@@ -2,6 +2,7 @@ package ru.curs.counting;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.kafka.annotation.EnableKafkaStreams;
 
 @SpringBootApplication
@@ -9,7 +10,7 @@ import org.springframework.kafka.annotation.EnableKafkaStreams;
 public class App {
 
 	public static void main(String[] args) {
-		SpringApplication.run(App.class, args);
+		new SpringApplicationBuilder(App.class).headless(false).run(args);
 	}
 
 }

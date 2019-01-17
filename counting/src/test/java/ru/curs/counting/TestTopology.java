@@ -8,22 +8,27 @@ import org.apache.kafka.streams.state.KeyValueStore;
 import org.apache.kafka.streams.test.ConsumerRecordFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.config.KafkaStreamsConfiguration;
+import ru.curs.counting.cli.GUI;
+import ru.curs.counting.configuration.KafkaConfiguration;
+import ru.curs.counting.configuration.TopologyConfiguration;
 import ru.curs.counting.transformer.CountingTransformer;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.io.IOException;
 
-@SpringBootTest
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class TestTopology {
 
 
     TopologyTestDriver topologyTestDriver;
 
     @BeforeEach
-    public void setUp(@Autowired KafkaStreamsConfiguration config, @Autowired Topology topology) {
+    public void setUp() throws IOException {
+        KafkaStreamsConfiguration config = new KafkaConfiguration().getStreamsConfig();
+        StreamsBuilder sb = new StreamsBuilder();
+        Topology topology = new TopologyConfiguration(
+                new GUI(VirtualScreenBuilder.screen())).createTopology(sb);
         topologyTestDriver = new TopologyTestDriver(
                 topology, config.asProperties());
     }
@@ -33,7 +38,6 @@ public class TestTopology {
                 Serdes.String().serializer());
         topologyTestDriver.pipeInput(factory.create("in", key, value));
     }
-
 
     @Test
     void testTopology() {

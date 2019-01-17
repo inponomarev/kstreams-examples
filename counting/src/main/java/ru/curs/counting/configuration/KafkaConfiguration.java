@@ -14,7 +14,7 @@ import java.util.Map;
 @Configuration
 public class KafkaConfiguration {
     @Bean(name = KafkaStreamsDefaultConfiguration.DEFAULT_STREAMS_CONFIG_BEAN_NAME)
-    KafkaStreamsConfiguration getStreamsConfig() {
+    public KafkaStreamsConfiguration getStreamsConfig() {
         Map<String, Object> props = new HashMap<>();
         props.put(StreamsConfig.CLIENT_ID_CONFIG, "parser-client");
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "g");
