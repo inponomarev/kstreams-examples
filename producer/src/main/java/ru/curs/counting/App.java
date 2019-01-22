@@ -1,7 +1,6 @@
 package ru.curs.counting;
 
-import org.apache.kafka.clients.admin.NewTopic;
-import org.apache.kafka.common.serialization.Serdes;
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,16 +8,21 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
+import ru.curs.counting.configuration.GeoLocationProducer;
 import ru.curs.counting.configuration.TweetProducer;
+import ru.curs.counting.model.GeoLocation;
 import ru.curs.counting.model.Tweet;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 @SpringBootApplication
 public class App implements CommandLineRunner {
 
 	public static Logger logger = LoggerFactory.getLogger(App.class);
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(App.class, args).close();
@@ -28,23 +32,46 @@ public class App implements CommandLineRunner {
 	private KafkaTemplate<String, String> template;
 
 	@Autowired
+	private GeoLocationProducer locationProducer;
+
+	@Autowired
 	private TweetProducer tweetProducer;
 
 	@Autowired
-	@Qualifier("TOPIC_NAME")
-	private String topicName;
+	@Qualifier("TWEET_TOPIC_NAME")
+	private String tweetTopicName;
 
-	@Override
-	public void run(String... args) throws Exception {
+	@Autowired
+	@Qualifier("GEO_TOPIC_NAME")
+	private String geoTopicName;
+
+	@SneakyThrows
+	private void writeTweets() {
 		while (true)
 		{
 			Tweet nextTweet = tweetProducer.nextTweet();
-			this.template.send(topicName, nextTweet.getUser(), nextTweet.getBody());
+			this.template.send(tweetTopicName, nextTweet.getUser(), nextTweet.getBody());
 			logger.info(nextTweet.toString());
 			Thread.sleep(50);
 		}
+	}
 
-	//	logger.info("All sent");
+	@SneakyThrows
+	private void writeLocations() {
+		while (true)
+		{
+			GeoLocation nextLocation = locationProducer.nextLocation();
+			this.template.send(geoTopicName, nextLocation.getUser(), nextLocation.getLocation());
+			logger.info(nextLocation.toString());
+			Thread.sleep(4000);
+		}
+	}
+
+	@Override
+	public void run(String... args) throws Exception {
+		ExecutorService executorService = Executors.newFixedThreadPool(2);
+		executorService.submit(this::writeTweets);
+		executorService.submit(this::writeLocations);
 	}
 
 }

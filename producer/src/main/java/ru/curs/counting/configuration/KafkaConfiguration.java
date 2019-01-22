@@ -2,7 +2,9 @@ package ru.curs.counting.configuration;
 
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.config.TopicConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
@@ -14,11 +16,15 @@ import java.util.Map;
 
 @Configuration
 public class KafkaConfiguration {
-    @Bean("TOPIC_NAME")
-    String topicName(){
+    @Bean("TWEET_TOPIC_NAME")
+    String tweetTopicName() {
         return "in";
     }
 
+    @Bean("GEO_TOPIC_NAME")
+    String geoTopicName() {
+        return "geo";
+    }
 
     @Bean
     public ProducerFactory<String, String> producerFactory() {
@@ -37,8 +43,22 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    public NewTopic getTopic(){
-        return new NewTopic("in", 10, (short) 1);
+    public NewTopic tweetTopic(@Qualifier("TWEET_TOPIC_NAME") String name) {
+        return new NewTopic(name, 10, (short) 1);
     }
 
+    @Bean
+    public NewTopic locationTopic(@Qualifier("GEO_TOPIC_NAME") String name) {
+        Map<String, String> props = new HashMap<>();
+        props.put(TopicConfig.CLEANUP_POLICY_CONFIG, TopicConfig.CLEANUP_POLICY_COMPACT);
+        return new NewTopic(name, 10, (short) 1).configs(props);
+    }
+
+
+    @Bean
+    public NewTopic locationTopic5() {
+        Map<String, String> props = new HashMap<>();
+        props.put(TopicConfig.CLEANUP_POLICY_CONFIG, TopicConfig.CLEANUP_POLICY_COMPACT);
+        return new NewTopic("geo5", 5, (short) 1).configs(props);
+    }
 }

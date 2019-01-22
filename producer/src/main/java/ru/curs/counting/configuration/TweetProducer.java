@@ -33,4 +33,5 @@ public class TweetProducer {
         String user = df.getItem(Arrays.asList("jbaruch", "yegor256", "tolkv"));
         return new Tweet(user, body.toString());
     }
+
 }
