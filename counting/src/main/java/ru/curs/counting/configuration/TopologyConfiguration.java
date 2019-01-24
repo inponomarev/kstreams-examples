@@ -24,7 +24,7 @@ public class TopologyConfiguration {
                         Consumed.with(Serdes.String(), Serdes.String())
                 ).filter((k, v) -> v.toLowerCase().contains("jpoint"));
 
-        KTable<String, Long> count = filtered.groupByKey().count();
+        //KTable<String, Long> count = filtered.groupByKey().count();
 
         KStream<String, Integer> counted =
                 new CountingTransformer()

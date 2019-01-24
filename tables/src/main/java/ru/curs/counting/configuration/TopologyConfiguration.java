@@ -24,30 +24,30 @@ public class TopologyConfiguration {
                         Consumed.with(Serdes.String(), Serdes.String())
                 ).filter((k, v) -> v.toLowerCase().contains("jpoint"));
 
-/*
+
 //Counter
         KTable<String, Long> count = filtered.groupByKey().count();
         count.toStream().foreach((k, v) -> {
             gui.update(k, String.valueOf(v));
         });
-*/
 
+/*
         KTable<String, String> latest = filtered.groupByKey()
                 .reduce((v1, v2) -> v2);
-/*
+
        //latest tweet
        latest.toStream().foreach((k, v) -> {
             gui.update(k, v);
         });
-*/
 
-        KTable<String, String> geo = streamsBuilder.table("geo", Consumed.with(Serdes.String(), Serdes.String()));
-        KTable<String, String> joined = latest.join(geo, (v1, v2) -> String.format("%s: %s", v2, v1));
+
+       KTable<String, String> geo = streamsBuilder.table("geo", Consumed.with(Serdes.String(), Serdes.String()));
+        KTable<String, String> joined = latest.leftJoin(geo, (v1, v2) -> String.format("%s: %s", v2, v1));
 
         joined.toStream().foreach((k, v) -> {
             gui.update(k, v);
         });
-/*
+
 //Latest tweet - via topic
         filtered.to("filtered", Produced.with(Serdes.String(), Serdes.String()));
 

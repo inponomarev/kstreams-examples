@@ -21,6 +21,7 @@ public class TopologyConfiguration {
         foo.print(Printed.toSysOut());
         foo.to("bar", Produced.with(Serdes.String(), Serdes.String()));
 
+
         return streamsBuilder.build();
     }
 }

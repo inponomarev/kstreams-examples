@@ -18,7 +18,7 @@ public class KafkaConfiguration {
         Map<String, Object> props = new HashMap<>();
         props.put(StreamsConfig.CLIENT_ID_CONFIG, "parser-client");
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "g");
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "parser-app");
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "counting-demo-app");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(StreamsConfig.REPLICATION_FACTOR_CONFIG, 1);
         props.put(StreamsConfig.DEFAULT_TIMESTAMP_EXTRACTOR_CLASS_CONFIG, WallclockTimestampExtractor.class);

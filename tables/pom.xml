@@ -11,8 +11,8 @@
 	<groupId>ru.curs</groupId>
 	<artifactId>counting</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>yelling</name>
-	<description>Demo project for Spring Boot</description>
+	<name>counting-demo</name>
+	<description>Demo project for Kafka Streams API</description>
 
 	<properties>
 		<java.version>1.8</java.version>
