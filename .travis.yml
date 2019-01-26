@@ -9,7 +9,7 @@ cache:
   - $HOME/.m2
 
 before_install:
-  - sudo add-apt-repository ppa:jgross-h/graphviz
+  - sudo add-apt-repository ppa:jgross-h/graphviz -y
   - sudo apt-get update
   - sudo apt-get install -y graphviz
 
