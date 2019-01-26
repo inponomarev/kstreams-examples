@@ -11,6 +11,8 @@ cache:
 before_install:
   - sudo add-apt-repository ppa:jgross-h/graphviz -y
   - sudo apt-get update
+  - sudo apt-get remove libcdt4
+  - sudo apt-get remove libpathplan4
   - sudo apt-get install -y graphviz
 
 after_success:
