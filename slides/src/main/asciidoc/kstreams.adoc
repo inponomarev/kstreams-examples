@@ -1,0 +1,430 @@
+= Kafka Streams API: Шаг за рамки Hello World
+Иван Пономарёв, КУРС/МФТИ
+:revealjs_theme: black
+:revealjs_customtheme: white_course.css
+:revealjs_slideNumber:
+:revealjs_history:
+:revealjs_progress:
+:encoding: UTF-8
+:lang: ru
+include::_doc_general_attributes.adoc[]
+:doctype: article
+:toclevels: 3
+:imagesdir: images
+:source-highlighter: highlightjs
+:highlightjsdir: highlight
+:icons: font
+:iconfont-remote!:
+:iconfont-name: font-awesome-4.7.0/css/font-awesome
+:revealjs_mouseWheel: true
+
+//== Часть 1. Введение
+
+=== Kafka за 30 секунд
+
+image::kafka_cluster.png[{image-60-width}]
+
+=== Kafka за 30 секунд
+
+image::log_anatomy.png[{image-60-width}]
+
+
+=== Compacted topics
+
+image::log_compaction.png[{image-90-width}]
+
+=== Kafka Streams API: нам обещают...
+
+[%step]
+* Real-time stream processing
+* Stream-like API (map / reduce)
+* Под капотом:
+** Автоматический коммит оффсетов
+** Ребалансировка
+** Внутреннее состояние обработчиков
+** Interactive Queries
+** ...
+
+=== Масштабирование? Легко!
+
+Параллелизация с автоматической ребалансировкой
+
+image::streams-elastic-scaling-2.png[{image-50-width}]
+
+=== Попробуем?
+
+image::gamov.png[{image-40-width}]
+
+=== Kafka Streams API: общая структура KStreams-приложения
+
+
+[source,java]
+----
+StreamsConfig config = ...;
+//Здесь устанавливаем всякие опции
+
+StreamsBuilder builder = ...; 
+//Здесь строим топологию
+
+
+//Это за нас делает SPRING-KAFKA
+KafkaStreams streams = new KafkaStreams(builder, config); 
+streams.start(); 
+...
+streams.close();
+
+----
+
+=== Топология
+
+image::streams-architecture-topology.jpg[{image-50-width}]
+
+//== Часть 2 Stateless processing.
+
+=== С чего начать?
+
+image::initializr.png[{image-90-width}]
+
+
+=== @Bean KafkaConfiguration 
+
+[source,java]
+----
+//ВАЖНО!
+@Bean(name = KafkaStreamsDefaultConfiguration.DEFAULT_STREAMS_CONFIG_BEAN_NAME)
+public KafkaStreamsConfiguration getStreamsConfig() {
+    Map<String, Object> props = new HashMap<>();
+    //ВАЖНО!
+    props.put(StreamsConfig.APPLICATION_ID_CONFIG, "my-app");
+    //ВАЖНО!
+    props.put(StreamsConfig.NUM_STREAM_THREADS_CONFIG, 4);
+    props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+    ...
+    KafkaStreamsConfiguration streamsConfig = new KafkaStreamsConfiguration(props);
+    return streamsConfig;
+}
+----
+
+=== @Bean NewTopic
+
+[source,java]
+----
+@Bean
+NewTopic getFilteredTopic() {
+    Map<String, String> props = new HashMap<>();
+    props.put(
+      TopicConfig.CLEANUP_POLICY_CONFIG,
+      TopicConfig.CLEANUP_POLICY_COMPACT);
+    return new NewTopic("mytopic", 10, (short) 1).configs(props);
+}
+----
+
+
+=== @Bean Topology
+[graphviz, "yelling-topology.png"]
+-----
+digraph G {
+
+rankdir="LR";
+node [fontsize=16; shape="circle"; fixedsize="true"; width="1.1"];
+
+Source -> MapValues -> Sink
+
+}
+-----
+{nbsp} +
+[source,java]
+----
+@Bean
+public Topology createTopology(StreamsBuilder streamsBuilder) {
+
+    KStream<String, String> foo = streamsBuilder
+        .stream("foo",Consumed.with(Serdes.String(), Serdes.String()))
+        .mapValues((ValueMapper<String, String>) String::toUpperCase)
+        .to("bar", Produced.with(Serdes.String(), Serdes.String()));
+        return streamsBuilder.build();
+}
+----
+
+
+=== TopologyTestDriver: создание
+
+[source,java]
+----
+KafkaStreamsConfiguration config = new KafkaConfiguration()
+                                        .getStreamsConfig();
+StreamsBuilder sb = new StreamsBuilder();
+Topology topology = new TopologyConfiguration().createTopology(sb);
+TopologyTestDriver topologyTestDriver = 
+        new TopologyTestDriver(topology, 
+                               config.asProperties());
+----
+
+=== TopologyTestDriver: использование
+
+[source,java]
+----
+ConsumerRecordFactory<String, String> factory = new
+                ConsumerRecordFactory<>(...);
+topologyTestDriver.pipeInput(factory.create("foo", "hello", "world"));
+
+ProducerRecord<String, String> bar = 
+    topologyTestDriver.readOutput("bar", ...);
+
+assertEquals("hello", bar.key());
+assertEquals("WORLD", bar.value());
+----
+
+=== Демо
+
+* Real-time processing
+* Сохранение consumer offset
+
+=== Простое ветвление стримов
+Java-стримы так не могут:
+[source,java]
+----
+KStream<..> foo = ...
+KStream<..> bar = foo.mapValues(…).map... to...
+Kstream<..> baz = foo.filter(…).map... forEach...
+----
+[graphviz, "simplebranch.png"]
+-----
+digraph G {
+rankdir="LR";
+node [fontsize=16; shape="circle"; fixedsize="true"; width="0.5"; label=""];
+Start, BF, CF, DF [style="invis"]
+Start -> A
+A -> B -> BF
+A -> C -> CF
+
+}
+-----
+
+
+=== Ветвление стримов по условию
+
+Не используйте KStream.branch:
+[source,java]
+----
+new KafkaStreamsBrancher<String, String>()
+   .branch((key, value) -> value.contains("A"), ks -> ks.to("A"))
+   .branch((key, value) -> value.contains("B"), ks -> ks.to("B"))
+   .defaultBranch(ks -> ks.to("C"))
+   .onTopOf(builder.stream("source"))
+   .map(...)
+----
+[graphviz, "switchbranch.png"]
+-----
+digraph G {
+rankdir="LR";
+node [fontsize=16; shape="circle"; fixedsize="true"; width="0.5"; label=""];
+Start, BF, CF, DF [style="invis"]
+Branch [shape="diamond", label="?"]
+Start -> A -> Branch
+Branch -> B -> BF
+Branch -> C -> CF
+}
+-----
+
+=== Простое слияние
+[source,java]
+----
+KStream<String, Integer> foo = ... 
+KStream<String, Integer> bar = ...
+KStream<String, Integer> merge = foo.merge(bar);
+----
+[graphviz, "merge.png"]
+-----
+digraph G {
+rankdir="LR";
+node [fontsize=16; shape="circle"; fixedsize="true"; width="0.5"; label=""];
+Finish, BF, CF, DF [style="invis"]
+BF -> A
+CF -> B 
+A -> C -> Finish
+B -> C 
+}
+-----
+
+=== Локальное состояние
+
+Facebook's RocksDB -- что это и зачем?
+
+[.custom-style]
+[cols="30a,70a"]
+|===
+|image::rocksdb.png[]
+|
+* Embedded key/value storage
+* LSM Tree (Log-Structured Merge-Tree)
+* High-performant (data locality)
+* Persistent, optimized for SSD
+|===
+
+
+=== RocksDB: краткий гид
+
+* Сохранение K,V в бинарном формате
+* Лексикографическая сортировка
+* Iterator (snapshot view)
+* Удаление диапазона (deleteRange)
+
+=== Пишем “Tweet Counting App”
+
+* Подсчитаем твиты с хэштегом
+* Key: имя пользователя, value: Count
+* `KeyValueStore` и `Transformer`
+
+=== @Bean Topology
+[graphviz, "counting-topology.png"]
+-----
+digraph G {
+rankdir="LR";
+node [fontsize=18; shape="circle"; fixedsize="true"; width="1.1"];
+Store [shape="cylinder"; label="Local Store"; fixedsize="true"; width="1.5"]
+Source -> Filter -> Counter -> Sink
+Counter -> Store [dir=both; label=" \n "]
+{rank = same; Store; Counter;}
+}
+-----
+{nbsp} +
+[source,java]
+----
+KStream<String, String> filtered = streamsBuilder
+            .stream("in")
+            .filter((k, v) -> v.toLowerCase().contains("jpoint"));
+
+KStream<String, Integer> counted =
+    new CountingTransformer()
+        .transformStream(streamsBuilder, filtered);
+----
+
+
+=== Демо
+
+* Ребалансировка / репликация партиций state при запуске / выключении обработчиков.
+
+=== Партиционирование и local state
+
+image::streams-architecture-states.jpg[{image-90-width}]
+
+=== Репартиционирование
+[%step]
+* явное при помощи `through(String topic, Produced<K, V> produced)` 
+* неявное при `map()`/`selectKey()` и stateful-операциях
+
+=== Таблицы vs стримы
+
+Местонахождение пользователя
+
+.Michael G. Noll. Of Streams and Tables in Kafka and Stream Processing
+image::stream-table-animation-latestLocation.gif[{image-100-width}]
+
+=== Таблицы vs стримы
+
+Количество посещенных мест
+
+.Michael G. Noll. Of Streams and Tables in Kafka and Stream Processing
+image::stream-table-animation-numVisitedLocations.gif[{image-100-width}]
+
+
+=== Таблицы vs стримы
+
+Производная и интеграл
+
+.Martin Kleppmann, “Designing Data Intensive Applications”
+image::derivative-and-integral.png[{image-100-width}]
+
+
+=== Переписываем counting app при помощи KTable
+
+[source,java]
+----
+KTable<String, Long> count = filtered.groupByKey().count();
+
+count.toStream().foreach((k, v) -> {
+            gui.update(k, String.valueOf(v));
+        });
+----
+=== Извлекаем самый свежий твит пользователя про #jpoint
+
+[source,java]
+----
+KTable<String, String> latest = filtered.groupByKey()
+            .reduce((v1, v2) -> v2);
+latest.toStream()....
+----
+
+=== Join: объединяем источники
+
+
+image::derivative.png[{image-90-width}]
+
+=== Объединяем твиты с геолокацией
+[source,java]
+----
+KTable<String, String> geo = streamsBuilder
+        .table("geo", ...);
+KTable<String, String> joined = latest
+    .join(geo, (v1, v2) -> String.format("%s: %s", v2, v1));
+----
+
+=== Копартиционирование: без него работать не будет!
+
+image::streams-architecture-states.jpg[{image-80-width}]
+
+=== Операции между стримами и таблицами: сводка
+
+image::streams-stateful_operations.png[{image-70-width}]
+
+
+=== Сохранение Timestamped-значений в RocksDB
+WindowKeySchema.java
+[source,java]
+----
+static Bytes toStoreKeyBinary(final byte[] serializedKey,
+                                  final long timestamp,
+                                  final int seqnum) {
+        final ByteBuffer buf = ByteBuffer.allocate(serializedKey.length
+                                        + TIMESTAMP_SIZE + SEQNUM_SIZE);
+        buf.put(serializedKey);
+        buf.putLong(timestamp);
+        buf.putInt(seqnum);
+        return Bytes.wrap(buf.array());
+    }
+----
+
+=== Разновидности окон
+
+* Tumbling
+* Hopping
+* Session
+
+=== Оконные агрегации: демо
+[source,java]
+----
+TimeWindowedKStream<String, String> windowed = filtered
+    .groupByKey()
+    .windowedBy(TimeWindows.of(Duration.ofSeconds(5)));
+    
+KTable<Windowed<String>, Long> count = windowed.count();
+----
+
+
+=== Kafka Streams in Action
+
+
+image::ksia.jpg[{image-40-width}]
+
+William Bejeck, “Kafka Streams in Action”, November 2018
+
+Уже устарела ))
+
+=== Другие источники
+
+- Kafka: The Definitive Guide
+- Developer Guide for Kafka Streams
+- Confluent Tutorials
+- Исходники!
+
