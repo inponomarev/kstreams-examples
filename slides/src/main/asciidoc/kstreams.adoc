@@ -361,6 +361,24 @@ latest.toStream()....
 
 image::derivative.png[{image-90-width}]
 
+[graphviz, "join-storages.png"]
+-----
+digraph G {
+rankdir="LR";
+node [fontsize=18; shape="circle"; fixedsize="true"; width="1.1"];
+Store1 [shape="cylinder"; label="Local Store 1"; fixedsize="true"; width="1.5"]
+Store2 [shape="cylinder"; label="Local Store 2"; fixedsize="true"; width="1.5"]
+Source1 -> Join
+Source2 -> Join
+
+Join -> Sink
+Join -> Store1 [dir=both; label=" \n "]
+Join -> Store2 [dir=both; label=" \n "]
+{rank = same; Store1; Store2; Join }
+}
+
+-----
+
 === Объединяем твиты с геолокацией
 [source,java]
 ----
@@ -369,6 +387,8 @@ KTable<String, String> geo = streamsBuilder
 KTable<String, String> joined = latest
     .join(geo, (v1, v2) -> String.format("%s: %s", v2, v1));
 ----
+
+
 
 === Копартиционирование: без него работать не будет!
 
