@@ -12,7 +12,7 @@
 	<artifactId>yelling</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>yelling</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Yelling app: convert messages to uppercase</description>
 
 	<properties>
 		<java.version>1.8</java.version>

@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>ru.curs</groupId>
-	<artifactId>counting</artifactId>
+	<artifactId>windows</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>yelling</name>
-	<description>Demo project for Spring Boot</description>
+	<name>windows</name>
+	<description>Use windows and demonstrate tumbling windows</description>
 
 	<properties>
 		<java.version>1.8</java.version>
