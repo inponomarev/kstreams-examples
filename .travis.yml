@@ -1,8 +1,4 @@
 ---
-branches:
-  only:
-    - dev
-
 sudo: required
 
 language: java
