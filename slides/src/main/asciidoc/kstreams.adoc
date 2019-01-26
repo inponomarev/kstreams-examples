@@ -19,9 +19,9 @@ include::_doc_general_attributes.adoc[]
 :revealjs_mouseWheel: true
 
 //== Часть 1. Введение
-
+:!figure-caption:
 === Kafka за 30 секунд
-
+.Источник: Kafka. The Definitive Guide
 image::kafka_cluster.png[{image-60-width}]
 
 === Kafka за 30 секунд
@@ -311,8 +311,9 @@ image::streams-architecture-states.jpg[{image-90-width}]
 
 === Репартиционирование
 [%step]
-* явное при помощи `through(String topic, Produced<K, V> produced)` 
-* неявное при `map()`/`selectKey()` и stateful-операциях
+* Явное при помощи +
+`through(String topic, Produced<K, V> produced)`
+* Неявное при `map()`/`selectKey()` и stateful-операциях
 
 === Таблицы vs стримы
 
@@ -359,15 +360,16 @@ latest.toStream()....
 === Join: объединяем источники
 
 
-image::derivative.png[{image-90-width}]
+image::derivative.png[{image-70-width}]
 
+[.fragment]
 [graphviz, "join-storages.png"]
 -----
 digraph G {
 rankdir="LR";
 node [fontsize=18; shape="circle"; fixedsize="true"; width="1.1"];
-Store1 [shape="cylinder"; label="Local Store 1"; fixedsize="true"; width="1.5"]
-Store2 [shape="cylinder"; label="Local Store 2"; fixedsize="true"; width="1.5"]
+Store1 [shape="cylinder"; label="Local Store 1"; fixedsize="true"; width="1.6"]
+Store2 [shape="cylinder"; label="Local Store 2"; fixedsize="true"; width="1.6"]
 Source1 -> Join
 Source2 -> Join
 
@@ -434,16 +436,31 @@ KTable<Windowed<String>, Long> count = windowed.count();
 
 === Kafka Streams in Action
 
+[.custom-style]
+[cols="30a,70a"]
+|===
+|image::KSIA.jpg[]
+|
+* **William Bejeck**, + 
+“Kafka Streams in Action”, November 2018
+* Примеры кода для Kafka 1.0
+|===
 
-image::ksia.jpg[{image-40-width}]
+=== Kafka: The Definitive Guide
 
-William Bejeck, “Kafka Streams in Action”, November 2018
+[.custom-style]
+[cols="30a,70a"]
+|===
+|image::kafka-the-definitive-guide.jpg[]
+|
+* Gwen Shapira, Neha Narkhede, Todd Palino
+* September 2017
+|===
 
-Уже устарела ))
+
 
 === Другие источники
 
-- Kafka: The Definitive Guide
 - Developer Guide for Kafka Streams
 - Confluent Tutorials
 - Исходники!

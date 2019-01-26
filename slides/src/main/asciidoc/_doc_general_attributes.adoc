@@ -4,6 +4,7 @@
 :note-caption: Замечание
 :tip-caption: Подсказка
 :warning-caption: Внимание
+:!figure-caption:
 :figure-caption:
 :table-caption: Таблица
 :example-caption: Пример
