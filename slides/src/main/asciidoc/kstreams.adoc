@@ -46,12 +46,12 @@ image::log_compaction.png[{image-70-width}]
 ** Ребалансировка
 ** Внутреннее состояние обработчиков
 ** Interactive Queries
-** ...
+
 
 === Масштабирование? Легко!
 
 Параллелизация с автоматической ребалансировкой
-
+.Источник: Kafka Documentation
 image::streams-elastic-scaling-2.png[{image-50-width}]
 
 === Попробуем?
@@ -80,9 +80,8 @@ streams.close();
 
 === Топология
 
-image::streams-architecture-topology.jpg[{image-50-width}]
-
-//== Часть 2 Stateless processing.
+.Источник: Kafka Documentation
+image::streams-architecture-topology.jpg[{image-40-width}]
 
 === С чего начать?
 
@@ -94,7 +93,9 @@ image::initializr.png[{image-90-width}]
 [source,java]
 ----
 //ВАЖНО!
-@Bean(name = KafkaStreamsDefaultConfiguration.DEFAULT_STREAMS_CONFIG_BEAN_NAME)
+@Bean(name = 
+    KafkaStreamsDefaultConfiguration
+                .DEFAULT_STREAMS_CONFIG_BEAN_NAME)
 public KafkaStreamsConfiguration getStreamsConfig() {
     Map<String, Object> props = new HashMap<>();
     //ВАЖНО!
@@ -103,7 +104,8 @@ public KafkaStreamsConfiguration getStreamsConfig() {
     props.put(StreamsConfig.NUM_STREAM_THREADS_CONFIG, 4);
     props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
     ...
-    KafkaStreamsConfiguration streamsConfig = new KafkaStreamsConfiguration(props);
+    KafkaStreamsConfiguration streamsConfig = 
+            new KafkaStreamsConfiguration(props);
     return streamsConfig;
 }
 ----
@@ -184,7 +186,7 @@ assertEquals("WORLD", bar.value());
 * Сохранение consumer offset
 
 === Простое ветвление стримов
-Java-стримы так не могут:
+* Java-стримы так не могут:
 [source,java]
 ----
 KStream<..> foo = ...
@@ -200,14 +202,12 @@ Start, BF, CF, DF [style="invis"]
 Start -> A
 A -> B -> BF
 A -> C -> CF
-
 }
 -----
 
-
 === Ветвление стримов по условию
 
-Не используйте KStream.branch:
+* Не используйте KStream.branch, используйте KafkaStreamsBrancher!
 [source,java]
 ----
 new KafkaStreamsBrancher<String, String>()
@@ -257,8 +257,8 @@ Facebook's RocksDB -- что это и зачем?
 [.custom-style]
 [cols="30a,70a"]
 |===
-|image::rocksdb.png[]
-|
+.<|image::rocksdb.png[]
+.<|
 * Embedded key/value storage
 * LSM Tree (Log-Structured Merge-Tree)
 * High-performant (data locality)
@@ -308,12 +308,13 @@ KStream<String, Integer> counted =
 
 * Ребалансировка / репликация партиций state при запуске / выключении обработчиков.
 
-=== Сохранение локального состояния в топик
+=== Сохранение локального состояния в{nbsp}топик
 
 [source,code]
 ----
 $kafka-topics --describe counting-demo-app-jpoint-counted-changelog
-Topic:counting-demo-app-jpoint-counted-changelog        PartitionCount:10       
+Topic:counting-demo-app-jpoint-counted-changelog
+PartitionCount:10       
 ReplicationFactor:1 
 Configs:cleanup.policy=compact
 ----
@@ -338,6 +339,7 @@ digraph G
 }
 -----
 {nbsp} +
+
 * Явное при помощи +
 `through(String topic, Produced<K, V> produced)`
 * Неявное при `map()`/`selectKey()` и stateful-операциях
@@ -446,31 +448,25 @@ table-demo-geo-STATE-STORE-0000000006-changelog
 ----
 === Копартиционирование: без него работать не будет!
 
-image::streams-architecture-states.jpg[{image-80-width}]
+image::streams-architecture-states.jpg[{image-70-width}]
 
 === Операции между стримами и таблицами: сводка
 
 image::streams-stateful_operations.png[{image-70-width}]
 
 
-=== Сохранение Timestamped-значений в RocksDB
-[graphviz, "timestamped-record.png"]
------
-digraph G
-{
-    node [shape=record, width=.1, height=.1];
-    node1 [label="<f0> key|<f1> timestamp|<f2> seqnum"];
-}
------
+=== Сохранение Timestamped-значений в{nbsp}RocksDB
 
 WindowKeySchema.java
+
 [source,java]
 ----
 static Bytes toStoreKeyBinary(final byte[] serializedKey,
                                   final long timestamp,
                                   final int seqnum) {
         final ByteBuffer buf = ByteBuffer.allocate(serializedKey.length
-                                        + TIMESTAMP_SIZE + SEQNUM_SIZE);
+                                        + TIMESTAMP_SIZE 
+                                        + SEQNUM_SIZE);
         buf.put(serializedKey);
         buf.putLong(timestamp);
         buf.putInt(seqnum);
@@ -478,11 +474,52 @@ static Bytes toStoreKeyBinary(final byte[] serializedKey,
     }
 ----
 
-=== Разновидности окон
+=== Быстрое извлечение
 
-* Tumbling
-* Hopping
-* Session
+[graphviz, "timestamped-record.png"]
+-----
+digraph G
+{
+    node [shape=record, fontsize=18];
+    node0 [label="..."];
+    node1 [label="<f0> key|<f1> timestamp|<f2> seqnum"];
+    node2 [label="..."];
+    node0 -> node1;
+    node0 -> node2;
+}
+-----
+
+
+=== Tumbling window
+
+[source,java]
+----
+TimeWindowedKStream<String, String> windowed = 
+    stream.groupByKey()
+        .windowedBy(TimeWindows.of(Duration.ofSeconds(20)));
+----
+.Источник: Kafka Streams in Action
+image::tumbling-window.png[{image-80-width}]
+
+=== Hopping Window
+[source,java]
+----
+TimeWindowedKStream<String, String> windowed = 
+    stream.groupByKey()
+        .windowedBy(TimeWindows.of(Duration.ofSeconds(20))
+                        .advanceBy(Duration.ofSeconds(10)));
+----
+.Источник: Kafka Streams in Action
+image::hopping-window.png[{image-60-width}]
+
+=== Session Window
+[source,java]
+----
+SessionWindowedKStream<String, String> windowed = 
+    stream.groupByKey()
+        .windowedBy(SessionWindows.with(Duration.ofMinutes(5)));
+----
+image::streams-session-windows-02.png[{image-60-width}]
 
 === Оконные агрегации: демо
 [source,java]
