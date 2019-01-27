@@ -304,13 +304,23 @@ KStream<String, Integer> counted =
 ----
 
 
-=== Демо
+=== Демо: Ребалансировка / репликация
 
 * Ребалансировка / репликация партиций state при запуске / выключении обработчиков.
 
+=== Сохранение локального состояния в топик
+
+[source,code]
+----
+$kafka-topics --describe counting-demo-app-jpoint-counted-changelog
+Topic:counting-demo-app-jpoint-counted-changelog        PartitionCount:10       
+ReplicationFactor:1 
+Configs:cleanup.policy=compact
+----
+
 === Партиционирование и local state
 
-image::streams-architecture-states.jpg[{image-90-width}]
+image::streams-architecture-states.jpg[{image-70-width}]
 
 === Репартиционирование
 [graphviz, "through.png"]
@@ -365,6 +375,17 @@ count.toStream().foreach((k, v) -> {
             gui.update(k, String.valueOf(v));
         });
 ----
+
+[source,code]
+----
+$kafka-topics --describe
+Topic:table-demo-KSTREAM-AGGREGATE-STATE-STORE-0000000002-changelog 
+PartitionCount:10
+ReplicationFactor:1
+Configs:cleanup.policy=compact
+----
+
+
 === Извлекаем самый свежий твит пользователя про #jpoint
 
 [source,java]
@@ -373,6 +394,16 @@ KTable<String, String> latest = filtered.groupByKey()
             .reduce((v1, v2) -> v2);
 latest.toStream()....
 ----
+[source,code]
+----
+$kafka-topics --describe
+Topic:table-demo-KSTREAM-REDUCE-STATE-STORE-0000000002-changelog 
+PartitionCount:10
+ReplicationFactor:1
+Configs:cleanup.policy=compact
+----
+
+
 
 === Join: объединяем источники
 
@@ -398,7 +429,7 @@ Store1 -> Store2 [style=invis]
 }
 -----
 
-=== Объединяем твиты с геолокацией
+=== Демо: Объединяем твиты с геолокацией
 [source,java]
 ----
 KTable<String, String> geo = streamsBuilder
@@ -407,8 +438,12 @@ KTable<String, String> joined = latest
     .join(geo, (v1, v2) -> String.format("%s: %s", v2, v1));
 ----
 
-
-
+[source,code]
+----
+$kafka-topics --list
+table-demo-KSTREAM-REDUCE-STATE-STORE-0000000002-changelog
+table-demo-geo-STATE-STORE-0000000006-changelog
+----
 === Копартиционирование: без него работать не будет!
 
 image::streams-architecture-states.jpg[{image-80-width}]
