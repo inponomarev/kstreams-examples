@@ -24,14 +24,17 @@ include::_doc_general_attributes.adoc[]
 .Источник: Kafka. The Definitive Guide
 image::kafka_cluster.png[{image-60-width}]
 
-=== Kafka за 30 секунд
+=== Kafka Message
 
-image::log_anatomy.png[{image-60-width}]
+//image::log_anatomy.png[{image-60-width}]
 
+* Partition Number -- определяется Producer-ом
+* Ключ
+* Значение
 
 === Compacted topics
-
-image::log_compaction.png[{image-90-width}]
+.Источник: Kafka Documentation
+image::log_compaction.png[{image-70-width}]
 
 === Kafka Streams API: нам обещают...
 
@@ -310,7 +313,21 @@ KStream<String, Integer> counted =
 image::streams-architecture-states.jpg[{image-90-width}]
 
 === Репартиционирование
-[%step]
+[graphviz, "through.png"]
+-----
+digraph G
+{
+    rankdir="LR";
+    node [shape=record, width=.1, height=.1];
+    node1 [label="{ | | | | }", fontsize = 18, xlabel= "through(. . .)"];
+    
+    node [label = " "; shape="circle"; fixedsize="true"; width="1.1"];
+    Source -> node1
+    node1 -> Sink
+    
+}
+-----
+{nbsp} +
 * Явное при помощи +
 `through(String topic, Produced<K, V> produced)`
 * Неявное при `map()`/`selectKey()` и stateful-операциях
@@ -360,25 +377,25 @@ latest.toStream()....
 === Join: объединяем источники
 
 
-image::derivative.png[{image-70-width}]
+image::derivative.png[{image-60-width}]
 
-[.fragment]
+=== Join: объединяем источники
 [graphviz, "join-storages.png"]
 -----
 digraph G {
 rankdir="LR";
 node [fontsize=18; shape="circle"; fixedsize="true"; width="1.1"];
-Store1 [shape="cylinder"; label="Local Store 1"; fixedsize="true"; width="1.6"]
-Store2 [shape="cylinder"; label="Local Store 2"; fixedsize="true"; width="1.6"]
+Store1 [shape="cylinder"; label="Local Store 1"; fixedsize="true"; width="1.7"]
+Store2 [shape="cylinder"; label="Local Store 2"; fixedsize="true"; width="1.7"]
 Source1 -> Join
 Source2 -> Join
 
 Join -> Sink
 Join -> Store1 [dir=both; label=" \n "]
 Join -> Store2 [dir=both; label=" \n "]
-{rank = same; Store1; Store2; Join }
+Store1 -> Store2 [style=invis]
+{rank = same; Store1; Join }
 }
-
 -----
 
 === Объединяем твиты с геолокацией
@@ -402,6 +419,15 @@ image::streams-stateful_operations.png[{image-70-width}]
 
 
 === Сохранение Timestamped-значений в RocksDB
+[graphviz, "timestamped-record.png"]
+-----
+digraph G
+{
+    node [shape=record, width=.1, height=.1];
+    node1 [label="<f0> key|<f1> timestamp|<f2> seqnum"];
+}
+-----
+
 WindowKeySchema.java
 [source,java]
 ----
