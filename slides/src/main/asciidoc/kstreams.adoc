@@ -317,7 +317,20 @@ KStream<String, Integer> counted =
         .transformStream(streamsBuilder, filtered);
 ----
 
-
+== Подсчёт твитов
+[source,java]
+----
+@Override
+public KeyValue<String, Integer> transform(
+    String key, 
+    String value, 
+    KeyValueStore<String, Integer> stateStore) {
+    int current = Optional.ofNullable(
+            stateStore.get(key)).orElse(0) + 1;
+    stateStore.put(key, current);
+    return KeyValue.pair(key, current);
+}
+----
 == Демо: Ребалансировка / репликация
 
 * Ребалансировка / репликация партиций state при запуске / выключении обработчиков.
@@ -423,6 +436,7 @@ Configs:cleanup.policy=compact
 
 == Join: объединяем источники
 
+(например, твиты и геолокация)
 
 image::derivative.png[{image-60-width}]
 
@@ -464,8 +478,18 @@ table-demo-geo-STATE-STORE-0000000006-changelog
 
 image::streams-architecture-states.jpg[{image-70-width}]
 
-== Операции между стримами и таблицами: сводка
+== Исключение: GlobalKTable
 
+[source,java]
+----
+GlobalKTable<...> global = streamsBuilder.globalTable("global", ...);
+----
+
+* Не нуждается в копартиционировании
+* Реплицируется в local state каждого обработчика
+
+== Операции между стримами и таблицами: сводка
+.Источник: https://kafka.apache.org/20/documentation/streams/developer-guide/dsl-api.html#stateful-transformations[Kafka Streams DSL Documentation]
 image::streams-stateful_operations.png[{image-70-width}]
 
 
@@ -592,6 +616,7 @@ windows-demo-KSTREAM-AGGREGATE-STATE-STORE-0000000002-changelog
 
 == Выводы
 
+[%step]
 * Kafka StreamsAPI -- это большой мир
 * Kafka StreamsAPI -- это удобная абстракция над «сырой» Кафкой
 * Чтобы начать пользоваться, надо настроить мышление под потоковую обработку
@@ -601,10 +626,10 @@ windows-demo-KSTREAM-AGGREGATE-STATE-STORE-0000000002-changelog
 
 == На этом всё!
 
-* Посмотрите примеры на https://github.com/inponomarev/kstreams-examples
-* Подпишитесь на твиттер @inponomarev
+* https://github.com/inponomarev/kstreams-examples
 {nbsp} +
-
-ponomarev@corchestra.ru
+* Мой твиттер @inponomarev
 {nbsp} +
-Спасибо!
+* Мой email: ponomarev@corchestra.ru
+{nbsp} +
+* *Спасибо!*
