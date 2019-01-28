@@ -9,8 +9,8 @@ import com.googlecode.lanterna.gui2.Label;
 import com.googlecode.lanterna.gui2.Panel;
 
 public class KeyValuePanel {
-    private final static int MAX_KEY_WIDTH = 10;
-    private final static int MAX_VAL_WIDTH = 80;
+    private final static int MAX_KEY_WIDTH = 50;
+    private final static int MAX_VAL_WIDTH = 10;
 
     private final Panel panel;
     private final Label keyLabel;

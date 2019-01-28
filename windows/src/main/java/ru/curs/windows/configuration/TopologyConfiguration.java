@@ -40,12 +40,9 @@ public class TopologyConfiguration {
 
                 .groupByKey().windowedBy(TimeWindows.of(Duration.ofSeconds(5)));
 
-
         KTable<Windowed<String>, Long> count = windowed.count();
-        count.toStream().map((s, l) -> KeyValue.pair(s.key(), new Windowed<>(l, s.window())))
-                .mapValues(s -> formatWindow(s.window()) + " " + s.key().toString())
-                .foreach((k, v)->gui.update(k, v));
-                //.print(Printed.toSysOut());
+        count.toStream().map((s, l)-> KeyValue.pair(s.key() + " " + formatWindow(s.window()), l))
+        .foreach((k, v)->gui.update(k, v.toString()));
 
         return streamsBuilder.build();
     }
