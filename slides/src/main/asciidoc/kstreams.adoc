@@ -21,23 +21,35 @@ include::_doc_general_attributes.adoc[]
 
 //== Часть 1. Введение
 :!figure-caption:
-=== Kafka за 30 секунд
+
+== Зачем нам Kafka?
+
+[%step]
+* Web-scraping в реальном времени
+* 500 запросов/сек
+* Удобные абстракции «из коробки»:
+** «Подрезаемый» лог
+** Batching
+** Балансировка
+* DISCLAIMER: пока не в production
+
+== Kafka за 30 секунд
 .Источник: Kafka. The Definitive Guide
 image::kafka_cluster.png[{image-60-width}]
 
-=== Kafka Message
+== Kafka Message
 
-//image::log_anatomy.png[{image-60-width}]
+image::1024px-Aiga_mail.svg.png[{image-10-width}]
 
 * Partition Number -- определяется Producer-ом
 * Ключ
 * Значение
 
-=== Compacted topics
+== Compacted topics
 .Источник: Kafka Documentation
 image::log_compaction.png[{image-70-width}]
 
-=== Kafka Streams API: нам обещают...
+== Kafka Streams API: нам обещают...
 
 [%step]
 * Real-time stream processing
@@ -49,18 +61,18 @@ image::log_compaction.png[{image-70-width}]
 ** Interactive Queries
 
 
-=== Масштабирование? Легко!
+== Масштабирование? Легко!
 
 * Параллелизация с автоматической ребалансировкой
 
 .Источник: Kafka Documentation
 image::streams-elastic-scaling-2.png[{image-50-width}]
 
-=== Попробуем?
+== Попробуем?
 
 image::gamov.png[{image-40-width}]
 
-=== Kafka Streams API: общая структура KStreams-приложения
+== Kafka Streams API: общая структура KStreams-приложения
 
 
 [source,java]
@@ -80,17 +92,17 @@ streams.close();
 
 ----
 
-=== Топология
+== Топология
 
 .Источник: Kafka Documentation
 image::streams-architecture-topology.jpg[{image-40-width}]
 
-=== С чего начать?
+== С чего начать?
 
 image::initializr.png[{image-90-width}]
 
 
-=== @Bean KafkaConfiguration 
+== @Bean KafkaConfiguration 
 
 [source,java]
 ----
@@ -112,7 +124,7 @@ public KafkaStreamsConfiguration getStreamsConfig() {
 }
 ----
 
-=== @Bean NewTopic
+== @Bean NewTopic
 
 [source,java]
 ----
@@ -127,7 +139,7 @@ NewTopic getFilteredTopic() {
 ----
 
 
-=== @Bean Topology
+== @Bean Topology
 [graphviz, "yelling-topology.png"]
 -----
 digraph G {
@@ -154,7 +166,7 @@ public Topology createTopology(StreamsBuilder streamsBuilder) {
 ----
 
 
-=== TopologyTestDriver: создание
+== TopologyTestDriver: создание
 
 [source,java]
 ----
@@ -167,7 +179,7 @@ TopologyTestDriver topologyTestDriver =
                                config.asProperties());
 ----
 
-=== TopologyTestDriver: использование
+== TopologyTestDriver: использование
 
 [source,java]
 ----
@@ -182,12 +194,12 @@ assertEquals("hello", bar.key());
 assertEquals("WORLD", bar.value());
 ----
 
-=== Демо
+== Демо
 
 * Real-time processing
 * Сохранение consumer offset
 
-=== Простое ветвление стримов
+== Простое ветвление стримов
 * Java-стримы так не могут:
 [source,java]
 ----
@@ -207,7 +219,7 @@ A -> C -> CF
 }
 -----
 
-=== Ветвление стримов по условию
+== Ветвление стримов по условию
 
 * Не используйте KStream.branch, используйте KafkaStreamsBrancher!
 [source,java]
@@ -232,7 +244,7 @@ Branch -> C -> CF
 }
 -----
 
-=== Простое слияние
+== Простое слияние
 [source,java]
 ----
 KStream<String, Integer> foo = ... 
@@ -252,7 +264,7 @@ B -> C
 }
 -----
 
-=== Локальное состояние
+== Локальное состояние
 
 Facebook's RocksDB -- что это и зачем?
 
@@ -268,20 +280,20 @@ Facebook's RocksDB -- что это и зачем?
 |===
 
 
-=== RocksDB: краткий гид
+== RocksDB: краткий гид
 
 * Сохранение K,V в бинарном формате
 * Лексикографическая сортировка
 * Iterator (snapshot view)
 * Удаление диапазона (deleteRange)
 
-=== Пишем “Tweet Counting App”
+== Пишем “Tweet Counting App”
 
 * Подсчитаем твиты с хэштегом
 * Key: имя пользователя, value: Count
 * `KeyValueStore` и `Transformer`
 
-=== @Bean Topology
+== @Bean Topology
 [graphviz, "counting-topology.png"]
 -----
 digraph G {
@@ -306,11 +318,11 @@ KStream<String, Integer> counted =
 ----
 
 
-=== Демо: Ребалансировка / репликация
+== Демо: Ребалансировка / репликация
 
 * Ребалансировка / репликация партиций state при запуске / выключении обработчиков.
 
-=== Сохранение локального состояния в{nbsp}топик
+== Сохранение локального состояния в{nbsp}топик
 
 [source,code]
 ----
@@ -321,11 +333,11 @@ ReplicationFactor:1
 Configs:cleanup.policy=compact
 ----
 
-=== Партиционирование и local state
+== Партиционирование и local state
 
 image::streams-architecture-states.jpg[{image-70-width}]
 
-=== Репартиционирование
+== Репартиционирование
 [graphviz, "through.png"]
 -----
 digraph G
@@ -346,14 +358,14 @@ digraph G
 `through(String topic, Produced<K, V> produced)`
 * Неявное при `map()`/`selectKey()` и stateful-операциях
 
-=== Таблицы vs стримы
+== Таблицы vs стримы
 
 Местонахождение пользователя
 
 .Michael G. Noll. Of Streams and Tables in Kafka and Stream Processing
 image::stream-table-animation-latestLocation.gif[{image-100-width}]
 
-=== Таблицы vs стримы
+== Таблицы vs стримы
 
 Количество посещенных мест
 
@@ -361,7 +373,7 @@ image::stream-table-animation-latestLocation.gif[{image-100-width}]
 image::stream-table-animation-numVisitedLocations.gif[{image-100-width}]
 
 
-=== Таблицы vs стримы
+== Таблицы vs стримы
 
 Производная и интеграл
 
@@ -369,7 +381,7 @@ image::stream-table-animation-numVisitedLocations.gif[{image-100-width}]
 image::derivative-and-integral.png[{image-100-width}]
 
 
-=== Переписываем counting app при помощи KTable
+== Переписываем counting app при помощи KTable
 
 [source,java]
 ----
@@ -390,7 +402,7 @@ Configs:cleanup.policy=compact
 ----
 
 
-=== Извлекаем самый свежий твит пользователя про #jpoint
+== Извлекаем самый свежий твит пользователя про #jpoint
 
 [source,java]
 ----
@@ -409,12 +421,12 @@ Configs:cleanup.policy=compact
 
 
 
-=== Join: объединяем источники
+== Join: объединяем источники
 
 
 image::derivative.png[{image-60-width}]
 
-=== Join: объединяем источники
+== Join: объединяем источники
 [graphviz, "join-storages.png"]
 -----
 digraph G {
@@ -433,7 +445,7 @@ Store1 -> Store2 [style=invis]
 }
 -----
 
-=== Демо: Объединяем твиты с геолокацией
+== Демо: Объединяем твиты с геолокацией
 [source,java]
 ----
 KTable<String, String> geo = streamsBuilder
@@ -448,16 +460,16 @@ $kafka-topics --list
 table-demo-KSTREAM-REDUCE-STATE-STORE-0000000002-changelog
 table-demo-geo-STATE-STORE-0000000006-changelog
 ----
-=== Копартиционирование: без него работать не будет!
+== Копартиционирование: без него работать не будет!
 
 image::streams-architecture-states.jpg[{image-70-width}]
 
-=== Операции между стримами и таблицами: сводка
+== Операции между стримами и таблицами: сводка
 
 image::streams-stateful_operations.png[{image-70-width}]
 
 
-=== Сохранение Timestamped-значений в{nbsp}RocksDB
+== Сохранение Timestamped-значений в{nbsp}RocksDB
 
 WindowKeySchema.java
 
@@ -476,7 +488,7 @@ static Bytes toStoreKeyBinary(final byte[] serializedKey,
     }
 ----
 
-=== Быстрое извлечение
+== Быстрое извлечение
 
 [graphviz, "timestamped-record.png"]
 -----
@@ -492,7 +504,7 @@ digraph G
 -----
 
 
-=== Tumbling window
+== Tumbling window
 
 [source,java]
 ----
@@ -503,7 +515,7 @@ TimeWindowedKStream<String, String> windowed =
 .Источник: Kafka Streams in Action
 image::tumbling-window.png[{image-80-width}]
 
-=== Hopping Window
+== Hopping Window
 [source,java]
 ----
 TimeWindowedKStream<String, String> windowed = 
@@ -514,7 +526,7 @@ TimeWindowedKStream<String, String> windowed =
 .Источник: Kafka Streams in Action
 image::hopping-window.png[{image-60-width}]
 
-=== Session Window
+== Session Window
 [source,java]
 ----
 SessionWindowedKStream<String, String> windowed = 
@@ -523,7 +535,7 @@ SessionWindowedKStream<String, String> windowed =
 ----
 image::streams-session-windows-02.png[{image-60-width}]
 
-=== Оконные агрегации: демо
+== Оконные агрегации: демо
 [source,java]
 ----
 TimeWindowedKStream<String, String> windowed = filtered
@@ -534,7 +546,7 @@ KTable<Windowed<String>, Long> count = windowed.count();
 ----
 
 
-=== Kafka Streams in Action
+== Kafka Streams in Action
 
 [.custom-style]
 [cols="30a,70a"]
@@ -546,7 +558,7 @@ KTable<Windowed<String>, Long> count = windowed.count();
 * Примеры кода для Kafka 1.0
 |===
 
-=== Kafka: The Definitive Guide
+== Kafka: The Definitive Guide
 
 [.custom-style]
 [cols="30a,70a"]
@@ -559,7 +571,7 @@ KTable<Windowed<String>, Long> count = windowed.count();
 
 
 
-=== Другие источники
+== Другие источники
 
 - Developer Guide for Kafka Streams
 - Confluent Tutorials
