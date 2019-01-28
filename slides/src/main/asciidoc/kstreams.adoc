@@ -17,6 +17,7 @@ include::_doc_general_attributes.adoc[]
 :iconfont-remote!:
 :iconfont-name: font-awesome-4.7.0/css/font-awesome
 :revealjs_mouseWheel: true
+:revealjs_center: false
 
 //== Часть 1. Введение
 :!figure-caption:
@@ -50,7 +51,8 @@ image::log_compaction.png[{image-70-width}]
 
 === Масштабирование? Легко!
 
-Параллелизация с автоматической ребалансировкой
+* Параллелизация с автоматической ребалансировкой
+
 .Источник: Kafka Documentation
 image::streams-elastic-scaling-2.png[{image-50-width}]
 

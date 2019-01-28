@@ -201,6 +201,12 @@ body {
   overflow: auto;
   max-height: 400px;
   word-wrap: normal; }
+  
+.reveal code.language-code {
+    background: black;
+    color: white;
+    display: inline-block;
+}
 
 .reveal table {
   margin: auto;
