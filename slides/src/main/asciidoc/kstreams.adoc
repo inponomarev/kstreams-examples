@@ -544,6 +544,17 @@ TimeWindowedKStream<String, String> windowed = filtered
     
 KTable<Windowed<String>, Long> count = windowed.count();
 ----
+[source,code]
+----
+$kafka-topics --list
+windows-demo-KSTREAM-AGGREGATE-STATE-STORE-0000000002-changelog
+----
+== Windowed<K> Interface
+
+* `K key()`
+* `Window window()`
+** `Instant startTime()`
+** `Instant endTime()`
 
 
 == Kafka Streams in Action
