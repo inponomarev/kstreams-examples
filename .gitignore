@@ -15,3 +15,6 @@ rocksdb/
 *.iws
 *.iml
 *.ipr
+
+#auto-generated images
+slides/src/main/asciidoc/*.png
