@@ -200,7 +200,7 @@ assertEquals("WORLD", bar.value());
 * Сохранение consumer offset
 
 == Простое ветвление стримов
-* Java-стримы так не могут:
+Java-стримы так не могут:
 [source,java]
 ----
 KStream<..> foo = ...
@@ -221,7 +221,7 @@ A -> C -> CF
 
 == Ветвление стримов по условию
 
-* Не используйте KStream.branch, используйте KafkaStreamsBrancher!
+Не используйте `KStream.branch`, используйте `KafkaStreamsBrancher`!
 [source,java]
 ----
 new KafkaStreamsBrancher<String, String>()
