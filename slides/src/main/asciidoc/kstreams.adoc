@@ -584,7 +584,27 @@ windows-demo-KSTREAM-AGGREGATE-STATE-STORE-0000000002-changelog
 
 == Другие источники
 
-- Developer Guide for Kafka Streams
-- Confluent Tutorials
+- https://docs.confluent.io/current/streams/developer-guide/index.html[docs.confluent.io: Streams Developer Guide]
+- https://www.confluent.io/blog/stream-processing-part-1-tutorial-developing-streaming-applications[Getting Your Feet Wet with Stream Processing (Confluent tutorials)]
 - Исходники!
+** https://github.com/apache/kafka/
+** https://github.com/spring-projects/spring-kafka
 
+== Выводы
+
+* Kafka StreamsAPI -- это большой мир
+* Kafka StreamsAPI -- это удобная абстракция над «сырой» Кафкой
+* Чтобы начать пользоваться, надо настроить мышление под потоковую обработку
+* Технология переживает бурное развитие
+** + живой community, есть шанс повлиять на процесс самому 
+** - публичные интерфейсы изменяются очень быстро
+
+== На этом всё!
+
+* Посмотрите примеры на https://github.com/inponomarev/kstreams-examples
+* Подпишитесь на твиттер @inponomarev
+{nbsp} +
+
+ponomarev@corchestra.ru
+{nbsp} +
+Спасибо!
