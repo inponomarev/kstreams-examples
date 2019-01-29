@@ -580,6 +580,18 @@ windows-demo-KSTREAM-AGGREGATE-STATE-STORE-0000000002-changelog
 ** `Instant startTime()`
 ** `Instant endTime()`
 
+== Windowed joins
+
+Соединения стрим-стрим возможны в пределах временного окна:
+[source,java]
+----
+KStream<String, String> join = 
+  foo.join(bar, (v1, v2) -> String.format("%s: %s", v2, v1),
+    JoinWindows.of(Duration.ofSeconds(20)));
+
+----
+
+(Анализ вида «увидел картинку и сделал покупку».)
 
 == Kafka Streams in Action
 
