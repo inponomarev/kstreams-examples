@@ -29,8 +29,8 @@ include::_doc_general_attributes.adoc[]
 * 500 запросов/сек
 * Удобные абстракции «из коробки»:
 ** «Подрезаемый» лог
-** Batching
-** Балансировка
+** Microbatching
+** Автоматическая балансировка при масштабировании
 * DISCLAIMER: пока не в production
 
 == Kafka за 30 секунд
@@ -58,15 +58,8 @@ image::log_compaction.png[{image-70-width}]
 ** Автоматический коммит оффсетов
 ** Ребалансировка
 ** Внутреннее состояние обработчиков
-** Interactive Queries
+** Легкое масштабирование
 
-
-== Масштабирование? Легко!
-
-* Параллелизация с автоматической ребалансировкой
-
-.Источник: Kafka Documentation
-image::streams-elastic-scaling-2.png[{image-50-width}]
 
 == Попробуем?
 
@@ -92,10 +85,35 @@ streams.close();
 
 ----
 
-== Топология
+== Топология (а на самом деле, DAG)
 
-.Источник: Kafka Documentation
-image::streams-architecture-topology.jpg[{image-40-width}]
+[graphviz,"topology-sample.png"]
+----
+digraph G {
+
+
+node [shape="circle" ];
+
+
+a[label="source"];
+b[label="source"];
+c[label="branch /\nsplit"];
+
+d[label="process"];
+e[label="join /\nmerge"];
+f[label="sink"];
+g[label="sink"];
+{rank = same; a; b;}
+a->c;
+b->e;
+c->e;
+c->d;
+d->f;
+e->g;
+
+}
+----
+
 
 == С чего начать?
 
@@ -348,7 +366,63 @@ Configs:cleanup.policy=compact
 
 == Партиционирование и local state
 
-image::streams-architecture-states.jpg[{image-70-width}]
+[graphviz, "local-partitioning.png"]
+-----
+digraph D {
+  subgraph system {
+
+    subgraph cluster_p1 {
+      label = "Worker 1";
+        
+          
+          subgraph cluster_pp11{
+              label = "Partition 2"
+          
+              b [label = "B"];
+              c[label = "C"];
+              
+          }
+ 
+        subgraph cluster_pp1{
+              label = "Partition 1"
+              
+              
+              a [label = "A"];
+              
+          }
+          
+        
+        ls1[shape="cylinder" label = "RocksDB"]
+        a->ls1;
+        b->ls1;
+        c->ls1;
+        
+        p1[shape="plaintext" label = "Partition 1"];
+        p2[shape="plaintext" label = "Partition 2"];
+        ls1->p1[dir="both"];
+        ls1->p2[dir="both"];
+    }
+    subgraph cluster_p2 {
+      label = "Worker 2";
+      subgraph cluster_pp2{
+              label = "Partition 3"
+                
+              d[label = "D"];
+              
+              
+          }
+          
+          
+        ls2[shape="cylinder" label = "RocksDB"]
+        d->ls2;
+        p3[shape="plaintext" label = "Partition 3"];
+        ls2->p3[dir="both"];
+    }
+    
+    
+  }
+} 
+-----
 
 == Репартиционирование
 [graphviz, "through.png"]
@@ -474,19 +548,273 @@ $kafka-topics --list
 table-demo-KSTREAM-REDUCE-STATE-STORE-0000000002-changelog
 table-demo-geo-STATE-STORE-0000000006-changelog
 ----
-== Копартиционирование: без него работать не будет!
 
-image::streams-architecture-states.jpg[{image-70-width}]
+== Копартиционирование: Join работает
 
-== Исключение: GlobalKTable
+
+[graphviz, "copart-norm.png"]
+-----
+digraph D {
+  subgraph system {
+     subgraph cluster_s2{
+          style = "invis"
+          S1 [shape=plaintext label = "Source 1"];
+          S2 [shape=plaintext label = "Source 2"];
+          S1->S2 [style="invis"]
+      }
+    subgraph cluster_p1 {
+      label = "Worker 1";
+        
+          
+          subgraph cluster_pp11{
+              label = "Partition 2"
+          
+              b [label = "B"];
+              c[label = "C"];
+              
+          }
+          subgraph cluster_pp12{
+              label = "Partition 2"
+              labelloc ="b"
+          
+              b1 [label = "B"];
+              
+              c1[label = "C"];
+          }
+          
+          subgraph cluster_p1{
+              label = "Partition 1"
+          labelloc = "b"
+              
+              a1 [label = "A"]
+              
+          }
+          
+        subgraph cluster_pp1{
+              label = "Partition 1"
+              
+              
+              a [label = "A"];
+              
+          }
+          
+          a->a1[style="dashed" dir="none"];
+          b->b1[style="dashed" dir="none"];
+          c->c1[style="dashed" dir="none"];
+    }
+    subgraph cluster_p2 {
+      label = "Worker 2";
+      subgraph cluster_pp2{
+              label = "Partition 3"
+                
+              d[label = "D"];
+              
+              
+          }
+          subgraph cluster_p2{
+              label = "Partition 3"
+              labelloc = "b"
+              d1[label = "D"];
+              
+              
+          }
+          
+          d->d1[style="dashed" dir="none"];
+    }
+  }
+} 
+-----
+
+== Разное число партиций: Join не работает (Runtime Exception)
+
+[graphviz, "copart-diff.png"]
+-----
+digraph D {
+  subgraph system {
+     subgraph cluster_s2{
+          style = "invis"
+          S1 [shape=plaintext label = "Source 1"];
+          S2 [shape=plaintext label = "Source 2"];
+          S1->S2 [style="invis"]
+      }
+    subgraph cluster_p1 {
+      label = "Worker 1";
+        subgraph cluster_p1{
+              label = "Partition 1"
+              labelloc = "b"
+              b1 [label = "B"]
+              a1 [label = "A"]
+          }
+          
+        subgraph cluster_pp1{
+              label = "Partition 1"
+          
+              
+              a [label = "A"];
+              
+          }
+          
+          subgraph cluster_pa2{
+              label = "Partition 2"
+          b [label = "B"];
+              c [label = "C" color="red"];
+              
+          }
+          a->a1[style="dashed" dir="none"];
+          b->b1[style="dashed" dir="none"];
+          
+          
+    }
+    subgraph cluster_p2 {
+      label = "Worker 2";
+      subgraph cluster_pp2{
+              label = "Partition 3"
+          
+              d[label = "D"];
+              
+              
+          }
+          subgraph cluster_pa3{
+              label = "Partition 2"
+              labelloc = "b"
+          
+              d1[label = "D"];
+              c1[label = "C" color ="red"];
+              
+          }
+          c->c1[ dir="none" color="red"];
+          d->d1[style="dashed" dir="none"];
+    }
+  }
+} 
+-----
+
+== Разный алгоритм партицирования: Join не работает молча!
+
+[graphviz, "copart-diff-algorithm.png"]
+-----
+digraph D {
+  subgraph system {
+     subgraph cluster_s2{
+          style = "invis"
+          S1 [shape=plaintext label = "Source 1"];
+          S2 [shape=plaintext label = "Source 2"];
+          S1->S2 [style="invis"]
+      }
+    subgraph cluster_p1 {
+      label = "Worker 1";
+        subgraph cluster_p1{
+              label = "Partition 1"
+              labelloc = "b"
+          
+              b1 [label = "B" color="red"]
+              a1 [label = "A"]
+              
+          }
+          
+        subgraph cluster_pp1{
+              label = "Partition 1"
+          
+               c[label = "C" color= "red"];
+              a [label = "A"];
+              
+          }
+          
+    }
+    subgraph cluster_p2 {
+      label = "Worker 2";
+      subgraph cluster_pp2{
+              label = "Partition 2"
+          b [label = "B" color="red"];
+              d[label = "D"];
+             
+              
+          }
+          subgraph cluster_p2{
+              label = "Partition 2"
+              labelloc = "b"
+              d1[label = "D"];
+              c1[label = "C" color = "red"];
+              
+          }
+          a->a1[style="dashed" dir="none"];
+          b->b1[color="red" dir="none"];
+          c->c1[color="red" dir="none"];
+          d->d1[style="dashed" dir="none"];
+    }
+  }
+} 
+-----
+
+== GlobalKTable: реплицируется всюду целиком
 
 [source,java]
 ----
 GlobalKTable<...> global = streamsBuilder.globalTable("global", ...);
 ----
 
-* Не нуждается в копартиционировании
-* Реплицируется в local state каждого обработчика
+[graphviz, "globalktable.png"]
+-----
+digraph D {
+  subgraph system {
+     subgraph cluster_s2{
+          style = "invis"
+          S1 [shape=plaintext label = "Source 1"];
+          S2 [shape=plaintext label = "GlobalKTable"];
+          S1->S2 [style="invis"]
+      }
+    subgraph cluster_p1 {
+      label = "Worker 1";
+        subgraph cluster_p1{
+              label = ""
+          
+              b1 [label = "B"]
+              a1 [label = "A"]
+              cc [label = "C"] 
+              dd [label = "D"]
+              a1->cc[style="invis"];
+              b1->dd[style="invis"];
+          }
+          
+        subgraph cluster_pp1{
+              label = "Partition 1"
+          
+             
+              a [label = "A"];
+              b [label = "B"];
+          }
+          
+    }
+    subgraph cluster_p2 {
+      label = "Worker 2";
+      subgraph cluster_pp2{
+              label = "Partition 2"
+                c[label = "C"];
+              
+              d[label = "D"];
+              
+             
+              
+          }
+          subgraph cluster_p2{
+              label = ""
+              labelloc = "b"
+              d1[label = "D"];
+              c1[label = "C" ];
+              aa[label = "A"];
+              bbb[label = "B"];
+              c1->aa [style= "invis"];
+              d1->bbb [style= "invis"];
+              
+          }
+          a->a1[style="dashed" dir="none"];
+          b->b1[style="dashed" dir="none"];
+          c->c1[style="dashed" dir="none"];
+          d->d1[style="dashed" dir="none"];
+    }
+  }
+} 
+-----
 
 == Операции между стримами и таблицами: сводка
 .Источник: https://kafka.apache.org/20/documentation/streams/developer-guide/dsl-api.html#stateful-transformations[Kafka Streams DSL Documentation]
@@ -625,6 +953,13 @@ KStream<String, String> join =
 - Исходники!
 ** https://github.com/apache/kafka/
 ** https://github.com/spring-projects/spring-kafka
+
+== Телеграм
+
+Грефневая Кафка
+
+* https://t.me/AwesomeKafka_ru
+* https://t.me/proKafka
 
 == Выводы
 
