@@ -549,7 +549,9 @@ table-demo-KSTREAM-REDUCE-STATE-STORE-0000000002-changelog
 table-demo-geo-STATE-STORE-0000000006-changelog
 ----
 
-== Копартиционирование: Join работает
+== Копартиционирование
+
+Join работает
 
 
 [graphviz, "copart-norm.png"]
@@ -625,7 +627,9 @@ digraph D {
 } 
 -----
 
-== Разное число партиций: Join не работает (Runtime Exception)
+== Несовпадение количества партиций
+
+Join не работает (Runtime Exception)
 
 [graphviz, "copart-diff.png"]
 -----
@@ -689,7 +693,9 @@ digraph D {
 } 
 -----
 
-== Разный алгоритм партицирования: Join не работает молча!
+== Несовпадение алгоритма партицирования
+
+Join не работает молча!
 
 [graphviz, "copart-diff-algorithm.png"]
 -----
@@ -746,7 +752,9 @@ digraph D {
 } 
 -----
 
-== GlobalKTable: реплицируется всюду целиком
+== GlobalKTable
+
+Реплицируется всюду целиком
 
 [source,java]
 ----
