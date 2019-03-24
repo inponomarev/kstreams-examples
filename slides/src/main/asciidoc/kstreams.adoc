@@ -27,12 +27,25 @@ include::_doc_general_attributes.adoc[]
 
 [%step]
 * Web-scraping в реальном времени
-* 500 запросов/сек
+* 500 запросов/сек (да, это совсем немного!)
 * Удобные абстракции «из коробки»:
-** «Подрезаемый» лог
+** Персистентный, но «подрезаемый» лог
 ** Microbatching
-** Автоматическая балансировка при масштабировании
-* DISCLAIMER: пока не в production
+
+== Зачем нам Streams API?
+
+[%step]
+* Real-time stream processing
+* Stream-like API (map / reduce)
+* Под капотом:
+** Автоматический offset commit
+** Ребалансировка
+** Внутреннее состояние обработчиков
+** Легкое масштабирование
+
+== Disclaimer
+
+Наш Kafka Streams ещё не в production
 
 == Kafka за 30 секунд
 .Источник: Kafka. The Definitive Guide
@@ -49,18 +62,6 @@ image::1024px-Aiga_mail.svg.png[{image-10-width}]
 == Compacted topics
 .Источник: Kafka Documentation
 image::log_compaction.png[{image-70-width}]
-
-== Kafka Streams API: нам обещают...
-
-[%step]
-* Real-time stream processing
-* Stream-like API (map / reduce)
-* Под капотом:
-** Автоматический коммит оффсетов
-** Ребалансировка
-** Внутреннее состояние обработчиков
-** Легкое масштабирование
-
 
 == Попробуем?
 
@@ -976,7 +977,6 @@ KStream<String, String> join =
 == Выводы
 
 [%step]
-* Kafka StreamsAPI -- это большой мир
 * Kafka StreamsAPI -- это удобная абстракция над «сырой» Кафкой
 * Чтобы начать пользоваться, надо настроить мышление под потоковую обработку
 * Технология переживает бурное развитие
