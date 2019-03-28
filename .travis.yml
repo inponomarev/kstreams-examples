@@ -11,8 +11,9 @@ cache:
 
 before_install:
   - docker pull exoplatform/jdk
-  - docker run -d exoplatform/jdk /bin/sh -c "apt-get install -y graphviz && mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn test -B" -v $HOME:/app
+  - docker run -d exoplatform/jdk /bin/sh -v $HOME:/app
   - docker ps -a
+  - docker run exoplatform/jdk /bin/sh -c "apt-get update && apt-get install -y graphviz && mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn test -B"
 
 after_success:
   - cd slides/target/generated-slides
