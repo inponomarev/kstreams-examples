@@ -1,6 +1,6 @@
 ---
 
-language: ruby
+language: java
 
 cache:
   directories:
@@ -8,7 +8,7 @@ cache:
 
 before_install:
   - docker pull exoplatform/jdk
-  - docker run -d exoplatform/jdk /bin/sh -c "apt-get install -y graphviz" -v $HOME:/app
+  - docker run -d exoplatform/jdk /bin/sh -c "apt-get install -y graphviz && mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V && mvn test -B" -v $HOME:/app
   - docker ps -a
 
 after_success:
