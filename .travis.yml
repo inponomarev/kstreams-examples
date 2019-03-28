@@ -1,17 +1,15 @@
 ---
-dist: xenial
 
-sudo: required
-
-language: java
-jdk: openjdk8
+language: ruby
 
 cache:
   directories:
   - $HOME/.m2
 
 before_install:
-  - sudo apt-get install -y graphviz
+  - docker pull exoplatform/jdk
+  - docker run -d exoplatform/jdk /bin/sh -c "apt-get install -y graphviz" -v $HOME:/app
+  - docker ps -a
 
 after_success:
   - cd slides/target/generated-slides
