@@ -10,8 +10,8 @@ cache:
   - $HOME/.m2
 
 before_install:
-  - docker pull openkbs/ubuntu-bionic-jdk-mvn-py3
-  - docker run --rm -u root --name kstreams -v $(pwd):/data openkbs/ubuntu-bionic-jdk-mvn-py3 /bin/bash -c "apt-get update ; apt-get install -y graphviz ; ls -lah . ; mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V ; mvn test -B"
+  - docker build -t kstreams .
+  - docker run --rm kstreams /bin/bash -c "mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V ; mvn test -B"
 
 after_success:
   - cd slides/target/generated-slides
