@@ -11,7 +11,7 @@ cache:
 
 before_install:
   - docker pull exoplatform/jdk
-  - docker run -d --name kstreams exoplatform/jdk -v $HOME:/app 
+  - docker run -d --name kstreams exoplatform/jdk -v $HOME:/app /bin/sh -c "sleep 300"
   - docker ps -a
   - docker exec kstreams /bin/sh -c "apt-get update ; apt-get install -y graphviz"
   - docker exec kstreams /bin/sh -c "mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V"
