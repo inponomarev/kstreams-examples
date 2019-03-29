@@ -13,8 +13,8 @@ before_install:
   - docker pull exoplatform/jdk
   - docker run -d --name kstreams exoplatform/jdk /bin/sh -c "apt-get update ; apt-get install -y graphviz" -v $HOME:/app 
   - docker ps -a
-  - docker exec -i kstreams /bin/sh -c "mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V"
-  - docker exec -i kstreams /bin/sh -c "mvn test -B"
+  - docker exec kstreams /bin/sh -c "mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V"
+  - docker exec kstreams /bin/sh -c "mvn test -B"
 
 after_success:
   - cd slides/target/generated-slides
