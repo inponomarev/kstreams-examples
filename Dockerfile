@@ -1,6 +1,6 @@
 FROM openkbs/ubuntu-bionic-jdk-mvn-py3
 
-ENV GRAPHVIZ_DOT /usr/local/bin/graphviz/dot
+ENV GRAPHVIZ_DOT /usr/bin/dot
 
 RUN apt-get update
 
