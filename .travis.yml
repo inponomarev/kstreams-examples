@@ -11,7 +11,7 @@ cache:
 
 before_install:
   - docker build -t kstreams .
-  - docker run --rm kstreams /bin/bash -c "mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V ; mvn test -B"
+  - docker run --rm kstreams /bin/bash -c "dot -h ; mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V ; mvn test -B"
 
 after_success:
   - cd slides/target/generated-slides
