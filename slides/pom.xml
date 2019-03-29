@@ -112,6 +112,9 @@
                     </dependency>
                 </dependencies>
                 <configuration>
+                    <attributes>
+                        <graphvizdot>/usr/bin/dot</graphvizdot>
+                    </attributes>
                     <sourceDocumentName>kstreams.adoc</sourceDocumentName>
                     <requires>
                         <require>asciidoctor-diagram</require>
