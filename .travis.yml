@@ -1,19 +1,20 @@
 ---
-dist: xenial
-
-sudo: required
-
-language: java
-jdk: openjdk8
+services:
+  - docker
 
 cache:
   directories:
-  - $HOME/.m2
+  - /tmp/m2
 
 before_install:
-  - sudo apt-get install -y graphviz
+  - mkdir -p /tmp/m2
+  - docker build -t kstreams .
+
+script:
+  - docker run -v /tmp/m2:/root/.m2 -v $TRAVIS_BUILD_DIR:/data --rm kstreams /bin/bash -c "mvn verify"
 
 after_success:
+  - sudo chown -R $USER slides/target/generated-slides
   - cd slides/target/generated-slides
   - git init
   - git config user.name "${GH_USER_NAME}"
