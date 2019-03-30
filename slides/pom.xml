@@ -112,9 +112,6 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <attributes>
-                        <graphvizdot>/usr/bin/dot</graphvizdot>
-                    </attributes>
                     <sourceDocumentName>kstreams.adoc</sourceDocumentName>
                     <requires>
                         <require>asciidoctor-diagram</require>
@@ -146,7 +143,6 @@
                                 <revealjs_theme>black</revealjs_theme>
                                 <revealjs_transition>linear</revealjs_transition>
                                 <project-version>${project.version}</project-version>
-                                <graphvizdot>/usr/bin/dot</graphvizdot>
                             </attributes>
                         </configuration>
                     </execution>
