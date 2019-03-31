@@ -261,6 +261,7 @@ assertEquals("hello", bar.key());
 assertEquals("WORLD", bar.value());
 ----
 
+[transition="fade-out, slide-in"]
 == Простое ветвление стримов
 Java-стримы так не могут:
 [source,java]
@@ -282,6 +283,7 @@ A -> C -> CF
 }
 -----
 
+[transition="fade-in, fade-out"]
 == Ветвление стримов по условию
 
 Не используйте `KStream.branch`, используйте `KafkaStreamsBrancher`!
@@ -308,6 +310,7 @@ Branch -> C -> CF
 }
 -----
 
+[transition="fade-in, slide-out"]
 == Простое слияние
 [source,java]
 ----
@@ -539,6 +542,7 @@ digraph G
 `through(String topic, Produced<K, V> produced)`
 * Неявное при `map()`/`selectKey()` и stateful-операциях
 
+[transition="fade-out, slide-in"]
 == Таблицы vs стримы
 
 Местонахождение пользователя
@@ -546,6 +550,7 @@ digraph G
 .Michael G. Noll. Of Streams and Tables in Kafka and Stream Processing
 image::stream-table-animation-latestLocation.gif[{image-100-width}]
 
+[transition="fade-in, fade-out"]
 == Таблицы vs стримы
 
 Количество посещенных мест
@@ -553,7 +558,7 @@ image::stream-table-animation-latestLocation.gif[{image-100-width}]
 .Michael G. Noll. Of Streams and Tables in Kafka and Stream Processing
 image::stream-table-animation-numVisitedLocations.gif[{image-100-width}]
 
-
+[transition="fade-in, slide-out"]
 == Таблицы vs стримы
 
 Производная и интеграл
@@ -984,7 +989,7 @@ digraph G
 }
 -----
 
-
+[transition="fade-out, slide-in"]
 == Tumbling window
 
 [source,java]
@@ -996,6 +1001,7 @@ TimeWindowedKStream<..., ...> windowed =
 .Источник: Kafka Streams in Action
 image::tumbling-window.png[{image-70-width}]
 
+[transition="fade-in, fade-out"]
 == Tumbling window
 [source,java]
 ----
@@ -1003,16 +1009,18 @@ TimeWindowedKStream<..., ...> windowed =
     stream.groupByKey()
         .windowedBy(TimeWindows.of(Duration.ofSeconds(20)));
     
-KTable<Windowed<String>, Long> count = windowed.count();
+KTable<Windowed<...>, Long> count = windowed.count();
+
+/*
+* Windowed<K> interface:
+* - K key()
+* - Window window()
+* -- Instant startTime()
+* -- Instant endTime()
+*/
 ----
 
-`Windowed<K>` interface:
-
-* `K key()`
-* `Window window()`
-** `Instant startTime()`
-** `Instant endTime()`
-
+[transition="fade-in, fade-out"]
 == Hopping Window
 [source,java]
 ----
@@ -1024,6 +1032,7 @@ TimeWindowedKStream<..., ...> windowed =
 .Источник: Kafka Streams in Action
 image::hopping-window.png[{image-50-width}]
 
+[transition="fade-in, slide-out"]
 == Session Window
 [source,java]
 ----
@@ -1043,24 +1052,15 @@ image::streams-session-windows-02.png[{image-50-width}]
 По событию смены счёта понимаем, какая ставка будет «правильной»:
 [source,java]
 ----
-public KeyValue<String, Bet> transform(String key, 
-                    EventScore value, 
-                    KeyValueStore<String, Score> stateStore) {
-        Score current = Optional.ofNullable(stateStore.get(key))
-                .orElse(new Score());
-        stateStore.put(key, value.getScore());
-        Outcome currenOutcome = 
-                value.getScore().getHome() > current.getHome() 
-                ?
-                Outcome.H : Outcome.A;
-        Bet bestBet = new Bet(null, 
-                            value.getEvent(), 
-                            currenOutcome, 
-                            0, 
-                            value.getTimestamp());
-        return KeyValue.pair(String.format("%s:%s", key, currenOutcome), bestBet);
 
-}
+Score current = Optional.ofNullable(stateStore.get(key))
+                .orElse(new Score());
+stateStore.put(key, value.getScore());
+
+Outcome currenOutcome = 
+    value.getScore().getHome() > current.getHome() 
+    ?
+    Outcome.H : Outcome.A;
 ----
 
 == Демо: Windowed Joins
