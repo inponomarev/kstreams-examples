@@ -22,6 +22,7 @@ include::_doc_general_attributes.adoc[]
 :revealjs_width: 1600
 :revealjs_height: 900
 
+
 //== Часть 1. Введение
 :!figure-caption:
 
@@ -29,7 +30,7 @@ include::_doc_general_attributes.adoc[]
 
 [%step]
 * Web-scraping в реальном времени
-* 500 запросов/сек (да, это совсем немного!)
+* 500 запросов/сек (да, это очень мало!)
 * Удобные абстракции «из коробки»:
 ** Персистентный, но «подрезаемый» лог
 ** Microbatching
@@ -47,7 +48,22 @@ include::_doc_general_attributes.adoc[]
 
 == Disclaimer
 
-Наш Kafka Streams ещё не в production
+Наш Kafka Streams ещё не в production!
+
+[.fragment]
+[.custom-style]
+[cols="30a,70a"]
+|===
+.^|image::koshelev.jpg[]
+.^|
+
+Вопросы про production?
+
+*Григорий Кошелев:*
+
+«Когда всё пошло по Кафке»
+|===
+
 
 == Kafka за 30 секунд
 .Источник: Kafka. The Definitive Guide
@@ -57,20 +73,20 @@ image::kafka_cluster.png[{image-60-width}]
 
 image::1024px-Aiga_mail.svg.png[{image-10-width}]
 
-* Partition Number -- определяется Producer-ом
+* Номер партиции
 * Ключ
 * Значение
 
 == Compacted topics
 .Источник: Kafka Documentation
-image::log_compaction.png[{image-70-width}]
+image::log_compaction.png[{image-60-width}]
 
 == Попробуем?
 
 image::gamov.png[{image-40-width}]
 
+[transition="fade-out, slide-in"]
 == Kafka Streams API: общая структура KStreams-приложения
-
 
 [source,java]
 ----
@@ -79,24 +95,19 @@ StreamsConfig config = ...;
 
 StreamsBuilder builder = ...; 
 //Здесь строим топологию
-
-
-//Это за нас делает SPRING-KAFKA
-KafkaStreams streams = new KafkaStreams(builder, config); 
-streams.start(); 
-...
-streams.close();
-
 ----
 
-== Топология (а на самом деле, DAG)
+[transition="fade-in, fade-out"]
+== Kafka Streams API: общая структура KStreams-приложения
+Топология -- конвейер обработчиков:
 
 [graphviz,"topology-sample.png"]
 ----
 digraph G {
 
-graph [ dpi = 140 ]; 
-node [shape="circle" ];
+graph [ dpi = 140 ];
+rankdir="LR";
+node [shape="circle" fontsize=14; fixedsize="true"; width="1.3" ];
 
 
 a[label="source"];
@@ -119,10 +130,42 @@ e->g;
 ----
 
 
-== С чего начать?
+[transition="fade-in, slide-out"]
+== Kafka Streams API: общая структура KStreams-приложения
 
-image::initializr.png[{image-90-width}]
+[source,java]
+----
+StreamsConfig config = ...;
+//Здесь устанавливаем всякие опции
 
+StreamsBuilder builder = ...; 
+//Здесь строим топологию
+
+
+//Это за нас делает SPRING-KAFKA
+KafkaStreams streams = new KafkaStreams(builder, config); 
+streams.start(); 
+...
+streams.close();
+
+----
+
+
+
+== В Спринге достаточно определить две вещи
+
+* `@Bean KafkaStreamsConfiguration`
+* `@Bean Topology`
+
+[.fragment]
+[.custom-style]
+[cols="30a,70a"]
+|===
+.^|image::borisov.png[]
+.<|И не забудьте про `@EnableKafkaStreams`
+|===
+
+== Demo Time
 
 == @Bean KafkaConfiguration 
 
@@ -135,7 +178,7 @@ image::initializr.png[{image-90-width}]
 public KafkaStreamsConfiguration getStreamsConfig() {
     Map<String, Object> props = new HashMap<>();
     //ВАЖНО!
-    props.put(StreamsConfig.APPLICATION_ID_CONFIG, "my-app");
+    props.put(StreamsConfig.APPLICATION_ID_CONFIG, "bet-totalling-demo-app");
     //ВАЖНО!
     props.put(StreamsConfig.NUM_STREAM_THREADS_CONFIG, 4);
     props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
@@ -215,11 +258,6 @@ ProducerRecord<String, String> bar =
 assertEquals("hello", bar.key());
 assertEquals("WORLD", bar.value());
 ----
-
-== Демо
-
-* Real-time processing
-* Сохранение consumer offset
 
 == Простое ветвление стримов
 Java-стримы так не могут:
@@ -305,18 +343,35 @@ Facebook's RocksDB -- что это и зачем?
 |===
 
 
-== RocksDB: краткий гид
+== RocksDB похож на `TreeMap<K,V>`
 
 * Сохранение K,V в бинарном формате
 * Лексикографическая сортировка
 * Iterator (snapshot view)
 * Удаление диапазона (deleteRange)
 
-== Пишем “Tweet Counting App”
+== Пишем “Bet Totalling App”
 
-* Подсчитаем твиты с хэштегом
-* Key: имя пользователя, value: Count
-* `KeyValueStore` и `Transformer`
+[cols="30a,70a"]
+|===
+.^|image::soccerball.png[]
+.^|
+* Идут футбольные матчи (меняется счёт)
+* Делаются ставки: H, D, A.
+* Ключ составной: `Cyprus-Belgium:A`
+* Значение:
+[source,java]
+----
+final String bettor;
+final String match;
+final Outcome outcome; //H, D or A
+final long amount;
+final long timestamp;
+----
+* Какова сумма ставок на исход?
+|===
+
+== Demo Time
 
 == @Bean Topology
 [graphviz, "counting-topology.png"]
@@ -326,37 +381,53 @@ graph [ dpi = 150 ];
 rankdir="LR";
 node [fontsize=18; shape="circle"; fixedsize="true"; width="1.1"];
 Store [shape="cylinder"; label="Local Store"; fixedsize="true"; width="1.5"]
-Source -> Filter -> Counter -> Sink
-Counter -> Store [dir=both; label=" \n "]
-{rank = same; Store; Counter;}
+Source -> Sum -> Sink
+Sum -> Store [dir=both; label=" \n "]
+{rank = same; Store; Sum;}
 }
 -----
 
 [source,java]
 ----
-KStream<String, String> filtered = streamsBuilder
-            .stream("in")
-            .filter((k, v) -> v.toLowerCase().contains("jpoint"));
+KStream<String, Bet> input = streamsBuilder.
+    stream(BET_TOPIC, Consumed.with(Serdes.String(),
+                      new JsonSerde<>(Bet.class)));
 
-KStream<String, Integer> counted =
-    new CountingTransformer()
-        .transformStream(streamsBuilder, filtered);
+KStream<String, Long> counted =
+    new TotallingTransformer()
+        .transformStream(streamsBuilder, input);
 ----
 
-== Подсчёт твитов
+== Суммирование ставок
 [source,java]
 ----
 @Override
-public KeyValue<String, Integer> transform(
-    String key, 
-    String value, 
-    KeyValueStore<String, Integer> stateStore) {
-    int current = Optional.ofNullable(
-            stateStore.get(key)).orElse(0) + 1;
+public KeyValue<String, Long> transform(String key, Bet value,
+                    KeyValueStore<String, Long> stateStore) {
+    long current = Optional.ofNullable(stateStore.get(key)).orElse(0L);
+    current += value.getAmount();
     stateStore.put(key, current);
     return KeyValue.pair(key, current);
 }
 ----
+
+== StateStore доступен в тестах
+[source,java]
+----
+@Test
+void testTopology() {
+    topologyTestDriver.pipeInput(...);
+    topologyTestDriver.pipeInput(...);
+
+    KeyValueStore<String, Long> store =
+        topologyTestDriver.getKeyValueStore(TotallingTransformer.STORE_NAME);
+    
+    assertEquals(..., store.get(...));
+    assertEquals(..., store.get(...));
+}
+----
+
+
 == Демо: Ребалансировка / репликация
 
 * Ребалансировка / репликация партиций state при запуске / выключении обработчиков.
@@ -365,8 +436,9 @@ public KeyValue<String, Integer> transform(
 
 [source,code]
 ----
-$kafka-topics --describe counting-demo-app-jpoint-counted-changelog
-Topic:counting-demo-app-jpoint-counted-changelog
+$kafka-topics --zookeeper localhost --describe
+
+Topic:bet-totalling-demo-app-totalling-store-changelog
 PartitionCount:10       
 ReplicationFactor:1 
 Configs:cleanup.policy=compact
@@ -379,6 +451,14 @@ Configs:cleanup.policy=compact
 digraph D {
   graph [ dpi = 150 ]; 
   subgraph system {
+
+     subgraph cluster_s2{
+          style = "invis"
+          S1 [shape=plaintext label = "Source"];
+          S2 [shape=plaintext label = "Local store"];
+          S3 [shape=plaintext label = "Changelog"];
+          S1->S2->S3 [style="invis"]
+      }
 
     subgraph cluster_p1 {
       label = "Worker 1";
@@ -477,53 +557,59 @@ image::stream-table-animation-numVisitedLocations.gif[{image-100-width}]
 image::derivative-and-integral.png[{image-100-width}]
 
 
-== Переписываем counting app при помощи KTable
+== Переписываем totalling app при помощи KTable
 
 [source,java]
 ----
-KTable<String, Long> count = filtered.groupByKey().count();
-
-count.toStream().foreach((k, v) -> {
-            gui.update(k, String.valueOf(v));
-        });
+KTable<String, Long> totals = input.groupByKey()
+    .aggregate(
+        () -> 0L, 
+        (k, v, a) -> a + v.getAmount(),
+        //Неявное создание локального хранилища
+        Materialized.with(Serdes.String(), Serdes.Long())
+    );
 ----
 
 [source,code]
 ----
-$kafka-topics --describe
-Topic:table-demo-KSTREAM-AGGREGATE-STATE-STORE-0000000002-changelog 
+$kafka-topics --zookeeper localhost --describe
+
+Topic: table2-demo-KSTREAM-AGGREGATE-STATE-STORE-0000000001-changelog 
 PartitionCount:10
 ReplicationFactor:1
 Configs:cleanup.policy=compact
 ----
 
 
-== Извлекаем самый свежий твит пользователя про #jpoint
+== Получаем таблицу счетов матчей
 
 [source,java]
 ----
-KTable<String, String> latest = filtered.groupByKey()
-            .reduce((v1, v2) -> v2);
-latest.toStream()....
+KStream<String, Score> scores = 
+    eventScores.flatMap((k, v) ->
+        Stream.of(Outcome.H, Outcome.A).map(o ->
+            KeyValue.pair(String.format("%s:%s", k, o), v))
+            .collect(Collectors.toList()))
+    .mapValues(EventScore::getScore);
+
+KTable<String, Score> tableScores =
+    scores.groupByKey(Grouped.with(...).reduce((a, b) -> b);
+
 ----
 [source,code]
 ----
-$kafka-topics --describe
-Topic:table-demo-KSTREAM-REDUCE-STATE-STORE-0000000002-changelog 
-PartitionCount:10
-ReplicationFactor:1
-Configs:cleanup.policy=compact
+$kafka-topics --zookeeper localhost --list
+
+table2-demo-KSTREAM-REDUCE-STATE-STORE-0000000006-repartition
+table2-demo-KSTREAM-REDUCE-STATE-STORE-0000000006-changelog
 ----
 
 
 
 == Join: объединяем источники
 
-(например, твиты и геолокация)
+image::derivative.png[{image-40-width}]
 
-image::derivative.png[{image-60-width}]
-
-== Join: объединяем источники
 [graphviz, "join-storages.png"]
 -----
 digraph G {
@@ -543,21 +629,15 @@ Store1 -> Store2 [style=invis]
 }
 -----
 
-== Демо: Объединяем твиты с геолокацией
+== Демо: Объединяем сумму ставок с текущим счётом
 [source,java]
 ----
-KTable<String, String> geo = streamsBuilder
-        .table("geo", ...);
-KTable<String, String> joined = latest
-    .join(geo, (v1, v2) -> String.format("%s: %s", v2, v1));
+KTable<String, String> joined = 
+    totals.join(tableScores,
+            (total, eventScore) -> 
+                String.format("(%s)\t%d", eventScore, total));
 ----
 
-[source,code]
-----
-$kafka-topics --list
-table-demo-KSTREAM-REDUCE-STATE-STORE-0000000002-changelog
-table-demo-geo-STATE-STORE-0000000006-changelog
-----
 
 [transition="fade-out, slide-in"]
 == Копартиционирование
