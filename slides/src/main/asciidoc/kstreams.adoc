@@ -178,7 +178,8 @@ streams.close();
 public KafkaStreamsConfiguration getStreamsConfig() {
     Map<String, Object> props = new HashMap<>();
     //ВАЖНО!
-    props.put(StreamsConfig.APPLICATION_ID_CONFIG, "bet-totalling-demo-app");
+    props.put(StreamsConfig.APPLICATION_ID_CONFIG,
+        "bet-totalling-demo-app");
     //ВАЖНО!
     props.put(StreamsConfig.NUM_STREAM_THREADS_CONFIG, 4);
     props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
@@ -212,7 +213,7 @@ graph [ dpi = 150 ];
 rankdir="LR";
 node [fontsize=16; shape="circle"; fixedsize="true"; width="1.1"];
 
-Source -> MapValues -> Sink
+Source -> MapVal -> Sink
 
 }
 -----
@@ -250,7 +251,8 @@ TopologyTestDriver topologyTestDriver =
 ----
 ConsumerRecordFactory<String, String> factory = new
                 ConsumerRecordFactory<>(...);
-topologyTestDriver.pipeInput(factory.create("foo", "hello", "world"));
+topologyTestDriver.pipeInput(factory.create("foo", "hello",
+                                                "world"));
 
 ProducerRecord<String, String> bar = 
     topologyTestDriver.readOutput("bar", ...);
@@ -404,7 +406,9 @@ KStream<String, Long> counted =
 @Override
 public KeyValue<String, Long> transform(String key, Bet value,
                     KeyValueStore<String, Long> stateStore) {
-    long current = Optional.ofNullable(stateStore.get(key)).orElse(0L);
+    long current = Optional
+        .ofNullable(stateStore.get(key))
+        .orElse(0L);
     current += value.getAmount();
     stateStore.put(key, current);
     return KeyValue.pair(key, current);
@@ -420,7 +424,8 @@ void testTopology() {
     topologyTestDriver.pipeInput(...);
 
     KeyValueStore<String, Long> store =
-        topologyTestDriver.getKeyValueStore(TotallingTransformer.STORE_NAME);
+        topologyTestDriver
+        .getKeyValueStore(TotallingTransformer.STORE_NAME);
     
     assertEquals(..., store.get(...));
     assertEquals(..., store.get(...));
@@ -574,7 +579,8 @@ KTable<String, Long> totals = input.groupByKey()
 ----
 $kafka-topics --zookeeper localhost --describe
 
-Topic: table2-demo-KSTREAM-AGGREGATE-STATE-STORE-0000000001-changelog 
+Topic: 
+table2-demo-KSTREAM-AGGREGATE-STATE-STORE-0000000001-changelog 
 PartitionCount:10
 ReplicationFactor:1
 Configs:cleanup.policy=compact
@@ -923,8 +929,24 @@ digraph D {
 
 == Операции между стримами и таблицами: сводка
 .Источник: https://kafka.apache.org/20/documentation/streams/developer-guide/dsl-api.html#stateful-transformations[Kafka Streams DSL Documentation]
-image::streams-stateful_operations.png[{image-70-width}]
+image::streams-stateful_operations.png[{image-50-width}]
 
+
+== Время, вперёд!
+
+[source,java]
+----
+KStream<String, Bet> bets = streamsBuilder.stream(BET_TOPIC,
+    Consumed.with(
+            Serdes...)
+            .withTimestampExtractor(
+                
+                (record, previousTimestamp) ->
+                    ((Bet) record.value()).getTimestamp()
+
+            ));
+----
+(Ещё время можно извлечь из WallClock и RecordMetadata.)
 
 == Сохранение Timestamped-значений в{nbsp}RocksDB
 
@@ -932,20 +954,21 @@ WindowKeySchema.java
 
 [source,java]
 ----
-static Bytes toStoreKeyBinary(final byte[] serializedKey,
-                                  final long timestamp,
-                                  final int seqnum) {
-        final ByteBuffer buf = ByteBuffer.allocate(serializedKey.length
-                                        + TIMESTAMP_SIZE 
-                                        + SEQNUM_SIZE);
-        buf.put(serializedKey);
-        buf.putLong(timestamp);
-        buf.putInt(seqnum);
-        return Bytes.wrap(buf.array());
-    }
+static Bytes toStoreKeyBinary(byte[] serializedKey,
+                              long timestamp,
+                              int seqnum) {
+    ByteBuffer buf = ByteBuffer.allocate(
+                                serializedKey.length
+                                + TIMESTAMP_SIZE 
+                                + SEQNUM_SIZE);
+    buf.put(serializedKey);
+    buf.putLong(timestamp);
+    buf.putInt(seqnum);
+    return Bytes.wrap(buf.array());
+}
 ----
 
-== Быстрое извлечение
+== Быстрое извлечение значений по ключу из диапазона времени
 
 [graphviz, "timestamped-record.png"]
 -----
@@ -966,66 +989,93 @@ digraph G
 
 [source,java]
 ----
-TimeWindowedKStream<String, String> windowed = 
+TimeWindowedKStream<..., ...> windowed = 
     stream.groupByKey()
         .windowedBy(TimeWindows.of(Duration.ofSeconds(20)));
 ----
 .Источник: Kafka Streams in Action
-image::tumbling-window.png[{image-80-width}]
+image::tumbling-window.png[{image-70-width}]
 
-== Hopping Window
+== Tumbling window
 [source,java]
 ----
-TimeWindowedKStream<String, String> windowed = 
+TimeWindowedKStream<..., ...> windowed = 
     stream.groupByKey()
-        .windowedBy(TimeWindows.of(Duration.ofSeconds(20))
-                        .advanceBy(Duration.ofSeconds(10)));
-----
-.Источник: Kafka Streams in Action
-image::hopping-window.png[{image-60-width}]
-
-== Session Window
-[source,java]
-----
-SessionWindowedKStream<String, String> windowed = 
-    stream.groupByKey()
-        .windowedBy(SessionWindows.with(Duration.ofMinutes(5)));
-----
-image::streams-session-windows-02.png[{image-60-width}]
-
-== Оконные агрегации: демо
-[source,java]
-----
-TimeWindowedKStream<String, String> windowed = filtered
-    .groupByKey()
-    .windowedBy(TimeWindows.of(Duration.ofSeconds(5)));
+        .windowedBy(TimeWindows.of(Duration.ofSeconds(20)));
     
 KTable<Windowed<String>, Long> count = windowed.count();
 ----
-[source,code]
-----
-$kafka-topics --list
-windows-demo-KSTREAM-AGGREGATE-STATE-STORE-0000000002-changelog
-----
-== Windowed<K> Interface
+
+`Windowed<K>` interface:
 
 * `K key()`
 * `Window window()`
 ** `Instant startTime()`
 ** `Instant endTime()`
 
-== Windowed joins
-
-Соединения стрим-стрим возможны в пределах временного окна:
+== Hopping Window
 [source,java]
 ----
-KStream<String, String> join = 
-  foo.join(bar, (v1, v2) -> String.format("%s: %s", v2, v1),
-    JoinWindows.of(Duration.ofSeconds(20)));
+TimeWindowedKStream<..., ...> windowed = 
+    stream.groupByKey()
+        .windowedBy(TimeWindows.of(Duration.ofSeconds(20))
+                        .advanceBy(Duration.ofSeconds(10)));
+----
+.Источник: Kafka Streams in Action
+image::hopping-window.png[{image-50-width}]
 
+== Session Window
+[source,java]
+----
+SessionWindowedKStream<..., ...> windowed = 
+    stream.groupByKey()
+        .windowedBy(SessionWindows.with(Duration.ofMinutes(5)));
+----
+image::streams-session-windows-02.png[{image-50-width}]
+
+
+== Демо: Windowed Joins
+
+* «Послегольщик» — игрок, пытающийся протолкнуть правильную ставку в момент смены счёта в матче
+* Штамп времени ставки и события смены счёта должны «почти совпадать».
+
+== Демо: Windowed Joins
+По событию смены счёта понимаем, какая ставка будет «правильной»:
+[source,java]
+----
+public KeyValue<String, Bet> transform(String key, 
+                    EventScore value, 
+                    KeyValueStore<String, Score> stateStore) {
+        Score current = Optional.ofNullable(stateStore.get(key))
+                .orElse(new Score());
+        stateStore.put(key, value.getScore());
+        Outcome currenOutcome = 
+                value.getScore().getHome() > current.getHome() 
+                ?
+                Outcome.H : Outcome.A;
+        Bet bestBet = new Bet(null, 
+                            value.getEvent(), 
+                            currenOutcome, 
+                            0, 
+                            value.getTimestamp());
+        return KeyValue.pair(String.format("%s:%s", key, currenOutcome), bestBet);
+
+}
 ----
 
-(Анализ вида «увидел картинку и сделал покупку».)
+== Демо: Windowed Joins
+[source, java]
+----
+KStream<String, String> join = bets.join(outcomes,
+    (bet, sureBet) -> 
+    
+    String.format("%s %dms before goal", 
+                bet.getBettor(),
+                sureBet.getTimestamp() - bet.getTimestamp()),
+                JoinWindows.of(Duration.ofSeconds(1)).before(Duration.ZERO),
+                Joined.with(Serdes....
+    ));
+----
 
 == Kafka Streams in Action
 
@@ -1059,13 +1109,9 @@ KStream<String, String> join =
 - Исходники!
 ** https://github.com/apache/kafka/
 ** https://github.com/spring-projects/spring-kafka
-
-== Телеграм
-
-Грефневая Кафка
-
-* https://t.me/AwesomeKafka_ru
-* https://t.me/proKafka
+- Телеграм: Грефневая Кафка
+** https://t.me/AwesomeKafka_ru
+** https://t.me/proKafka
 
 == Выводы
 
