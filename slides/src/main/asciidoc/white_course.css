@@ -89,7 +89,15 @@ body {
   }
 
 .reveal h2 {
-  font-size: 2em; }
+  font-size: 2em; 
+  padding-bottom: 10px;
+  border-bottom: 2px dotted #DDD}
+  
+ 
+.reveal .title h2 {
+  padding-bottom: 0;
+  border-bottom: none}
+  
 
 .reveal h3 {
   font-size: 1.2em; }
@@ -196,7 +204,7 @@ body {
 
 .reveal pre code {
   /* display: block;*/
-  font-size: 2em;
+  font-size: 3.1em;
   padding: 5px;
   overflow: auto;
   max-height: 400px;
@@ -446,3 +454,7 @@ body {
   background-repeat: repeat;
 }
   
+
+.reveal  .imageblock {
+  margin: 2em 0px;
+}

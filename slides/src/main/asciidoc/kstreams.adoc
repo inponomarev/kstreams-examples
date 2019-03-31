@@ -19,6 +19,8 @@ include::_doc_general_attributes.adoc[]
 :revealjs_mouseWheel: true
 :revealjs_center: false
 :revealjs_transition: none
+:revealjs_width: 1600
+:revealjs_height: 900
 
 //== Часть 1. Введение
 :!figure-caption:
@@ -93,7 +95,7 @@ streams.close();
 ----
 digraph G {
 
-
+graph [ dpi = 140 ]; 
 node [shape="circle" ];
 
 
@@ -163,7 +165,7 @@ NewTopic getFilteredTopic() {
 [graphviz, "yelling-topology.png"]
 -----
 digraph G {
-
+graph [ dpi = 150 ]; 
 rankdir="LR";
 node [fontsize=16; shape="circle"; fixedsize="true"; width="1.1"];
 
@@ -171,7 +173,7 @@ Source -> MapValues -> Sink
 
 }
 -----
-{nbsp} +
+
 [source,java]
 ----
 @Bean
@@ -230,6 +232,7 @@ Kstream<..> baz = foo.filter(…).map... forEach...
 [graphviz, "simplebranch.png"]
 -----
 digraph G {
+graph [ dpi = 150 ]; 
 rankdir="LR";
 node [fontsize=16; shape="circle"; fixedsize="true"; width="0.5"; label=""];
 Start, BF, CF, DF [style="invis"]
@@ -254,6 +257,7 @@ new KafkaStreamsBrancher<String, String>()
 [graphviz, "switchbranch.png"]
 -----
 digraph G {
+graph [ dpi = 150 ]; 
 rankdir="LR";
 node [fontsize=16; shape="circle"; fixedsize="true"; width="0.5"; label=""];
 Start, BF, CF, DF [style="invis"]
@@ -274,6 +278,7 @@ KStream<String, Integer> merge = foo.merge(bar);
 [graphviz, "merge.png"]
 -----
 digraph G {
+graph [ dpi = 150 ]; 
 rankdir="LR";
 node [fontsize=16; shape="circle"; fixedsize="true"; width="0.5"; label=""];
 Finish, BF, CF, DF [style="invis"]
@@ -291,8 +296,8 @@ Facebook's RocksDB -- что это и зачем?
 [.custom-style]
 [cols="30a,70a"]
 |===
-.<|image::rocksdb.png[]
-.<|
+.^|image::rocksdb.png[]
+.^|
 * Embedded key/value storage
 * LSM Tree (Log-Structured Merge-Tree)
 * High-performant (data locality)
@@ -317,6 +322,7 @@ Facebook's RocksDB -- что это и зачем?
 [graphviz, "counting-topology.png"]
 -----
 digraph G {
+graph [ dpi = 150 ]; 
 rankdir="LR";
 node [fontsize=18; shape="circle"; fixedsize="true"; width="1.1"];
 Store [shape="cylinder"; label="Local Store"; fixedsize="true"; width="1.5"]
@@ -325,7 +331,7 @@ Counter -> Store [dir=both; label=" \n "]
 {rank = same; Store; Counter;}
 }
 -----
-{nbsp} +
+
 [source,java]
 ----
 KStream<String, String> filtered = streamsBuilder
@@ -371,6 +377,7 @@ Configs:cleanup.policy=compact
 [graphviz, "local-partitioning.png"]
 -----
 digraph D {
+  graph [ dpi = 150 ]; 
   subgraph system {
 
     subgraph cluster_p1 {
@@ -431,6 +438,7 @@ digraph D {
 -----
 digraph G
 {
+    graph [ dpi = 150 ]; 
     rankdir="LR";
     node [shape=record, width=.1, height=.1];
     node1 [label="{ | | | | }", fontsize = 18, xlabel= "through(. . .)"];
@@ -441,7 +449,6 @@ digraph G
     
 }
 -----
-{nbsp} +
 
 * Явное при помощи +
 `through(String topic, Produced<K, V> produced)`
@@ -520,6 +527,7 @@ image::derivative.png[{image-60-width}]
 [graphviz, "join-storages.png"]
 -----
 digraph G {
+graph [ dpi = 150 ]; 
 rankdir="LR";
 node [fontsize=18; shape="circle"; fixedsize="true"; width="1.1"];
 Store1 [shape="cylinder"; label="Local Store 1"; fixedsize="true"; width="1.7"]
@@ -560,6 +568,7 @@ Join работает
 [graphviz, "copart-norm.png"]
 -----
 digraph D {
+  graph [ dpi = 150 ]; 
   subgraph system {
      subgraph cluster_s2{
           style = "invis"
@@ -638,6 +647,7 @@ Join не работает (Runtime Exception)
 [graphviz, "copart-diff.png"]
 -----
 digraph D {
+  graph [ dpi = 150 ]; 
   subgraph system {
      subgraph cluster_s2{
           style = "invis"
@@ -705,6 +715,7 @@ Join не работает молча!
 [graphviz, "copart-diff-algorithm.png"]
 -----
 digraph D {
+  graph [ dpi = 150 ]; 
   subgraph system {
      subgraph cluster_s2{
           style = "invis"
@@ -769,6 +780,7 @@ GlobalKTable<...> global = streamsBuilder.globalTable("global", ...);
 [graphviz, "globalktable.png"]
 -----
 digraph D {
+  graph [ dpi = 150 ]; 
   subgraph system {
      subgraph cluster_s2{
           style = "invis"
@@ -859,6 +871,7 @@ static Bytes toStoreKeyBinary(final byte[] serializedKey,
 -----
 digraph G
 {
+    graph [ dpi = 150 ]; 
     node [shape=record, fontsize=18];
     node0 [label="..."];
     node1 [label="<f0> key|<f1> timestamp|<f2> seqnum"];
@@ -986,9 +999,9 @@ KStream<String, String> join =
 == На этом всё!
 
 * https://github.com/inponomarev/kstreams-examples
-{nbsp} +
+
 * Мой твиттер @inponomarev
-{nbsp} +
+
 * Мой email: ponomarev@corchestra.ru
-{nbsp} +
+
 * *Спасибо!*
