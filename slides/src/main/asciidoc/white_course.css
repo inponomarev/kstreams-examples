@@ -86,16 +86,16 @@ body {
 
 .reveal h1 {
   font-family: Roboto-condensed;
-  font-size: 3.7em; 
+  font-size: 3.5em; 
   margin-bottom: 10px;
-  margin-top: 20px;
+  margin-top: 200px;
   border-bottom: 2px dotted #DDD;
   padding-bottom: 5px;
   
   }
 
 .reveal h2 {
-  font-size: 2.4em; 
+  font-size: 2.1em; 
   padding-bottom: 10px;
   border-bottom: 2px dotted #DDD;
   font-family: Roboto-condensed;}
@@ -431,8 +431,11 @@ td.valign-top {
 
 .reveal .author small {
   margin-top: 20px;
-  font-size: 1em;
-  font-weight: bold;
+  font-size: 1.1em;
+  font-family: Roboto-condensed;
+  /*font-weight: bold;*/
+  color: #AAA
+  /*font-style: oblique;*/
 }  
   
 /*********************************************
@@ -466,4 +469,20 @@ body {
 
 .reveal  .imageblock {
   margin: 2em 0px;
+}
+
+.reveal .preamble {
+    display: block;
+    position: absolute;
+    bottom: 80px;
+    width: 100%;
+    color: #2a76dd;
+}
+
+.reveal .preamble a {
+    color: #2a76dd;
+}
+
+section.title {
+  height: 100%;
 }
