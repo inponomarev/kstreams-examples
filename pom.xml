@@ -10,11 +10,12 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>betmodel</module>
         <module>yelling</module>
-        <module>producer</module>
-        <module>counting</module>
-        <module>tables</module>
-        <module>windows</module>
+        <module>producer2</module>
+        <module>counting2</module>
+        <module>tables2</module>
+        <module>windows2</module>
         <module>slides</module>
     </modules>
 
