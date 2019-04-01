@@ -26,6 +26,10 @@ include::_doc_general_attributes.adoc[]
 //== Часть 1. Введение
 :!figure-caption:
 
+ponomarev@corchestra.ru
+
+icon:twitter[size=lg] @inponomarev
+
 == Зачем нам Kafka?
 
 [%step]
