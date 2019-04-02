@@ -1,25 +1,25 @@
-package ru.curs.counting.configuration;
+package ru.curs.stateless.configuration;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
-import org.apache.kafka.streams.kstream.Consumed;
-import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.Printed;
+import org.apache.kafka.streams.kstream.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.support.serializer.JsonSerde;
-import ru.curs.counting.cli.GUI;
 import ru.curs.counting.model.Bet;
-import ru.curs.counting.transformer.TotallingTransformer;
+
+import java.util.function.Consumer;
 
 import static ru.curs.counting.model.TopicNames.BET_TOPIC;
 
 @Configuration
 @RequiredArgsConstructor
 public class TopologyConfiguration {
-    private final GUI gui;
+
+    private final Consumer<String> out;
 
     @Bean
     public Topology createTopology(StreamsBuilder streamsBuilder) {
@@ -28,20 +28,23 @@ public class TopologyConfiguration {
                         Consumed.with(Serdes.String(),
                                 new JsonSerde<>(Bet.class))
                 );
-
+        /*Key: "Germany-Belgium:H"
+         Value: Bet{
+                   bettor = John Doe;
+                   match = Germany-Belgium;
+                   outcome = H;
+                   amount = 100;
+                   odds = 1.7;
+                   timestamp = 1554215083998;
+                }
+        */
         KStream<String, Long> gain
                 = input.mapValues(v -> Math.round(v.getAmount() * v.getOdds()));
         /*  Key: "Germany-Belgium:H"
             Value: 170L
         */
 
-        KStream<String, Long> counted =
-                new TotallingTransformer()
-                        .transformStream(streamsBuilder, gain);
-
-        counted.foreach((k, v) -> {
-            gui.update(k, v);
-        });
+        gain.foreach((k, v) -> out.accept(String.format("%s %d", k, v)));
 
         return streamsBuilder.build();
     }

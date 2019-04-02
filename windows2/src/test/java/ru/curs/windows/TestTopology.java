@@ -41,10 +41,11 @@ public class TestTopology {
         Topology topology = new TopologyConfiguration(output::add).createTopology(sb);
         topologyTestDriver = new TopologyTestDriver(
                 topology, config.asProperties());
+        output.clear();
     }
 
     void putBet(Bet value) {
-        topologyTestDriver.pipeInput(betFactory.create(BET_TOPIC, value.getMatch() + ":" + value.getOutcome(), value));
+        topologyTestDriver.pipeInput(betFactory.create(BET_TOPIC, value.key(), value));
     }
 
     void putScore(EventScore value) {
@@ -55,7 +56,7 @@ public class TestTopology {
     @Test
     public void nearBetsFound() {
         long current = System.currentTimeMillis();
-        output.clear();
+
         putScore(new EventScore("Turkey-Moldova", new Score().goalHome(), current));
         putBet(new Bet("alice", "Turkey-Moldova", Outcome.A, 1, current - 100));
         putBet(new Bet("bob", "Turkey-Moldova", Outcome.H, 1, current - 100));

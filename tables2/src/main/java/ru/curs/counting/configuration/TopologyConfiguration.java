@@ -57,7 +57,8 @@ public class TopologyConfiguration {
                 .mapValues(EventScore::getScore);
 
         KTable<String, Score> tableScores =
-                scores.groupByKey(Grouped.with(Serdes.String(), new JsonSerde<>(Score.class))).reduce((a, b) -> b);
+                scores.groupByKey(Grouped.with(Serdes.String(), new JsonSerde<>(Score.class)))
+                        .reduce((a, b) -> b);
 
 
         //tableScores.toStream().foreach((k, v) -> System.out.printf("%s->%s%n", k, v.toString()));

@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>ru.curs</groupId>
-	<artifactId>yelling</artifactId>
+	<artifactId>stateless</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>yelling</name>
-	<description>Yelling app: convert messages to uppercase</description>
+	<name>stateless</name>
+	<description>Stateless transform example</description>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -20,6 +20,11 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>ru.curs</groupId>
+			<artifactId>betmodel</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>

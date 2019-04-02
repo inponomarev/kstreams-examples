@@ -39,19 +39,19 @@ public class TestTopology {
                 topology, config.asProperties());
     }
 
-    void processValue(String key, Bet value) {
-        topologyTestDriver.pipeInput(factory.create(BET_TOPIC, key, value));
+    void placeBet(Bet value) {
+        topologyTestDriver.pipeInput(factory.create(BET_TOPIC, value.key(), value));
     }
 
     @Test
     void testTopology() {
-        processValue("A-B:A", new Bet("foo", "A-B", Outcome.A, 2, 0));
-        processValue("A-B:A", new Bet("foo", "A-B", Outcome.A, 3, 0));
-        processValue("A-B:H", new Bet("foo", "A-B", Outcome.H, 1, 0));
+        placeBet(new Bet("foo", "A-B", Outcome.A, 20, 1.1, 0));
+        placeBet(new Bet("foo", "A-B", Outcome.A, 30, 1.1,0));
+        placeBet(new Bet("foo", "A-B", Outcome.H, 10, 1.1,0));
 
         KeyValueStore<String, Long> store = topologyTestDriver.getKeyValueStore(TotallingTransformer.STORE_NAME);
-        assertEquals(5, store.get("A-B:A").intValue());
-        assertEquals(1, store.get("A-B:H").intValue());
+        assertEquals(55, store.get("A-B:A").intValue());
+        assertEquals(11, store.get("A-B:H").intValue());
 
     }
 }

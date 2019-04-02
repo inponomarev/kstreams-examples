@@ -15,9 +15,9 @@ public class KafkaConfiguration {
     @Bean(name = KafkaStreamsDefaultConfiguration.DEFAULT_STREAMS_CONFIG_BEAN_NAME)
     public KafkaStreamsConfiguration getStreamsConfig() {
         Map<String, Object> props = new HashMap<>();
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "bet-totalling-demo-app");
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "gain-totalling-demo-app");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        props.put(StreamsConfig.NUM_STREAM_THREADS_CONFIG, 4);
+        props.put(StreamsConfig.NUM_STREAM_THREADS_CONFIG, 1);
         KafkaStreamsConfiguration streamsConfig = new KafkaStreamsConfiguration(props);
         return streamsConfig;
     }

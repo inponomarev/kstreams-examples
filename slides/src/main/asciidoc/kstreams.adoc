@@ -89,6 +89,13 @@ image::log_compaction.png[{image-60-width}]
 
 image::gamov.png[{image-40-width}]
 
+== Наш план
+
+1. *Общая структура приложения. Простые (stateless) трансформации*
+2. Трансформации с использованием локального состояния
+3. Дуализм «поток—таблица» и табличные join-ы
+4. Время и оконные операции
+
 [transition="fade-out, slide-in"]
 == Kafka Streams API: общая структура KStreams-приложения
 
@@ -97,8 +104,9 @@ image::gamov.png[{image-40-width}]
 StreamsConfig config = ...;
 //Здесь устанавливаем всякие опции
 
-StreamsBuilder builder = ...; 
+Topology topology = new StreamsBuilder()
 //Здесь строим топологию
+....build();
 ----
 
 [transition="fade-in, fade-out"]
@@ -142,12 +150,13 @@ e->g;
 StreamsConfig config = ...;
 //Здесь устанавливаем всякие опции
 
-StreamsBuilder builder = ...; 
+Topology topology = new StreamsBuilder()
 //Здесь строим топологию
+....build(); 
 
 
 //Это за нас делает SPRING-KAFKA
-KafkaStreams streams = new KafkaStreams(builder, config); 
+KafkaStreams streams = new KafkaStreams(topology, config); 
 streams.start(); 
 ...
 streams.close();
@@ -169,7 +178,29 @@ streams.close();
 .<|И не забудьте про `@EnableKafkaStreams`
 |===
 
-== Demo Time
+== Легенда
+
+[cols="30a,70a"]
+|===
+.^|image::soccerball.png[]
+.^|
+* Идут футбольные матчи (меняется счёт)
+* Делаются ставки: H, D, A.
+* Поток ставок, значение:
+[source,java]
+----
+class Bet {
+  String bettor;   //John Doe
+  String match;    //Cyprus-Belgium
+  Outcome outcome; //A (or H or D)
+  long amount;     //100
+  double odds;     //1.7
+  long timestamp;  //1554215083998
+}
+----
+* Поток ставок, ключ: `Cyprus-Belgium:A`
+|===
+
 
 == @Bean KafkaConfiguration 
 
@@ -183,7 +214,7 @@ public KafkaStreamsConfiguration getStreamsConfig() {
     Map<String, Object> props = new HashMap<>();
     //ВАЖНО!
     props.put(StreamsConfig.APPLICATION_ID_CONFIG,
-        "bet-totalling-demo-app");
+        "stateless-demo-app");
     //ВАЖНО!
     props.put(StreamsConfig.NUM_STREAM_THREADS_CONFIG, 4);
     props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
@@ -226,12 +257,11 @@ Source -> MapVal -> Sink
 ----
 @Bean
 public Topology createTopology(StreamsBuilder streamsBuilder) {
-
-    KStream<String, String> foo = streamsBuilder
-        .stream("foo",Consumed.with(Serdes.String(), Serdes.String()))
-        .mapValues((ValueMapper<String, String>) String::toUpperCase)
-        .to("bar", Produced.with(Serdes.String(), Serdes.String()));
-        return streamsBuilder.build();
+    KStream<String, Bet> input = streamsBuilder.stream(...);
+    KStream<String, Long> gain
+            = input.mapValues(v -> Math.round(v.getAmount() * v.getOdds()));
+    gain.foreach(....);
+    return streamsBuilder.build();
 }
 ----
 
@@ -253,16 +283,16 @@ TopologyTestDriver topologyTestDriver =
 
 [source,java]
 ----
-ConsumerRecordFactory<String, String> factory = new
-                ConsumerRecordFactory<>(...);
-topologyTestDriver.pipeInput(factory.create("foo", "hello",
-                                                "world"));
+Bet bet = Bet.builder()
+            .bettor("John Doe")
+            .match("Germany-Belgium")
+            .outcome(Outcome.H)
+            .amount(100)
+            .odds(1.7).build();
 
-ProducerRecord<String, String> bar = 
-    topologyTestDriver.readOutput("bar", ...);
+topologyTestDriver.pipeInput(betFactory.create(BET_TOPIC, bet.key(), bet));
 
-assertEquals("hello", bar.key());
-assertEquals("WORLD", bar.value());
+assertEquals(Arrays.asList("Germany-Belgium:H 170"), output);
 ----
 
 [transition="fade-out, slide-in"]
@@ -336,6 +366,14 @@ B -> C
 }
 -----
 
+== Наш план
+
+1. [line-through]#Общая структура приложения. Простые (stateless) трансформации#
+2. *Трансформации с использованием локального состояния*
+3. Дуализм «поток—таблица» и табличные join-ы
+4. Время и оконные операции
+
+
 == Локальное состояние
 
 Facebook's RocksDB -- что это и зачем?
@@ -351,7 +389,6 @@ Facebook's RocksDB -- что это и зачем?
 * Persistent, optimized for SSD
 |===
 
-
 == RocksDB похож на `TreeMap<K,V>`
 
 * Сохранение K,V в бинарном формате
@@ -361,28 +398,8 @@ Facebook's RocksDB -- что это и зачем?
 
 == Пишем “Bet Totalling App”
 
-[cols="30a,70a"]
-|===
-.^|image::soccerball.png[]
-.^|
-* Идут футбольные матчи (меняется счёт)
-* Делаются ставки: H, D, A.
-* Ключ составной: `Cyprus-Belgium:A`
-* Значение:
-[source,java]
-----
-final String bettor;
-final String match;
-final Outcome outcome; //H, D or A
-final long amount;
-final long timestamp;
-----
-* Какова сумма ставок на исход?
-|===
+Какова сумма выплат по сделанным ставкам, если сыграет исход?
 
-== Demo Time
-
-== @Bean Topology
 [graphviz, "counting-topology.png"]
 -----
 digraph G {
@@ -390,11 +407,13 @@ graph [ dpi = 150 ];
 rankdir="LR";
 node [fontsize=18; shape="circle"; fixedsize="true"; width="1.1"];
 Store [shape="cylinder"; label="Local Store"; fixedsize="true"; width="1.5"]
-Source -> Sum -> Sink
+Source -> MapVal -> Sum -> Sink
 Sum -> Store [dir=both; label=" \n "]
 {rank = same; Store; Sum;}
 }
 -----
+
+== @Bean Topology
 
 [source,java]
 ----
@@ -456,8 +475,93 @@ ReplicationFactor:1
 Configs:cleanup.policy=compact
 ----
 
-== Партиционирование и local state
+[.fragment]
+[graphviz, "counting-topology-changelog.png"]
+-----
+digraph G {
+graph [ dpi = 150 ]; 
+rankdir="LR";
+node [fontsize=18; shape="circle"; fixedsize="true"; width="1.1"];
+Store [shape="cylinder"; label="Local Store"; fixedsize="true"; width="1.5"]
+Source -> MapVal -> Sum -> Sink
+Sum -> Store [dir=both; label=" \n "]
+{rank = same; Store; Sum;}
+Store -> Changelog[style="dotted"]
+Changelog[shape="ellipse"; style="dotted"]
+}
+-----
 
+[transition="fade-out, slide-in"]
+
+== Партиционирование и local state
+[graphviz, "local-partitioning-oneworker.png"]
+-----
+digraph D {
+  graph [ dpi = 150 ]; 
+  subgraph system {
+
+     subgraph cluster_s2{
+          style = "invis"
+          S1 [shape=plaintext label = "Source"];
+          S2 [shape=plaintext label = "Local store"];
+          S3 [shape=plaintext label = "Changelog"];
+          S1->S2->S3 [style="invis"]
+      }
+
+    subgraph cluster_p1 {
+      label = "Worker 1";
+        
+        subgraph cluster_pp2{
+              label = "Partition 3"
+                
+              d[label = "D"];
+              
+              
+          }
+          
+          
+        d->ls1;
+        p3[shape="plaintext" label = "Partition 3"];
+        ls1->p3[dir="both"];
+          
+          subgraph cluster_pp11{
+              label = "Partition 2"
+          
+              b [label = "B"];
+              c[label = "C"];
+              
+          }
+ 
+        subgraph cluster_pp1{
+              label = "Partition 1"
+              
+              
+              a [label = "A"];
+              
+          }
+          
+        
+        ls1[shape="cylinder" label = "RocksDB"]
+        a->ls1;
+        b->ls1;
+        c->ls1;
+        
+        p1[shape="plaintext" label = "Partition 1"];
+        p2[shape="plaintext" label = "Partition 2"];
+        ls1->p1[dir="both"];
+        ls1->p2[dir="both"];
+        
+        
+    }
+
+    
+    
+  }
+} 
+-----
+
+[transition="fade-in, slide-out"]
+== Партиционирование и local state
 [graphviz, "local-partitioning.png"]
 -----
 digraph D {
@@ -545,6 +649,15 @@ digraph G
 * Явное при помощи +
 `through(String topic, Produced<K, V> produced)`
 * Неявное при `map()`/`selectKey()` и stateful-операциях
+
+
+== Наш план
+
+1. [line-through]#Общая структура приложения. Простые (stateless) трансформации#
+2. [line-through]#Трансформации с использованием локального состояния#
+3. *Дуализм «поток—таблица» и табличные join-ы*
+4. Время и оконные операции
+
 
 [transition="fade-out, slide-in"]
 == Таблицы vs стримы
@@ -940,6 +1053,12 @@ digraph D {
 .Источник: https://kafka.apache.org/20/documentation/streams/developer-guide/dsl-api.html#stateful-transformations[Kafka Streams DSL Documentation]
 image::streams-stateful_operations.png[{image-50-width}]
 
+== Наш план
+
+1. [line-through]#Общая структура приложения. Простые (stateless) трансформации#
+2. [line-through]#Трансформации с использованием локального состояния#
+3. [line-through]#Дуализм «поток—таблица» и табличные join-ы#
+4. *Время и оконные операции*
 
 == Время, вперёд!
 
@@ -992,6 +1111,41 @@ digraph G
     node0 -> node2;
 }
 -----
+
+== Демо: Windowed Joins
+
+* «Послегольщик» — игрок, пытающийся протолкнуть правильную ставку в момент смены счёта в матче
+* Штамп времени ставки и события смены счёта должны «почти совпадать».
+
+== Демо: Windowed Joins
+По событию смены счёта понимаем, какая ставка будет «правильной»:
+[source,java]
+----
+
+Score current = Optional.ofNullable(stateStore.get(key))
+                .orElse(new Score());
+stateStore.put(key, value.getScore());
+
+Outcome currenOutcome = 
+    value.getScore().getHome() > current.getHome() 
+    ?
+    Outcome.H : Outcome.A;
+----
+
+== Демо: Windowed Joins
+[source, java]
+----
+KStream<String, String> join = bets.join(outcomes,
+    (bet, sureBet) -> 
+    
+    String.format("%s %dms before goal", 
+                bet.getBettor(),
+                sureBet.getTimestamp() - bet.getTimestamp()),
+                JoinWindows.of(Duration.ofSeconds(1)).before(Duration.ZERO),
+                Joined.with(Serdes....
+    ));
+----
+
 
 [transition="fade-out, slide-in"]
 == Tumbling window
@@ -1047,39 +1201,14 @@ SessionWindowedKStream<..., ...> windowed =
 image::streams-session-windows-02.png[{image-50-width}]
 
 
-== Демо: Windowed Joins
+== Наш план
 
-* «Послегольщик» — игрок, пытающийся протолкнуть правильную ставку в момент смены счёта в матче
-* Штамп времени ставки и события смены счёта должны «почти совпадать».
+1. [line-through]#Общая структура приложения. Простые (stateless) трансформации#
+2. [line-through]#Трансформации с использованием локального состояния#
+3. [line-through]#Дуализм «поток—таблица» и табличные join-ы#
+4. [line-through]#Время и оконные операции#
 
-== Демо: Windowed Joins
-По событию смены счёта понимаем, какая ставка будет «правильной»:
-[source,java]
-----
-
-Score current = Optional.ofNullable(stateStore.get(key))
-                .orElse(new Score());
-stateStore.put(key, value.getScore());
-
-Outcome currenOutcome = 
-    value.getScore().getHome() > current.getHome() 
-    ?
-    Outcome.H : Outcome.A;
-----
-
-== Демо: Windowed Joins
-[source, java]
-----
-KStream<String, String> join = bets.join(outcomes,
-    (bet, sureBet) -> 
-    
-    String.format("%s %dms before goal", 
-                bet.getBettor(),
-                sureBet.getTimestamp() - bet.getTimestamp()),
-                JoinWindows.of(Duration.ofSeconds(1)).before(Duration.ZERO),
-                Joined.with(Serdes....
-    ));
-----
+Пора закругляться!
 
 == Kafka Streams in Action
 

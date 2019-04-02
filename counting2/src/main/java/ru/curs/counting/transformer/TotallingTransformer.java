@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class TotallingTransformer implements
         StatefulTransformer<String, Long,
-                String, Bet,
+                String, Long,
                 String, Long> {
 
     public static final String STORE_NAME = "totalling-store";
@@ -32,10 +32,10 @@ public class TotallingTransformer implements
     }
 
     @Override
-    public KeyValue<String, Long> transform(String key, Bet value,
+    public KeyValue<String, Long> transform(String key, Long value,
                                             KeyValueStore<String, Long> stateStore) {
         long current = Optional.ofNullable(stateStore.get(key)).orElse(0L);
-        current += value.getAmount();
+        current += value;
         stateStore.put(key, current);
         return KeyValue.pair(key, current);
     }

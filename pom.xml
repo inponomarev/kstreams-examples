@@ -11,7 +11,7 @@
 
     <modules>
         <module>betmodel</module>
-        <module>yelling</module>
+        <module>stateless</module>
         <module>producer2</module>
         <module>counting2</module>
         <module>tables2</module>
