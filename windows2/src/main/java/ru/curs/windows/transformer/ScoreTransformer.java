@@ -36,7 +36,7 @@ public class ScoreTransformer implements StatefulTransformer<String, Score,
         stateStore.put(key, value.getScore());
         Outcome currenOutcome = value.getScore().getHome() > current.getHome() ?
                 Outcome.H : Outcome.A;
-        Bet bestBet = new Bet(null, value.getEvent(), currenOutcome, 0, value.getTimestamp());
+        Bet bestBet = new Bet(null, value.getEvent(), currenOutcome, 0, 1, value.getTimestamp());
         return KeyValue.pair(String.format("%s:%s", key, currenOutcome), bestBet);
 
     }
