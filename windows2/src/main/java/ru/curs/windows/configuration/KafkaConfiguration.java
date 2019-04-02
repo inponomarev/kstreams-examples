@@ -18,6 +18,13 @@ public class KafkaConfiguration {
     @Bean(name = KafkaStreamsDefaultConfiguration.DEFAULT_STREAMS_CONFIG_BEAN_NAME)
     public KafkaStreamsConfiguration getStreamsConfig() {
         Map<String, Object> props = new HashMap<>();
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "windowed-join-demo-app");
+        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(StreamsConfig.NUM_STREAM_THREADS_CONFIG, 1);
+        props.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 500);
+        KafkaStreamsConfiguration streamsConfig = new KafkaStreamsConfiguration(props);
+        return streamsConfig;
+/*
         props.put(StreamsConfig.CLIENT_ID_CONFIG, "parser-client");
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "g");
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "windows-demo");
@@ -27,12 +34,6 @@ public class KafkaConfiguration {
         props.put(StreamsConfig.DEFAULT_TIMESTAMP_EXTRACTOR_CLASS_CONFIG, WallclockTimestampExtractor.class);
         KafkaStreamsConfiguration streamsConfig = new KafkaStreamsConfiguration(props);
         return streamsConfig;
-    }
-
-    @Bean
-    NewTopic getFilteredTopic() {
-        Map<String, String> props = new HashMap<>();
-        props.put(TopicConfig.CLEANUP_POLICY_CONFIG, TopicConfig.CLEANUP_POLICY_COMPACT);
-        return new NewTopic("filtered", 10, (short) 1).configs(props);
+        */
     }
 }

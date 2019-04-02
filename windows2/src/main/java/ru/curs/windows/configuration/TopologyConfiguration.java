@@ -30,7 +30,6 @@ public class TopologyConfiguration {
     @Bean
     public Topology createTopology(StreamsBuilder streamsBuilder) {
 
-
         KStream<String, Bet> bets = streamsBuilder.
                 stream(BET_TOPIC,
                         Consumed.with(
@@ -39,14 +38,38 @@ public class TopologyConfiguration {
                                         ((Bet) record.value()).getTimestamp()
                                 )
                 );
+        /*Key: "Germany-Belgium:H"
+         Value: Bet{
+                   bettor    = John Doe;
+                   match     = Germany-Belgium;
+                   outcome   = H;
+                   amount    = 100;
+                   odds      = 1.7;
+                   timestamp = 1554215083873;
+                }
+        */
 
         KStream<String, EventScore> eventScores = streamsBuilder.stream(EVENT_SCORE_TOPIC,
                 Consumed.with(
                         Serdes.String(), new JsonSerde<>(EventScore.class))
                         .withTimestampExtractor((record, previousTimestamp) ->
                                 ((EventScore) record.value()).getTimestamp()));
+        /*
+            Key: Germany-Belgium
+            Value: EventScore {
+                     event     = Germany-Belgium;
+                     score     = 1:1; <<<was 0:1
+                     timestamp = 554215083998;
+             }
+         */
 
         KStream<String, Bet> outcomes = new ScoreTransformer().transformStream(streamsBuilder, eventScores);
+        /*
+            Key: Germany-Belgium:H
+            Value: Bet {
+                     .....
+             }
+        */
 
         KStream<String, String> join = bets.join(outcomes,
                 (bet, sureBet) -> String.format("%s bet %s=%s %d", bet.getBettor(), bet.getOutcome(), sureBet.getOutcome(),

@@ -19,13 +19,10 @@ public class KafkaConfiguration {
     @Bean(name = KafkaStreamsDefaultConfiguration.DEFAULT_STREAMS_CONFIG_BEAN_NAME)
     KafkaStreamsConfiguration getStreamsConfig() {
         Map<String, Object> props = new HashMap<>();
-        props.put(StreamsConfig.CLIENT_ID_CONFIG, "parser-client");
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "g");
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "table2-demo");
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "gain-totalling-tables-demo-app");
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        props.put(StreamsConfig.REPLICATION_FACTOR_CONFIG, 1);
+        props.put(StreamsConfig.NUM_STREAM_THREADS_CONFIG, 1);
         props.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 500);
-        props.put(StreamsConfig.DEFAULT_TIMESTAMP_EXTRACTOR_CLASS_CONFIG, WallclockTimestampExtractor.class);
         KafkaStreamsConfiguration streamsConfig = new KafkaStreamsConfiguration(props);
         return streamsConfig;
     }

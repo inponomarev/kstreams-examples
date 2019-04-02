@@ -683,58 +683,7 @@ image::stream-table-animation-numVisitedLocations.gif[{image-100-width}]
 .Martin Kleppmann, “Designing Data Intensive Applications”
 image::derivative-and-integral.png[{image-100-width}]
 
-
-== Переписываем totalling app при помощи KTable
-
-[source,java]
-----
-KTable<String, Long> totals = input.groupByKey()
-    .aggregate(
-        () -> 0L, 
-        (k, v, a) -> a + v.getAmount(),
-        //Неявное создание локального хранилища
-        Materialized.with(Serdes.String(), Serdes.Long())
-    );
-----
-
-[source,code]
-----
-$kafka-topics --zookeeper localhost --describe
-
-Topic: 
-table2-demo-KSTREAM-AGGREGATE-STATE-STORE-0000000001-changelog 
-PartitionCount:10
-ReplicationFactor:1
-Configs:cleanup.policy=compact
-----
-
-
-== Получаем таблицу счетов матчей
-
-[source,java]
-----
-KStream<String, Score> scores = 
-    eventScores.flatMap((k, v) ->
-        Stream.of(Outcome.H, Outcome.A).map(o ->
-            KeyValue.pair(String.format("%s:%s", k, o), v))
-            .collect(Collectors.toList()))
-    .mapValues(EventScore::getScore);
-
-KTable<String, Score> tableScores =
-    scores.groupByKey(Grouped.with(...).reduce((a, b) -> b);
-
-----
-[source,code]
-----
-$kafka-topics --zookeeper localhost --list
-
-table2-demo-KSTREAM-REDUCE-STATE-STORE-0000000006-repartition
-table2-demo-KSTREAM-REDUCE-STATE-STORE-0000000006-changelog
-----
-
-
-
-== Join: объединяем источники
+== Join
 
 image::derivative.png[{image-40-width}]
 
@@ -757,6 +706,51 @@ Store1 -> Store2 [style=invis]
 }
 -----
 
+== Переписываем totalling app при помощи KTable
+
+[source,java]
+----
+KTable<String, Long> totals = input.groupByKey().aggregate(
+    () -> 0L, 
+    (k, v, a) -> a + Math.round(v.getAmount() * v.getOdds()),
+    Materialized.with(Serdes.String(), Serdes.Long())
+);
+----
+
+[source,code]
+----
+$kafka-topics --zookeeper localhost --describe
+
+Topic: 
+table2-demo-KSTREAM-AGGREGATE-STATE-STORE-0000000001-changelog 
+PartitionCount:10
+ReplicationFactor:1
+Configs:cleanup.policy=compact
+----
+
+
+== Получаем таблицу счетов матчей
+[source,java]
+----
+KStream<String, Score> scores = 
+    eventScores.flatMap((k, v) ->
+        Stream.of(Outcome.H, Outcome.A).map(o ->
+            KeyValue.pair(String.format("%s:%s", k, o), v))
+            .collect(Collectors.toList()))
+    .mapValues(EventScore::getScore);
+
+KTable<String, Score> tableScores =
+    scores.groupByKey(Grouped.with(...).reduce((a, b) -> b);
+
+----
+[source,code]
+----
+$kafka-topics --zookeeper localhost --list
+
+table2-demo-KSTREAM-REDUCE-STATE-STORE-0000000006-repartition
+table2-demo-KSTREAM-REDUCE-STATE-STORE-0000000006-changelog
+----
+
 == Демо: Объединяем сумму ставок с текущим счётом
 [source,java]
 ----
@@ -771,7 +765,6 @@ KTable<String, String> joined =
 == Копартиционирование
 
 Join работает
-
 
 [graphviz, "copart-norm.png"]
 -----

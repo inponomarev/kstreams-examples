@@ -34,26 +34,48 @@ public class TopologyConfiguration {
                                 new JsonSerde<>(Bet.class))
                 );
 
+        /*Key: "Germany-Belgium:H"
+         Value: Bet{
+                   bettor    = John Doe;
+                   match     = Germany-Belgium;
+                   outcome   = H;
+                   amount    = 100;
+                   odds      = 1.7;
+                   timestamp = 1554215083998;
+                }
+        */
         KTable<String, Long> totals = input.groupByKey().aggregate(
-                () -> 0L, (k, v, a) -> a + v.getAmount(),
+                () -> 0L, (k, v, a) -> a + Math.round(v.getAmount() * v.getOdds()),
                 Materialized.with(Serdes.String(), Serdes.Long())
         );
 
-/*
-        totals.toStream().foreach((k, v) -> {
-            gui.update(k, String.valueOf(v));
-        });
+        /*  Key: "Germany-Belgium:H"
+            Value: 171340L <<total value
         */
-
         KStream<String, EventScore> eventScores = streamsBuilder.stream(EVENT_SCORE_TOPIC,
                 Consumed.with(Serdes.String(), new JsonSerde<>(EventScore.class)
                 ));
+        /*
+            Key: Germany-Belgium
+            Value: EventScore {
+                     event     = Germany-Belgium;
+                     score     = 1:0;
+                     timestamp = 554215083998;
+             }
+         */
+        KStream<String, Score> scores = eventScores
+                .flatMap((k, v) ->
+                        Stream.of(Outcome.H, Outcome.A).map(o ->
+                                KeyValue.pair(
+                                        String.format("%s:%s", k, o), v))
+                                .collect(Collectors.toList()))
+                /*
+                    Key: Germany-Belgium:H
+                    Value: EventScore
 
-        KStream<String, Score> scores = eventScores.flatMap((k, v) ->
-                Stream.of(Outcome.H, Outcome.A).map(o ->
-                        KeyValue.pair(
-                                String.format("%s:%s", k, o), v))
-                        .collect(Collectors.toList()))
+                    Key: Germany-Belgium:A
+                    Value: EventScore
+                 */
                 .mapValues(EventScore::getScore);
 
         KTable<String, Score> tableScores =
@@ -61,14 +83,15 @@ public class TopologyConfiguration {
                         .reduce((a, b) -> b);
 
 
-        //tableScores.toStream().foreach((k, v) -> System.out.printf("%s->%s%n", k, v.toString()));
-
         KTable<String, String> joined = totals.join(tableScores,
                 (total, eventScore) -> String.format("(%s)\t%d", eventScore, total));
+
+        /*Key: Germany-Belgium:H
+          Value: (1:0) 171340*/
+
         joined.toStream().foreach((k, v) ->
                 gui.update(k, v)
         );
-
         return streamsBuilder.build();
     }
 }

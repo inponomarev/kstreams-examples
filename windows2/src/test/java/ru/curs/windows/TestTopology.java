@@ -56,12 +56,10 @@ public class TestTopology {
     @Test
     public void nearBetsFound() {
         long current = System.currentTimeMillis();
-
         putScore(new EventScore("Turkey-Moldova", new Score().goalHome(), current));
         putBet(new Bet("alice", "Turkey-Moldova", Outcome.A, 1, 1.5, current - 100));
         putBet(new Bet("bob", "Turkey-Moldova", Outcome.H, 1, 1.5, current - 100));
         putBet(new Bet("bob", "Turkey-Moldova", Outcome.H, 1, 1.5, current - 5000));
-
         assertEquals(Arrays.asList("Turkey-Moldova:H-bob bet H=H 100"), output);
     }
 
