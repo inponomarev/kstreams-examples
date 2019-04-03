@@ -1054,21 +1054,6 @@ image::streams-stateful_operations.png[{image-50-width}]
 3. [line-through]#Дуализм «поток—таблица» и табличные join-ы#
 4. *Время и оконные операции*
 
-== Время, вперёд!
-
-[source,java]
-----
-KStream<String, Bet> bets = streamsBuilder.stream(BET_TOPIC,
-    Consumed.with(
-            Serdes...)
-            .withTimestampExtractor(
-                
-                (record, previousTimestamp) ->
-                    ((Bet) record.value()).getTimestamp()
-
-            ));
-----
-(Ещё время можно извлечь из WallClock и RecordMetadata.)
 
 == Сохранение Timestamped-значений в{nbsp}RocksDB
 
@@ -1110,6 +1095,23 @@ digraph G
 
 * «Послегольщик» — игрок, пытающийся протолкнуть правильную ставку в момент смены счёта в матче
 * Штамп времени ставки и события смены счёта должны «почти совпадать».
+
+== Время, вперёд!
+
+[source,java]
+----
+KStream<String, Bet> bets = streamsBuilder.stream(BET_TOPIC,
+    Consumed.with(
+            Serdes...)
+            .withTimestampExtractor(
+                
+                (record, previousTimestamp) ->
+                    ((Bet) record.value()).getTimestamp()
+
+            ));
+----
+(Ещё время можно извлечь из WallClock и RecordMetadata.)
+
 
 == Демо: Windowed Joins
 По событию смены счёта понимаем, какая ставка будет «правильной»:
