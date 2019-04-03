@@ -290,7 +290,8 @@ Bet bet = Bet.builder()
             .amount(100)
             .odds(1.7).build();
 
-topologyTestDriver.pipeInput(betFactory.create(BET_TOPIC, bet.key(), bet));
+topologyTestDriver.pipeInput(
+    betFactory.create(BET_TOPIC, bet.key(), bet));
 
 assertEquals(Arrays.asList("Germany-Belgium:H 170"), output);
 ----
@@ -1201,7 +1202,7 @@ image::streams-session-windows-02.png[{image-50-width}]
 3. [line-through]#Дуализм «поток—таблица» и табличные join-ы#
 4. [line-through]#Время и оконные операции#
 
-Пора закругляться!
+*Пора закругляться!*
 
 == Kafka Streams in Action
 
@@ -1250,10 +1251,10 @@ image::streams-session-windows-02.png[{image-50-width}]
 
 == На этом всё!
 
-* https://github.com/inponomarev/kstreams-examples
+icon:github[size=lg] https://github.com/inponomarev/kstreams-examples[inponomarev/kstreams-examples]
 
-* Мой твиттер @inponomarev
+icon:twitter[size=lg] https://twitter.com/inponomarev[@inponomarev]
 
-* Мой email: ponomarev@corchestra.ru
+ponomarev@corchestra.ru
 
-* *Спасибо!*
+*Спасибо!*

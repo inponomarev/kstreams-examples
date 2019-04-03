@@ -460,6 +460,9 @@ td.valign-top {
   margin-bottom: 0.6em
 }
 
+.reveal .line-through {
+    text-decoration: line-through;
+}
 
 body {
   background-image: url(pattern.svg);
