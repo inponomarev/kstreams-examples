@@ -560,8 +560,8 @@ Store [shape="cylinder"; label="Local Store"; fixedsize="true"; width="1.5"]
 Source -> MapVal -> Sum -> Sink
 Sum -> Store [dir=both; label=" \n "]
 {rank = same; Store; Sum;}
-Store -> Changelog[style="dotted"]
-Changelog[shape="ellipse"; style="dotted"]
+Store -> Changelog[style="dashed"]
+Changelog[shape="box"; style="dashed"]
 }
 -----
 
@@ -740,7 +740,7 @@ KStream sink = mapped.leftJoin(counts, ...);
 digraph G {
 graph [ dpi = 150 ]; 
 rankdir="LR";
-node [fontsize=16; shape="circle"; fixedsize="true"; width="0.5"; label=""];
+node [fontsize=16; shape="circle"; fixedsize="true"; width="0.8"; label=""];
 Start, Finish [style="invis"]
 Start -> A
 A[label="map"]
@@ -775,7 +775,7 @@ KStream sink = shuffled.leftJoin(counts, ...);
 digraph G {
 graph [ dpi = 150 ]; 
 rankdir="LR";
-node [fontsize=16; shape="circle"; fixedsize="true"; width="0.5"; label=""];
+node [fontsize=16; shape="circle"; fixedsize="true"; width="0.8"; label=""];
 Start, Finish [style="invis"]
 Start -> A
 A[label="map"]
