@@ -561,7 +561,7 @@ Source -> MapVal -> Sum -> Sink
 Sum -> Store [dir=both; label=" \n "]
 {rank = same; Store; Sum;}
 Store -> Changelog[style="dashed"]
-Changelog[shape="box"; style="dashed"]
+Changelog[shape="box"; style="dashed"; width="1.5"]
 }
 -----
 
@@ -780,7 +780,7 @@ Start, Finish [style="invis"]
 Start -> A
 A[label="map"]
 A -> throughAgg
-throughAgg[xlabel="trhough"]
+throughAgg[xlabel="through"]
 throughAgg -> Agg
 throughAgg -> Join
 Agg[label="Agg"]
@@ -793,7 +793,33 @@ throughAgg [shape="record"; label="{ | | | | }"; height = "0.2"]
 }
 -----
 
-Guozhang Wang: Performance Analysis and Optimizations for Kafka Streams Applications
+== Ключ лучше лишний раз не трогать
+
+*Key only:* `selectKey`
+
+[%header,cols=2*] 
+|===
+|Key and Value
+|Value Only
+
+|`map`
+|`mapValues`
+
+|`flatMap`
+|`flatMapValues`
+
+|`transform`
+|`transformValues`
+
+|`flatTransform`
+|`flatTransformValues`
+
+
+|===
+
+== Подробнее на эту тему
+
+Guozhang Wang: Performance Analysis and Optimizations for Kafka Streams Applications (Kafka Summit London, 2019)
 
 == Наш план
 
