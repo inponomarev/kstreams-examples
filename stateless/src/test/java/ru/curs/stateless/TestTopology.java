@@ -2,6 +2,7 @@ package ru.curs.stateless;
 
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.TopologyTestDriver;
@@ -9,6 +10,7 @@ import org.apache.kafka.streams.test.ConsumerRecordFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.kafka.config.KafkaStreamsConfiguration;
+import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerde;
 import ru.curs.counting.model.Bet;
 import ru.curs.counting.model.Outcome;
@@ -21,6 +23,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static ru.curs.counting.model.TopicNames.BET_TOPIC;
+import static ru.curs.counting.model.TopicNames.GAIN_TOPIC;
 
 public class TestTopology {
 
@@ -49,6 +52,11 @@ public class TestTopology {
 
         topologyTestDriver.pipeInput(betFactory.create(BET_TOPIC, bet.key(), bet));
 
-        assertEquals(Arrays.asList("Germany-Belgium:H 170"), output);
+        ProducerRecord<String, Long> record = topologyTestDriver.readOutput(GAIN_TOPIC, new StringDeserializer(),
+                new JsonDeserializer<>(Long.class));
+
+        assertEquals(bet.key(), record.key());
+        assertEquals(170L, record.value().longValue());
+
     }
 }

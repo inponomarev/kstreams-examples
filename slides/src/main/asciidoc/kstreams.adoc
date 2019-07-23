@@ -30,12 +30,51 @@ ponomarev@corchestra.ru
 
 icon:twitter[size=lg] @inponomarev
 
+[%notitle]
+== Кто я такой
+
+[cols="30a,70a"]
+|===
+.^|image::me.jpg[]
+.^|
+* Tech Lead at KURS
+* ERP systems & Java background
+* Speaker at JPoint, Devoops, Heisenbug, JUG.MSK, PermDevDay, DevopsForum, Стачка etc.
+* Текущий проект: Real-time Webscraping
+----
+|===
+
+[%notitle]
+== Наш опенсорс: Celesta & 2bass
+
+[cols="45a,35a"]
+|===
+.^|
+image::celesta_duke.png[]
+.^|
+image::bass_duke.png[]
+|===
+
+== Celesta & 2bass -- хабрапосты:
+
+* https://habr.com/ru/post/337816/[Миграция схемы данных без головной боли: идемпотентность и конвергентность для DDL-скриптов]
+* https://habr.com/ru/post/455746/[Celesta 7.x: ORM, миграции и тестирование «в одном флаконе»]
+
+image::migration.png[]
+
+== Celesta 7.x
+
+* Только Java (отказались от Jython)
+* Maven Plugin 
+* JUnit5 extension
+* Spring Boot Starter
+
 == Зачем нам Kafka?
 
 [%step]
 * Web-scraping в реальном времени
 * 500 запросов/сек (да, это очень мало!)
-* Удобные абстракции «из коробки»:
+* Удобные штуки «из коробки»:
 ** Персистентный, но «подрезаемый» лог
 ** Microbatching
 
@@ -49,24 +88,6 @@ icon:twitter[size=lg] @inponomarev
 ** Ребалансировка
 ** Внутреннее состояние обработчиков
 ** Легкое масштабирование
-
-== Disclaimer
-
-Наш Kafka Streams ещё не в production!
-
-[.fragment]
-[.custom-style]
-[cols="30a,70a"]
-|===
-.^|image::koshelev.jpg[]
-.^|
-
-Вопросы про production?
-
-*Григорий Кошелев:*
-
-«Когда всё пошло по Кафке»
-|===
 
 
 == Kafka за 30 секунд
@@ -85,13 +106,9 @@ image::1024px-Aiga_mail.svg.png[{image-10-width}]
 .Источник: Kafka Documentation
 image::log_compaction.png[{image-60-width}]
 
-== Попробуем?
-
-image::gamov.png[{image-40-width}]
-
 == Наш план
 
-1. *Общая структура приложения. Простые (stateless) трансформации*
+1. *Конфигурация приложения. Простые (stateless) трансформации*
 2. Трансформации с использованием локального состояния
 3. Дуализм «поток—таблица» и табличные join-ы
 4. Время и оконные операции
@@ -186,6 +203,7 @@ streams.close();
 .^|
 * Идут футбольные матчи (меняется счёт)
 * Делаются ставки: H, D, A.
+* Поток ставок, ключ: `Cyprus-Belgium:A`
 * Поток ставок, значение:
 [source,java]
 ----
@@ -198,7 +216,6 @@ class Bet {
   long timestamp;  //1554215083998
 }
 ----
-* Поток ставок, ключ: `Cyprus-Belgium:A`
 |===
 
 
@@ -260,7 +277,8 @@ public Topology createTopology(StreamsBuilder streamsBuilder) {
     KStream<String, Bet> input = streamsBuilder.stream(...);
     KStream<String, Long> gain
             = input.mapValues(v -> Math.round(v.getAmount() * v.getOdds()));
-    gain.foreach(....);
+    gain.to(GAIN_TOPIC, Produced.with(Serdes.String(),
+                new JsonSerde<>(Long.class)));
     return streamsBuilder.build();
 }
 ----
@@ -292,9 +310,64 @@ Bet bet = Bet.builder()
 
 topologyTestDriver.pipeInput(
     betFactory.create(BET_TOPIC, bet.key(), bet));
-
-assertEquals(Arrays.asList("Germany-Belgium:H 170"), output);
 ----
+
+== TopologyTestDriver: использование
+
+[source,java]
+----
+ProducerRecord<String, Long> record =
+   topologyTestDriver.readOutput(
+        GAIN_TOPIC, 
+        new StringDeserializer(),
+        new JsonDeserializer<>(Long.class)
+    );
+
+assertEquals(bet.key(), record.key());
+assertEquals(170L, record.value().longValue());
+----
+
+== Если что-то пошло не так...
+
+* `default.deserialization.exception.handler` -- не смогли десериализовать
+* `default.production.exception.handler` -- брокер отверг сообщение (например, оно слишком велико)
+
+== Если всё совсем развалилось
+
+[source,java]
+----
+streams.setUncaughtExceptionHandler(
+  (Thread thread, Throwable throwable) -> {
+    . . .
+   });
+----
+
+[.fragment]
+В Спринге всё сложнее (см. код)
+
+== Состояния приложения KafkaStreams
+
+[graphviz, "kstreamsstates.png"]
+-----
+digraph G {
+  graph [ dpi = 150 ]; 
+  Created -> Running;
+  Running -> Rebalancing;
+  Rebalancing -> Running;
+  Rebalancing -> PendingShutdown;
+  PendingShutdown -> NotRunning;
+  Created -> PendingShutdown; 
+  Running -> PendingShutdown; 
+  Running -> Error;
+  Rebalancing -> Error;
+  Error -> PendingShutdown; 
+  {rank = same; Created; Running;}
+  {rank = same; Rebalancing; Error;}
+  {rank = same; PendingShutdown; NotRunning;}
+}
+-----
+
+== Что ещё нужно знать про stateless-трансформации?
 
 [transition="fade-out, slide-in"]
 == Простое ветвление стримов
@@ -369,7 +442,7 @@ B -> C
 
 == Наш план
 
-1. [line-through]#Общая структура приложения. Простые (stateless) трансформации#
+1. [line-through]#Конфигурация приложения. Простые (stateless) трансформации#
 2. *Трансформации с использованием локального состояния*
 3. Дуализм «поток—таблица» и табличные join-ы
 4. Время и оконные операции
@@ -651,10 +724,78 @@ digraph G
 `through(String topic, Produced<K, V> produced)`
 * Неявное при `map()`/`selectKey()` и stateful-операциях
 
+== Дублирующееся неявное репартиционирование
+
+[source,java]
+----
+KStream source = builder.stream("topic1");
+KStream mapped = source.map(...);
+KTable counts = mapped.groupByKey().aggregate(...);
+KStream sink = mapped.leftJoin(counts, ...);
+----
+
+[graphviz, "doublethrough.png"]
+-----
+ digraph G {
+//graph [ dpi = 150 ]; 
+rankdir="LR";
+node [fontsize=16; shape="circle"; fixedsize="true"; width="0.5"; label=""];
+Start, Finish [style="invis"]
+Start -> A
+A[label="map"]
+A -> throughAgg  [style=dashed]
+throughAgg -> Agg  [style=dashed]
+A -> throughJoin [style=dashed]
+throughJoin -> Join [style=dashed]
+Agg[label="Agg"]
+Join[label="Join"]
+Agg -> Join
+Join -> Finish
+Store [shape="cylinder"; label="Store";]
+Agg -> Store [dir="both"]
+throughAgg [shape="record"; label="{ | | | | }"; height = "0.2"]
+throughJoin [shape="record"; label="{ | | | | }"; height = "0.2"]
+}
+-----
+
+== Избавляемся от дублирующегося репартиционирования
+
+[source,java]
+----
+KStream source = builder.stream("topic1");
+KStream shuffled = source.map(...).through("topic2",..);
+KTable counts = shuffled.groupByKey().aggregate(...);
+KStream sink = shuffled.leftJoin(counts, ...);
+----
+
+[graphviz, "implicitthrough.png"]
+-----
+digraph G {
+//graph [ dpi = 150 ]; 
+rankdir="LR";
+node [fontsize=16; shape="circle"; fixedsize="true"; width="0.5"; label=""];
+Start, Finish [style="invis"]
+Start -> A
+A[label="map"]
+A -> throughAgg
+throughAgg[xlabel="trhough"]
+throughAgg -> Agg
+throughAgg -> Join
+Agg[label="Agg"]
+Join[label="Join"]
+Agg -> Join
+Join -> Finish
+Store [shape="cylinder"; label="Store";]
+Agg -> Store [dir="both"]
+throughAgg [shape="record"; label="{ | | | | }"; height = "0.2"]
+}
+-----
+
+Guozhang Wang: Performance Analysis and Optimizations for Kafka Streams Applications
 
 == Наш план
 
-1. [line-through]#Общая структура приложения. Простые (stateless) трансформации#
+1. [line-through]#Конфигурация приложения. Простые (stateless) трансформации#
 2. [line-through]#Трансформации с использованием локального состояния#
 3. *Дуализм «поток—таблица» и табличные join-ы*
 4. Время и оконные операции
@@ -1049,7 +1190,7 @@ image::streams-stateful_operations.png[{image-50-width}]
 
 == Наш план
 
-1. [line-through]#Общая структура приложения. Простые (stateless) трансформации#
+1. [line-through]#Конфигурация приложения. Простые (stateless) трансформации#
 2. [line-through]#Трансформации с использованием локального состояния#
 3. [line-through]#Дуализм «поток—таблица» и табличные join-ы#
 4. *Время и оконные операции*
@@ -1199,7 +1340,7 @@ image::streams-session-windows-02.png[{image-50-width}]
 
 == Наш план
 
-1. [line-through]#Общая структура приложения. Простые (stateless) трансформации#
+1. [line-through]#Конфигурация приложения. Простые (stateless) трансформации#
 2. [line-through]#Трансформации с использованием локального состояния#
 3. [line-through]#Дуализм «поток—таблица» и табличные join-ы#
 4. [line-through]#Время и оконные операции#

@@ -14,6 +14,7 @@ import ru.curs.counting.model.Bet;
 import java.util.function.Consumer;
 
 import static ru.curs.counting.model.TopicNames.BET_TOPIC;
+import static ru.curs.counting.model.TopicNames.GAIN_TOPIC;
 
 @Configuration
 @RequiredArgsConstructor
@@ -39,13 +40,24 @@ public class TopologyConfiguration {
                 }
         */
         KStream<String, Long> gain
-                = input.mapValues(v -> Math.round(v.getAmount() * v.getOdds()));
+                = input.mapValues(v -> {
+            long val = Math.round(v.getAmount() * v.getOdds());
+            return val;
+        });
         /*  Key: "Germany-Belgium:H"
             Value: 170L
         */
 
-        gain.foreach((k, v) -> out.accept(String.format("%s %d", k, v)));
+        gain.to(GAIN_TOPIC, Produced.with(Serdes.String(),
+                new JsonSerde<>(Long.class)));
+        Topology topology = streamsBuilder.build();
 
-        return streamsBuilder.build();
+        System.out.println("===============================");
+        System.out.println(topology.describe());
+        System.out.println("===============================");
+
+        // https://zz85.github.io/kafka-streams-viz/
+
+        return topology;
     }
 }

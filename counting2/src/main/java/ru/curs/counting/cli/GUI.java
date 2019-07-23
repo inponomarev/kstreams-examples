@@ -1,6 +1,8 @@
 package ru.curs.counting.cli;
 
 import com.googlecode.lanterna.gui2.*;
+import com.googlecode.lanterna.input.KeyStroke;
+import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
 import org.springframework.stereotype.Component;
 
@@ -8,15 +10,17 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
+import java.util.concurrent.*;
 
 @Component
 public class GUI implements AutoCloseable {
 
     private final Screen screen;
     private final AsynchronousTextGUIThread guiThread;
-    private final Map<String, KeyValuePanel> panelMap = new TreeMap<>();
+    private final Map<String, KeyValuePanel> panelMap = new ConcurrentSkipListMap<>();
     private final ValueSetter valueSetter;
     private final Panel mainPanel;
+    private final Map<String, Long> internalTable = new ConcurrentHashMap<>();
 
     public GUI(Screen screen) throws IOException {
         this.screen = screen;
@@ -36,10 +40,14 @@ public class GUI implements AutoCloseable {
         textGUI.addWindow(window);
         guiThread.start();
         valueSetter = new ValueSetter(guiThread);
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+
+        Executors.newSingleThreadScheduledExecutor().scheduleWithFixedDelay(this::refresh,
+                300, 200, TimeUnit.MILLISECONDS);
+    }
+
+    void refresh(){
+        for(Map.Entry<String, Long> e: internalTable.entrySet()){
+            internalUpdate(e.getKey(), e.getValue());
         }
     }
 
@@ -51,7 +59,12 @@ public class GUI implements AutoCloseable {
         valueSetter.close();
     }
 
-    public void update(String item, double newVal) {
+
+    public void update(String item, long newVal){
+        internalTable.put(item, newVal);
+    }
+
+    private void internalUpdate(String item, double newVal) {
         if (newVal < 1) {
             Optional.ofNullable(panelMap.remove(item)).ifPresent(
                     p -> guiThread.invokeLater(() ->

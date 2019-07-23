@@ -4,6 +4,7 @@ import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.state.KeyValueStore;
+import org.springframework.kafka.support.serializer.JsonSerde;
 import ru.curs.counting.model.Bet;
 import ru.curs.counting.util.StatefulTransformer;
 
@@ -17,6 +18,11 @@ public class TotallingTransformer implements
     public static final String STORE_NAME = "totalling-store";
 
     @Override
+    public boolean isPersistent() {
+        return false;
+    }
+
+    @Override
     public String storeName() {
         return STORE_NAME;
     }
@@ -28,7 +34,7 @@ public class TotallingTransformer implements
 
     @Override
     public Serde<Long> storeValueSerde() {
-        return Serdes.Long();
+        return new JsonSerde<>(Long.class);//Serdes.Long();
     }
 
     @Override

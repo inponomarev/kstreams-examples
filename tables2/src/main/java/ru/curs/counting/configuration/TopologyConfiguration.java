@@ -46,7 +46,7 @@ public class TopologyConfiguration {
         */
         KTable<String, Long> totals = input.groupByKey().aggregate(
                 () -> 0L, (k, v, a) -> a + Math.round(v.getAmount() * v.getOdds()),
-                Materialized.with(Serdes.String(), Serdes.Long())
+                Materialized.with(Serdes.String(), new JsonSerde<>(Long.class))
         );
 
         /*  Key: "Germany-Belgium:H"

@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
-import org.apache.kafka.streams.kstream.Consumed;
-import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.Printed;
+import org.apache.kafka.streams.kstream.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.support.serializer.JsonSerde;
@@ -35,14 +33,24 @@ public class TopologyConfiguration {
             Value: 170L
         */
 
+
         KStream<String, Long> counted =
                 new TotallingTransformer()
                         .transformStream(streamsBuilder, gain);
-
+/*
+        KStream<String, Long> counted = gain.groupByKey().reduce(Long::sum, Materialized.with(
+                Serdes.String(), new JsonSerde<>(Long.class)
+        )).toStream();
+*/
         counted.foreach((k, v) -> {
             gui.update(k, v);
         });
 
-        return streamsBuilder.build();
+        Topology topology = streamsBuilder.build();
+        System.out.println("==============================");
+        System.out.println(topology.describe());
+        System.out.println("==============================");
+        // https://zz85.github.io/kafka-streams-viz/
+        return topology;
     }
 }

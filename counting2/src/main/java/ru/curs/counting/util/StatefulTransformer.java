@@ -11,6 +11,7 @@ import org.apache.kafka.streams.state.KeyValueStore;
 import org.apache.kafka.streams.state.StoreBuilder;
 import org.apache.kafka.streams.state.Stores;
 
+@SuppressWarnings("Duplicates")
 public interface StatefulTransformer<SK, SV, IK, IV, RK, RV> {
     String storeName();
 

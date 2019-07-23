@@ -1,7 +1,5 @@
 package ru.curs.counting;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -21,10 +19,10 @@ import static ru.curs.counting.model.TopicNames.EVENT_SCORE_TOPIC;
 
 
 @SpringBootApplication
-public class App implements CommandLineRunner {
+public class Producer implements CommandLineRunner {
 
     public static void main(String[] args) {
-        SpringApplication.run(App.class, args).close();
+        SpringApplication.run(Producer.class, args).close();
     }
 
     @Autowired

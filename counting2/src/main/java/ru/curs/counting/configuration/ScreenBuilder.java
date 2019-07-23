@@ -8,7 +8,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Configuration
 public class ScreenBuilder {
@@ -23,5 +25,10 @@ public class ScreenBuilder {
         } else {
             return (new DefaultTerminalFactory()).createScreen();
         }
+    }
+
+    @Bean("localtable")
+    Map<String, Long> getLocalTable(){
+        return new ConcurrentHashMap<>();
     }
 }

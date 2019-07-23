@@ -6,10 +6,10 @@ import org.springframework.kafka.annotation.EnableKafkaStreams;
 
 @SpringBootApplication
 @EnableKafkaStreams
-public class App {
+public class Counting {
 
 	public static void main(String[] args) {
-		new SpringApplicationBuilder(App.class).headless(false).run(args);
+		new SpringApplicationBuilder(Counting.class).headless(false).run(args);
 	}
 
 }

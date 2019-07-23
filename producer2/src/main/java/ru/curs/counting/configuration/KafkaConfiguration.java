@@ -14,8 +14,7 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 import java.util.HashMap;
 import java.util.Map;
 
-import static ru.curs.counting.model.TopicNames.BET_TOPIC;
-import static ru.curs.counting.model.TopicNames.EVENT_SCORE_TOPIC;
+import static ru.curs.counting.model.TopicNames.*;
 
 @Configuration
 public class KafkaConfiguration {
@@ -38,6 +37,11 @@ public class KafkaConfiguration {
     @Bean
     public NewTopic betTopic() {
         return new NewTopic(BET_TOPIC, 10, (short) 1);
+    }
+
+    @Bean
+    public NewTopic gainTopic() {
+        return new NewTopic(GAIN_TOPIC, 10, (short) 1);
     }
 
     @Bean
