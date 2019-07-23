@@ -723,7 +723,7 @@ digraph G
 
 * Явное при помощи +
 `through(String topic, Produced<K, V> produced)`
-* Неявное при `map()`/`selectKey()` и stateful-операциях
+* Неявное при операциях, меняющих ключ + stateful-операциях
 
 [transition="fade-out, slide-in"]
 == Дублирующееся неявное репартиционирование
@@ -797,10 +797,10 @@ throughAgg [shape="record"; label="{ | | | | }"; height = "0.2"]
 
 *Key only:* `selectKey`
 
-[%header,cols=2*] 
+[cols=2*] 
 |===
-|Key and Value
-|Value Only
+|*Key and Value*
+|*Value Only*
 
 |`map`
 |`mapValues`
@@ -819,7 +819,12 @@ throughAgg [shape="record"; label="{ | | | | }"; height = "0.2"]
 
 == Подробнее на эту тему
 
-Guozhang Wang: Performance Analysis and Optimizations for Kafka Streams Applications (Kafka Summit London, 2019)
+[cols="30a,70a"]
+|===
+.^|image::guozhang.jpeg[]
+.^|
+*Guozhang Wang* Performance Analysis and Optimizations for Kafka Streams Applications (Kafka Summit London, 2019)
+|===
 
 == Наш план
 
