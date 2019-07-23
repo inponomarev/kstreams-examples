@@ -703,6 +703,7 @@ digraph D {
 } 
 -----
 
+
 == Репартиционирование
 [graphviz, "through.png"]
 -----
@@ -724,8 +725,8 @@ digraph G
 `through(String topic, Produced<K, V> produced)`
 * Неявное при `map()`/`selectKey()` и stateful-операциях
 
+[transition="fade-out, slide-in"]
 == Дублирующееся неявное репартиционирование
-
 [source,java]
 ----
 KStream source = builder.stream("topic1");
@@ -736,8 +737,8 @@ KStream sink = mapped.leftJoin(counts, ...);
 
 [graphviz, "doublethrough.png"]
 -----
- digraph G {
-//graph [ dpi = 150 ]; 
+digraph G {
+graph [ dpi = 150 ]; 
 rankdir="LR";
 node [fontsize=16; shape="circle"; fixedsize="true"; width="0.5"; label=""];
 Start, Finish [style="invis"]
@@ -758,6 +759,7 @@ throughJoin [shape="record"; label="{ | | | | }"; height = "0.2"]
 }
 -----
 
+[transition="fade-in, slide-out"]
 == Избавляемся от дублирующегося репартиционирования
 
 [source,java]
@@ -771,7 +773,7 @@ KStream sink = shuffled.leftJoin(counts, ...);
 [graphviz, "implicitthrough.png"]
 -----
 digraph G {
-//graph [ dpi = 150 ]; 
+graph [ dpi = 150 ]; 
 rankdir="LR";
 node [fontsize=16; shape="circle"; fixedsize="true"; width="0.5"; label=""];
 Start, Finish [style="invis"]
