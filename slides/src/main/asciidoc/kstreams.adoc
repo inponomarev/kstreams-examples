@@ -41,7 +41,6 @@ icon:twitter[size=lg] @inponomarev
 * ERP systems & Java background
 * Speaker at JPoint, Devoops, Heisenbug, JUG.MSK, PermDevDay, DevopsForum, Стачка etc.
 * Текущий проект: Real-time Webscraping
-----
 |===
 
 [%notitle]
@@ -69,6 +68,12 @@ image::migration.png[]
 * JUnit5 extension
 * Spring Boot Starter
 
+[transition="fade-out, slide-in"]
+== Зачем нам Kafka?
+
+image::kafka.jpg[{image-30-width}]
+
+[transition="fade-in, fade-out"]
 == Зачем нам Kafka?
 
 [%step]
@@ -96,7 +101,7 @@ image::kafka_cluster.png[{image-60-width}]
 
 == Kafka Message
 
-image::1024px-Aiga_mail.svg.png[{image-10-width}]
+image::message.jpg[{image-20-width}]
 
 * Номер партиции
 * Ключ
@@ -108,10 +113,16 @@ image::log_compaction.png[{image-60-width}]
 
 == Наш план
 
+[cols="20a,60a,20a"]
+|===
+.^|image::kafka.jpg[]
+.^|
 1. *Конфигурация приложения. Простые (stateless) трансформации*
 2. Трансформации с использованием локального состояния
 3. Дуализм «поток—таблица» и табличные join-ы
 4. Время и оконные операции
+.^|image::kafka.jpg[]
+|===
 
 [transition="fade-out, slide-in"]
 == Kafka Streams API: общая структура KStreams-приложения
@@ -199,7 +210,7 @@ streams.close();
 
 [cols="30a,70a"]
 |===
-.^|image::soccerball.png[]
+.^|image::betting.jpg[]
 .^|
 * Идут футбольные матчи (меняется счёт)
 * Делаются ставки: H, D, A.
@@ -441,19 +452,23 @@ B -> C
 -----
 
 == Наш план
-
+[cols="20a,60a,20a"]
+|===
+.^|image::kafka.jpg[]
+.^|
 1. [line-through]#Конфигурация приложения. Простые (stateless) трансформации#
 2. *Трансформации с использованием локального состояния*
 3. Дуализм «поток—таблица» и табличные join-ы
 4. Время и оконные операции
-
+.^|image::kafka.jpg[]
+|===
 
 == Локальное состояние
 
 Facebook's RocksDB -- что это и зачем?
 
 [.custom-style]
-[cols="30a,70a"]
+[cols="25a,75a"]
 |===
 .^|image::rocksdb.png[]
 .^|
@@ -828,10 +843,16 @@ throughAgg [shape="record"; label="{ | | | | }"; height = "0.2"]
 
 == Наш план
 
+[cols="20a,60a,20a"]
+|===
+.^|image::kafka.jpg[]
+.^|
 1. [line-through]#Конфигурация приложения. Простые (stateless) трансформации#
 2. [line-through]#Трансформации с использованием локального состояния#
 3. *Дуализм «поток—таблица» и табличные join-ы*
 4. Время и оконные операции
+.^|image::kafka.jpg[]
+|===
 
 
 [transition="fade-out, slide-in"]
@@ -1223,10 +1244,16 @@ image::streams-stateful_operations.png[{image-50-width}]
 
 == Наш план
 
+[cols="20a,60a,20a"]
+|===
+.^|image::kafka.jpg[]
+.^|
 1. [line-through]#Конфигурация приложения. Простые (stateless) трансформации#
 2. [line-through]#Трансформации с использованием локального состояния#
 3. [line-through]#Дуализм «поток—таблица» и табличные join-ы#
 4. *Время и оконные операции*
+.^|image::kafka.jpg[]
+|===
 
 
 == Сохранение Timestamped-значений в{nbsp}RocksDB
@@ -1269,6 +1296,8 @@ digraph G
 
 * «Послегольщик» — игрок, пытающийся протолкнуть правильную ставку в момент смены счёта в матче
 * Штамп времени ставки и события смены счёта должны «почти совпадать».
+
+image::livebet.jpg[{image-50-width}]
 
 == Время, вперёд!
 
@@ -1370,13 +1399,45 @@ SessionWindowedKStream<..., ...> windowed =
 ----
 image::streams-session-windows-02.png[{image-50-width}]
 
+== Window Retention time vs. Grace Time
+
+image::window-retention.png[]
+
+
+== Иногда нужны не окна, а Punctuator
+
+[.custom-style]
+[cols="30a,70a"]
+|===
+|image::metronome.jpg[]
+|
+[source,java]
+----
+class MyTransformer implements Transformer<...> {
+    @Override
+    public void init(ProcessorContext context) {
+    
+        context.schedule(
+            Duration.ofSeconds(10),
+            PunctuationType.WALL_CLOCK_TIME,
+            timestamp->{. . .});
+            
+    }
+----
+|===
 
 == Наш план
 
+[cols="20a,60a,20a"]
+|===
+.^|image::kafka.jpg[]
+.^|
 1. [line-through]#Конфигурация приложения. Простые (stateless) трансформации#
 2. [line-through]#Трансформации с использованием локального состояния#
 3. [line-through]#Дуализм «поток—таблица» и табличные join-ы#
 4. [line-through]#Время и оконные операции#
+.^|image::kafka.jpg[]
+|===
 
 *Пора закругляться!*
 
@@ -1389,7 +1450,7 @@ image::streams-session-windows-02.png[{image-50-width}]
 |
 * **William Bejeck**, + 
 “Kafka Streams in Action”, November 2018
-* Примеры кода для Kafka 1.0
+* Примеры кода для Kafka 1.x
 |===
 
 == Kafka: The Definitive Guide
@@ -1412,11 +1473,14 @@ image::streams-session-windows-02.png[{image-50-width}]
 - Исходники!
 ** https://github.com/apache/kafka/
 ** https://github.com/spring-projects/spring-kafka
+
+== Сообщества, конференции
 - Телеграм: Грефневая Кафка
 ** https://t.me/AwesomeKafka_ru
 ** https://t.me/proKafka
+- Kafka Summit Conference
 
-== Выводы
+== Некоторые итоги
 
 [%step]
 * Kafka StreamsAPI -- это удобная абстракция над «сырой» Кафкой

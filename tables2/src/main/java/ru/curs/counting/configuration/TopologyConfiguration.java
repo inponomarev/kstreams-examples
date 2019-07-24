@@ -92,6 +92,10 @@ public class TopologyConfiguration {
         joined.toStream().foreach((k, v) ->
                 gui.update(k, v)
         );
-        return streamsBuilder.build();
+        Topology topology = streamsBuilder.build();
+        System.out.println("========================================");
+        System.out.println(topology.describe());
+        System.out.println("========================================");
+        return topology;
     }
 }

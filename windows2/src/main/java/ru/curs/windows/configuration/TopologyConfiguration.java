@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
-import org.apache.kafka.streams.kstream.Consumed;
-import org.apache.kafka.streams.kstream.JoinWindows;
-import org.apache.kafka.streams.kstream.Joined;
-import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.support.serializer.JsonSerde;
@@ -18,6 +15,7 @@ import ru.curs.windows.transformer.ScoreTransformer;
 import java.time.Duration;
 import java.util.function.Consumer;
 
+import static ru.curs.counting.model.Outcome.H;
 import static ru.curs.counting.model.TopicNames.BET_TOPIC;
 import static ru.curs.counting.model.TopicNames.EVENT_SCORE_TOPIC;
 
@@ -63,7 +61,7 @@ public class TopologyConfiguration {
              }
          */
 
-        KStream<String, Bet> outcomes = new ScoreTransformer().transformStream(streamsBuilder, eventScores);
+        KStream<String, Bet> winningBets = new ScoreTransformer().transformStream(streamsBuilder, eventScores);
         /*
             Key: Germany-Belgium:H
             Value: Bet {
@@ -71,9 +69,13 @@ public class TopologyConfiguration {
              }
         */
 
-        KStream<String, String> join = bets.join(outcomes,
-                (bet, sureBet) -> String.format("%s bet %s=%s %d", bet.getBettor(), bet.getOutcome(), sureBet.getOutcome(),
-                        sureBet.getTimestamp() - bet.getTimestamp()),
+        KStream<String, String> join = bets.join(winningBets,
+                (bet, winningBet) ->
+                        String.format("%s bet %s=%s %d",
+                                bet.getBettor(),
+                                bet.getOutcome(),
+                                winningBet.getOutcome(),
+                                winningBet.getTimestamp() - bet.getTimestamp()),
                 JoinWindows.of(Duration.ofSeconds(1)).before(Duration.ZERO),
                 Joined.with(Serdes.String(),
                         new JsonSerde<>(Bet.class),
@@ -82,7 +84,11 @@ public class TopologyConfiguration {
 
         join.foreach((k, v) -> output.accept(String.format("%s-%s", k, v)));
 
-        return streamsBuilder.build();
+        Topology topology = streamsBuilder.build();
+        System.out.println("==========================");
+        System.out.println(topology.describe());
+        System.out.println("==========================");
+        return topology;
     }
 
 }
