@@ -68,6 +68,18 @@ image::migration.png[]
 * JUnit5 extension
 * Spring Boot Starter
 
+== Всё, что я показываю, есть на гитхабе
+
+[cols="30a,70a"]
+|===
+.^|image::octocat.jpg[]
+.^|
+* Слайды: https://inponomarev.github.io/kstreams-examples[inponomarev.github.io/kstreams-examples]
+
+* Исходники: https://github.com/inponomarev/kstreams-examples[github.com/inponomarev/kstreams-examples]
+|===
+
+
 [transition="fade-out, slide-in"]
 == Зачем нам Kafka?
 
@@ -93,6 +105,19 @@ image::kafka.jpg[{image-30-width}]
 ** Ребалансировка
 ** Внутреннее состояние обработчиков
 ** Легкое масштабирование
+
+== Disclaimer #1: предполагается базовое понимание Кафки
+
+* https://www.youtube.com/watch?v=ztsnkyaIO64[Виктор Гамов — Все стримы ведут в Кафку (jug.msk.ru 23/04/2018)]
+
+* https://www.youtube.com/watch?v=PgoRuxKqStI[Виктор Гамов — Kafka Streams IQ: «Зачем нам база данных?» (jug.msk.ru 08/05/2019)]
+
+== Disclaimer #2: доклад не о жизни в production!
+
+Доклады о жизни в production:
+
+* https://www.youtube.com/watch?v=A_yUaPARv8U[Григорий Кошелев — Когда всё пошло по Кафке (JPoint 2019)]
+* https://www.youtube.com/watch?v=wCCR1Tkxc-s[Никита Сальников-Тарновский — Streaming architecture — шаг за рамки примеров кода (devclub.eu 2019.03.26)]
 
 
 == Kafka за 30 секунд
@@ -552,6 +577,15 @@ void testTopology() {
 
 * Ребалансировка / репликация партиций state при запуске / выключении обработчиков.
 
+== Подробнее о ребалансировке
+
+[cols="30a,70a"]
+|===
+.^|image::matthias.jpg[]
+.^|
+*Matthias J. Sax* https://www.confluent.io/kafka-summit-lon19/everything-you-wanted-to-know-kafka-afraid[Everything You Always Wanted to Know About Kafka’s Rebalance Protocol but Were Afraid to Ask (Kafka Summit London, 2019)]
+|===
+
 == Сохранение локального состояния в{nbsp}топик
 
 [source,code]
@@ -832,13 +866,13 @@ throughAgg [shape="record"; label="{ | | | | }"; height = "0.2"]
 
 |===
 
-== Подробнее на эту тему
+== Подробнее про «лишнее» репартиционирование
 
 [cols="30a,70a"]
 |===
 .^|image::guozhang.jpeg[]
 .^|
-*Guozhang Wang* Performance Analysis and Optimizations for Kafka Streams Applications (Kafka Summit London, 2019)
+*Guozhang Wang* https://www.confluent.io/kafka-summit-lon19/performance-analysis-optimizations-kafka-streams-applications[Performance Analysis and Optimizations for Kafka Streams Applications (Kafka Summit London, 2019)]
 |===
 
 == Наш план
