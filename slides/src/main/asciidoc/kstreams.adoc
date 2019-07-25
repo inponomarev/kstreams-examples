@@ -367,6 +367,8 @@ assertEquals(170L, record.value().longValue());
 * `default.deserialization.exception.handler` -- не смогли десериализовать
 * `default.production.exception.handler` -- брокер отверг сообщение (например, оно слишком велико)
 
+image::failure.jpg[{image-50-width}]
+
 == Если всё совсем развалилось
 
 [source,java]
@@ -376,6 +378,8 @@ streams.setUncaughtExceptionHandler(
     . . .
    });
 ----
+
+image::uncaughtexception.jpg[{image-100-width}]
 
 [.fragment]
 В Спринге всё сложнее (см. код)
@@ -1274,6 +1278,31 @@ digraph D {
 == Операции между стримами и таблицами: сводка
 .Источник: https://kafka.apache.org/20/documentation/streams/developer-guide/dsl-api.html#stateful-transformations[Kafka Streams DSL Documentation]
 image::streams-stateful_operations.png[{image-50-width}]
+
+[transition="fade-out, slide-in"]
+== Виды Join-ов: Table-Table
+
+image::table-table.svg[{image-40-width}]
+
+[transition="fade-in, fade-out"]
+== Виды Join-ов: Table-Table
+
+image::table-table1.svg[{image-40-width}]
+
+[transition="fade-in, slide-out"]
+== Виды Join-ов: Table-Table
+
+image::table-table2.svg[{image-40-width}]
+
+== Виды Join-ов: Stream-Table
+
+image::stream-table.svg[{image-40-width}]
+
+[transition="fade-in, slide-out"]
+== Виды Join-ов: Stream-Stream
+
+image::stream-stream.svg[{image-40-width}]
+
 
 == Наш план
 
