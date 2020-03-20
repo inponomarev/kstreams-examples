@@ -2,9 +2,9 @@ package ru.curs.windows;
 
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
+import org.apache.kafka.streams.TestInputTopic;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.TopologyTestDriver;
-import org.apache.kafka.streams.test.ConsumerRecordFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.kafka.config.KafkaStreamsConfiguration;
@@ -16,7 +16,6 @@ import ru.curs.counting.model.Score;
 import ru.curs.windows.configuration.KafkaConfiguration;
 import ru.curs.windows.configuration.TopologyConfiguration;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,30 +25,32 @@ import static ru.curs.counting.model.TopicNames.BET_TOPIC;
 import static ru.curs.counting.model.TopicNames.EVENT_SCORE_TOPIC;
 
 public class TestTopology {
-    private TopologyTestDriver topologyTestDriver;
-    private ConsumerRecordFactory<String, Bet> betFactory = new ConsumerRecordFactory<>(Serdes.String().serializer(),
-            new JsonSerde<>(Bet.class).serializer());
+
+    private TestInputTopic<String, Bet> betsTopic;
     private List<String> output = new ArrayList<>();
 
-    private ConsumerRecordFactory<String, EventScore> scoreFactory = new ConsumerRecordFactory<>(Serdes.String().serializer(),
-            new JsonSerde<>(EventScore.class).serializer());
+    private TestInputTopic<String, EventScore> scoreTopic;
 
     @BeforeEach
-    public void setUp() throws IOException {
+    public void setUp() {
         KafkaStreamsConfiguration config = new KafkaConfiguration().getStreamsConfig();
         StreamsBuilder sb = new StreamsBuilder();
         Topology topology = new TopologyConfiguration(output::add).createTopology(sb);
-        topologyTestDriver = new TopologyTestDriver(
-                topology, config.asProperties());
+        TopologyTestDriver topologyTestDriver = new TopologyTestDriver(topology, config.asProperties());
+        betsTopic = topologyTestDriver.createInputTopic(BET_TOPIC, Serdes.String().serializer(),
+                new JsonSerde<>(Bet.class).serializer());
+        scoreTopic = topologyTestDriver.createInputTopic(EVENT_SCORE_TOPIC, Serdes.String().serializer(),
+                new JsonSerde<>(EventScore.class).serializer());
+
         output.clear();
     }
 
     void putBet(Bet value) {
-        topologyTestDriver.pipeInput(betFactory.create(BET_TOPIC, value.key(), value));
+        betsTopic.pipeInput(value.key(), value);
     }
 
     void putScore(EventScore value) {
-        topologyTestDriver.pipeInput(scoreFactory.create(EVENT_SCORE_TOPIC, value.getEvent(), value));
+        scoreTopic.pipeInput(value.getEvent(), value);
     }
 
 

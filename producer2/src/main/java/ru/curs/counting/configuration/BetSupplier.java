@@ -1,6 +1,5 @@
 package ru.curs.counting.configuration;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.RequiredArgsConstructor;
 import org.fluttercode.datafactory.impl.DataFactory;
 import org.springframework.stereotype.Service;

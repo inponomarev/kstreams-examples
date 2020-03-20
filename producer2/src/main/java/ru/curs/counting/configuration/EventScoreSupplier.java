@@ -1,12 +1,10 @@
 package ru.curs.counting.configuration;
 
 import lombok.RequiredArgsConstructor;
-import org.fluttercode.datafactory.impl.DataFactory;
 import org.springframework.stereotype.Service;
 import ru.curs.counting.model.EventScore;
 import ru.curs.counting.model.Score;
 
-import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;

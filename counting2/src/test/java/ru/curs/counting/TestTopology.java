@@ -2,10 +2,10 @@ package ru.curs.counting;
 
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
+import org.apache.kafka.streams.TestInputTopic;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.TopologyTestDriver;
 import org.apache.kafka.streams.state.KeyValueStore;
-import org.apache.kafka.streams.test.ConsumerRecordFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.kafka.config.KafkaStreamsConfiguration;
@@ -24,10 +24,8 @@ import static ru.curs.counting.model.TopicNames.BET_TOPIC;
 
 public class TestTopology {
 
-
     private TopologyTestDriver topologyTestDriver;
-    private ConsumerRecordFactory<String, Bet> factory = new ConsumerRecordFactory<>(Serdes.String().serializer(),
-            new JsonSerde<>(Bet.class).serializer());
+    private TestInputTopic<String, Bet> inputTopic;
 
     @BeforeEach
     public void setUp() throws IOException {
@@ -37,10 +35,12 @@ public class TestTopology {
                 new GUI(VirtualScreenBuilder.screen())).createTopology(sb);
         topologyTestDriver = new TopologyTestDriver(
                 topology, config.asProperties());
+        inputTopic = topologyTestDriver.createInputTopic(BET_TOPIC, Serdes.String().serializer(),
+                new JsonSerde<>(Bet.class).serializer());
     }
 
     void placeBet(Bet value) {
-        topologyTestDriver.pipeInput(factory.create(BET_TOPIC, value.key(), value));
+        inputTopic.pipeInput(value.key(), value);
     }
 
     @Test
