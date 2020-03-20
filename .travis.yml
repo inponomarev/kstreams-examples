@@ -1,17 +1,16 @@
 ---
-services:
-  - docker
+dist: bionic
+addons:
+  apt:
+    packages:
+      - graphviz
+
+language: java
+jdk: openjdk8
 
 cache:
   directories:
-  - /tmp/m2
-
-before_install:
-  - mkdir -p /tmp/m2
-  - docker build -t kstreams .
-
-script:
-  - docker run -v /tmp/m2:/root/.m2 -v $TRAVIS_BUILD_DIR:/data --rm kstreams /bin/bash -c "mvn verify"
+  - $HOME/.m2
 
 deploy:
   provider: pages
