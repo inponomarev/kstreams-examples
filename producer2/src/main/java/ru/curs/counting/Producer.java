@@ -1,7 +1,7 @@
 package ru.curs.counting;
 
+import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,21 +19,18 @@ import static ru.curs.counting.model.TopicNames.EVENT_SCORE_TOPIC;
 
 
 @SpringBootApplication
+@AllArgsConstructor
 public class Producer implements CommandLineRunner {
 
     public static void main(String[] args) {
         SpringApplication.run(Producer.class, args).close();
     }
 
-    @Autowired
-    private KafkaTemplate<String, Object> template;
+    private final KafkaTemplate<String, Object> template;
 
+    private final BetSupplier betSupplier;
 
-    @Autowired
-    private BetSupplier betSupplier;
-
-    @Autowired
-    private EventScoreSupplier eventScoreSupplier;
+    private final EventScoreSupplier eventScoreSupplier;
 
     @SneakyThrows
     private void writeBets() {
