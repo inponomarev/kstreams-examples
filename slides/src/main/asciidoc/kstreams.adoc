@@ -332,6 +332,19 @@ TopologyTestDriver topologyTestDriver =
                                config.asProperties());
 ----
 
+== TestInput/OutputTopic: создание
+[source,java]
+----
+TestInputTopic<String, Bet> inputTopic =
+        topologyTestDriver.createInputTopic(BET_TOPIC,
+            Serdes.String().serializer(),
+            new JsonSerde<>(Bet.class).serializer());
+TestOutputTopic<String, Long> outputTopic =
+        topologyTestDriver.createOutputTopic(GAIN_TOPIC,
+            Serdes.String().deserializer(),
+            new JsonSerde<>(Long.class).deserializer());
+----
+
 == TopologyTestDriver: использование
 
 [source,java]
@@ -343,20 +356,14 @@ Bet bet = Bet.builder()
             .amount(100)
             .odds(1.7).build();
 
-topologyTestDriver.pipeInput(
-    betFactory.create(BET_TOPIC, bet.key(), bet));
+inputTopic.pipeInput(bet.key(), bet);
 ----
 
 == TopologyTestDriver: использование
 
 [source,java]
 ----
-ProducerRecord<String, Long> record =
-   topologyTestDriver.readOutput(
-        GAIN_TOPIC, 
-        new StringDeserializer(),
-        new JsonDeserializer<>(Long.class)
-    );
+TestRecord<String, Long> record = outputTopic.readRecord();
 
 assertEquals(bet.key(), record.key());
 assertEquals(170L, record.value().longValue());
@@ -1403,7 +1410,7 @@ KStream<String, String> join = bets.join(outcomes,
                 bet.getBettor(),
                 sureBet.getTimestamp() - bet.getTimestamp()),
                 JoinWindows.of(Duration.ofSeconds(1)).before(Duration.ZERO),
-                Joined.with(Serdes....
+                StreamJoined.with(Serdes....
     ));
 ----
 
