@@ -89,9 +89,7 @@ public class TopologyConfiguration {
         /*Key: Germany-Belgium:H
           Value: (1:0) 171340*/
 
-        joined.toStream().foreach((k, v) ->
-                gui.update(k, v)
-        );
+        joined.toStream().foreach(gui::update);
         Topology topology = streamsBuilder.build();
         System.out.println("========================================");
         System.out.println(topology.describe());

@@ -45,6 +45,11 @@ public class KafkaConfiguration {
     }
 
     @Bean
+    public NewTopic fraudTopic() {
+        return new NewTopic(FRAUD_TOPIC, 10, (short) 1);
+    }
+
+    @Bean
     public NewTopic scoreTopic() {
         Map<String, String> props = new HashMap<>();
         props.put(TopicConfig.CLEANUP_POLICY_CONFIG, TopicConfig.CLEANUP_POLICY_COMPACT);

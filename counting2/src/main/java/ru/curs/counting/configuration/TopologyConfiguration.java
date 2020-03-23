@@ -42,9 +42,7 @@ public class TopologyConfiguration {
                 Serdes.String(), new JsonSerde<>(Long.class)
         )).toStream();
 */
-        counted.foreach((k, v) -> {
-            gui.update(k, v);
-        });
+        counted.foreach(gui::update);
 
         Topology topology = streamsBuilder.build();
         System.out.println("==============================");

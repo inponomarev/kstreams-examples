@@ -7,16 +7,18 @@ import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.JoinWindows;
 import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.kstream.StreamJoined;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.support.serializer.JsonSerde;
 import ru.curs.counting.model.Bet;
 import ru.curs.counting.model.EventScore;
+import ru.curs.counting.model.Fraud;
+import ru.curs.counting.model.TopicNames;
 import ru.curs.windows.transformer.ScoreTransformer;
 
 import java.time.Duration;
-import java.util.function.Consumer;
 
 import static ru.curs.counting.model.TopicNames.BET_TOPIC;
 import static ru.curs.counting.model.TopicNames.EVENT_SCORE_TOPIC;
@@ -24,8 +26,6 @@ import static ru.curs.counting.model.TopicNames.EVENT_SCORE_TOPIC;
 @Configuration
 @RequiredArgsConstructor
 public class TopologyConfiguration {
-
-    private final Consumer<String> output;
 
     @Bean
     public Topology createTopology(StreamsBuilder streamsBuilder) {
@@ -71,20 +71,28 @@ public class TopologyConfiguration {
              }
         */
 
-        KStream<String, String> join = bets.join(winningBets,
+        KStream<String, Fraud> join = bets.join(winningBets,
                 (bet, winningBet) ->
-                        String.format("%s bet %s=%s %d",
-                                bet.getBettor(),
-                                bet.getOutcome(),
-                                winningBet.getOutcome(),
-                                winningBet.getTimestamp() - bet.getTimestamp()),
+                        Fraud.builder()
+                                .bettor(bet.getBettor())
+                                .outcome(bet.getOutcome())
+                                .amount(bet.getAmount())
+                                .match(bet.getMatch())
+                                .odds(bet.getOdds())
+                                .lag(winningBet.getTimestamp() - bet.getTimestamp())
+                                .build(),
                 JoinWindows.of(Duration.ofSeconds(1)).before(Duration.ZERO),
                 StreamJoined.with(Serdes.String(),
                         new JsonSerde<>(Bet.class),
                         new JsonSerde<>(Bet.class)
                 ));
 
-        join.foreach((k, v) -> output.accept(String.format("%s-%s", k, v)));
+
+        join.peek((k, v) -> System.out.printf(String.format("%s-%s%n", k, v)))
+                .to(TopicNames.FRAUD_TOPIC, Produced.with(
+                        Serdes.String(),
+                        new JsonSerde<>(Fraud.class)
+                ));
 
         Topology topology = streamsBuilder.build();
         System.out.println("==========================");
