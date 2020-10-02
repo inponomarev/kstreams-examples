@@ -25,7 +25,7 @@
 
     <properties>
         <kafka.version>2.5.0</kafka.version>
-        <jackson.version>2.11.0</jackson.version>
+        <jackson.version>2.11.3</jackson.version>
     </properties>
 
     <dependencyManagement>
