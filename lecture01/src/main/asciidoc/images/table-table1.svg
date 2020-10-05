@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Создано Microsoft Visio 11.0, Экспорт SVG, версия 1.0 table-table1.svg Страница-1 -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
+		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="2.31869in" height="2.58689in"
+		viewBox="0 0 166.945 186.256" xml:space="preserve" color-interpolation-filters="sRGB" class="st10">
+	<v:documentProperties v:langID="1049" v:metric="true" v:viewMarkup="false"/>
+
+	<style type="text/css">
+	<![CDATA[
+		.st1 {fill:#e5b9b5;stroke:#164326;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.24}
+		.st2 {fill:none;stroke:#164326;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.24}
+		.st3 {fill:#ff0000;stroke:#164326;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.24}
+		.st4 {fill:none;stroke:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st5 {fill:#164326;font-family:Calibri;font-size:1.5em}
+		.st6 {fill:#ff0000}
+		.st7 {stroke:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
+		.st8 {stroke:#164326;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.24}
+		.st9 {fill:#ffffff;stroke:#ff0000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.24;visibility:hidden}
+		.st10 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
+	]]>
+	</style>
+
+	<g v:mID="0" v:index="1" v:groupContext="foregroundPage">
+		<title>Страница-1</title>
+		<v:pageProperties v:drawingScale="0.0393701" v:pageScale="0.0393701" v:drawingUnits="24" v:shadowOffsetX="8.50394"
+				v:shadowOffsetY="-8.50394"/>
+		<g id="shape74-1" v:mID="74" v:groupContext="shape" transform="translate(24.9731,-114.136)">
+			<title>Поле.74</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<rect x="0" y="157.909" width="28.3465" height="28.3465" class="st1"/>
+		</g>
+		<g id="shape75-3" v:mID="75" v:groupContext="shape" transform="translate(53.3196,-114.136)">
+			<title>Поле.75</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<rect x="0" y="157.909" width="28.3465" height="28.3465" class="st2"/>
+		</g>
+		<g id="shape76-5" v:mID="76" v:groupContext="shape" transform="translate(81.666,-114.136)">
+			<title>Поле.76</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<rect x="0" y="157.909" width="28.3465" height="28.3465" class="st2"/>
+		</g>
+		<g id="shape77-7" v:mID="77" v:groupContext="shape" transform="translate(110.012,-114.136)">
+			<title>Поле.77</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<rect x="0" y="157.909" width="28.3465" height="28.3465" class="st2"/>
+		</g>
+		<g id="shape78-9" v:mID="78" v:groupContext="shape" transform="translate(138.359,-114.136)">
+			<title>Поле.78</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<rect x="0" y="157.909" width="28.3465" height="28.3465" class="st2"/>
+		</g>
+		<g id="shape79-11" v:mID="79" v:groupContext="shape" transform="translate(24.9731,-85.7894)">
+			<title>Поле.79</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<rect x="0" y="157.909" width="28.3465" height="28.3465" class="st2"/>
+		</g>
+		<g id="shape80-13" v:mID="80" v:groupContext="shape" transform="translate(53.3196,-85.7894)">
+			<title>Поле.80</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<rect x="0" y="157.909" width="28.3465" height="28.3465" class="st2"/>
+		</g>
+		<g id="shape81-15" v:mID="81" v:groupContext="shape" transform="translate(81.666,-85.7894)">
+			<title>Поле.81</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<rect x="0" y="157.909" width="28.3465" height="28.3465" class="st2"/>
+		</g>
+		<g id="shape82-17" v:mID="82" v:groupContext="shape" transform="translate(110.012,-85.7894)">
+			<title>Поле.82</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<rect x="0" y="157.909" width="28.3465" height="28.3465" class="st1"/>
+		</g>
+		<g id="shape83-19" v:mID="83" v:groupContext="shape" transform="translate(138.359,-85.7894)">
+			<title>Поле.83</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<rect x="0" y="157.909" width="28.3465" height="28.3465" class="st2"/>
+		</g>
+		<g id="shape84-21" v:mID="84" v:groupContext="shape" transform="translate(24.9731,-57.4429)">
+			<title>Поле.84</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<rect x="0" y="157.909" width="28.3465" height="28.3465" class="st2"/>
+		</g>
+		<g id="shape85-23" v:mID="85" v:groupContext="shape" transform="translate(53.3196,-57.4429)">
+			<title>Поле.85</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<rect x="0" y="157.909" width="28.3465" height="28.3465" class="st1"/>
+		</g>
+		<g id="shape86-25" v:mID="86" v:groupContext="shape" transform="translate(81.666,-57.4429)">
+			<title>Поле.86</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<rect x="0" y="157.909" width="28.3465" height="28.3465" class="st2"/>
+		</g>
+		<g id="shape87-27" v:mID="87" v:groupContext="shape" transform="translate(110.012,-57.4429)">
+			<title>Поле.87</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<rect x="0" y="157.909" width="28.3465" height="28.3465" class="st2"/>
+		</g>
+		<g id="shape88-29" v:mID="88" v:groupContext="shape" transform="translate(138.359,-57.4429)">
+			<title>Поле.88</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<rect x="0" y="157.909" width="28.3465" height="28.3465" class="st2"/>
+		</g>
+		<g id="shape89-31" v:mID="89" v:groupContext="shape" transform="translate(24.9731,-29.0965)">
+			<title>Поле.89</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<rect x="0" y="157.909" width="28.3465" height="28.3465" class="st2"/>
+		</g>
+		<g id="shape90-33" v:mID="90" v:groupContext="shape" transform="translate(53.3196,-29.0965)">
+			<title>Поле.90</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<rect x="0" y="157.909" width="28.3465" height="28.3465" class="st2"/>
+		</g>
+		<g id="shape91-35" v:mID="91" v:groupContext="shape" transform="translate(81.666,-29.0965)">
+			<title>Поле.91</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<rect x="0" y="157.909" width="28.3465" height="28.3465" class="st2"/>
+		</g>
+		<g id="shape92-37" v:mID="92" v:groupContext="shape" transform="translate(110.012,-29.0965)">
+			<title>Поле.92</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<rect x="0" y="157.909" width="28.3465" height="28.3465" class="st2"/>
+		</g>
+		<g id="shape93-39" v:mID="93" v:groupContext="shape" transform="translate(138.359,-29.0965)">
+			<title>Поле.93</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<rect x="0" y="157.909" width="28.3465" height="28.3465" class="st1"/>
+		</g>
+		<g id="shape94-41" v:mID="94" v:groupContext="shape" transform="translate(24.9731,-0.75)">
+			<title>Поле.94</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<rect x="0" y="157.909" width="28.3465" height="28.3465" class="st2"/>
+		</g>
+		<g id="shape95-43" v:mID="95" v:groupContext="shape" transform="translate(53.3196,-0.75)">
+			<title>Поле.95</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<rect x="0" y="157.909" width="28.3465" height="28.3465" class="st2"/>
+		</g>
+		<g id="shape96-45" v:mID="96" v:groupContext="shape" transform="translate(81.666,-0.75)">
+			<title>Поле.96</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<rect x="0" y="157.909" width="28.3465" height="28.3465" class="st3"/>
+		</g>
+		<g id="shape97-47" v:mID="97" v:groupContext="shape" transform="translate(110.012,-0.75)">
+			<title>Поле.97</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<rect x="0" y="157.909" width="28.3465" height="28.3465" class="st2"/>
+		</g>
+		<g id="shape98-49" v:mID="98" v:groupContext="shape" transform="translate(138.359,-0.75)">
+			<title>Поле.98</title>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<rect x="0" y="157.909" width="28.3465" height="28.3465" class="st2"/>
+		</g>
+		<g id="shape100-51" v:mID="100" v:groupContext="shape" transform="translate(-167.456,185.506) rotate(-90)">
+			<title>Лист.100</title>
+			<desc>Table 2</desc>
+			<v:textBlock v:margins="rect(4,4,4,4)" v:tabSpace="42.5197"/>
+			<v:textRect cx="70.8661" cy="178.256" width="141.74" height="16"/>
+			<rect x="0" y="170.256" width="141.732" height="16" class="st4"/>
+			<text x="44.3" y="183.66" class="st5" v:langID="1033"><v:paragraph v:horizAlign="1"/><v:tabList/>Table 2</text>		</g>
+		<g id="group101-54" transform="translate(267.922,0.75) rotate(90)" v:mID="101" v:groupContext="group">
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(14):26"/>
+			</v:userDefs>
+			<title>Простая односторонняя.101</title>
+			<g id="shape102-55" v:mID="102" v:groupContext="shape">
+				<title>Лист.102</title>
+				<path d="M0 179.17 L35.94 179.17 L35.94 186.26 L43.02 172.08 L35.94 157.91 L35.94 165 L0 165 L0 179.17 Z"
+						class="st6"/>
+				<path d="M0 179.17 L35.94 179.17 L35.94 186.26 L43.02 172.08 L35.94 157.91 L35.94 165 L0 165" class="st7"/>
+			</g>
+			<g id="shape103-58" v:mID="103" v:groupContext="shape">
+				<title>Лист.103</title>
+				<path d="M0 179.17 L35.94 179.17 L35.94 186.26 L43.02 172.08 L35.94 157.91 L35.94 165 L0 165 L0 179.17" class="st8"/>
+			</g>
+			<g id="shape104-61" v:mID="104" v:groupContext="shape" transform="translate(-0.551658,-7.20661)">
+				<title>Лист.104</title>
+				<rect x="0" y="172.323" width="0.242844" height="13.9332" class="st9"/>
+			</g>
+		</g>
+	</g>
+</svg>
