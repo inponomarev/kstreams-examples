@@ -125,11 +125,11 @@ digraph D {
       label = "topic A";
       style = "rounded";
       T1[shape="none"; style="invis"; label=<<table cellspacing="5" cellborder="0"  border="1">
-        <tr><td>0</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>0</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         <hr/>
-        <tr><td>1</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>1</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         <hr/>
-        <tr><td>2</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>2</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         </table>>]
     }
      
@@ -137,9 +137,9 @@ digraph D {
       label = "topic B";
       style = "rounded";
       T2[shape="none"; style="invis"; label=<<table cellspacing="5" cellborder="0"  border="1">
-        <tr><td>0</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>0</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         <hr/>
-        <tr><td>1</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>1</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         </table>>]
 
     }   
@@ -149,13 +149,13 @@ digraph D {
       label = "topic C";
       style = "rounded";
       T3[shape="none"; style="invis"; label=<<table cellspacing="5" cellborder="0"  border="1">
-        <tr><td>0</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>0</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         <hr/>
-        <tr><td>1</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>1</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         <hr/>
-        <tr><td>2</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>2</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         <hr/>
-        <tr><td>3</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>3</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         </table>>]
     }   
     
@@ -177,11 +177,11 @@ digraph D {
       label = "topic A";
       style = "rounded";
       T1[shape="none"; label=<<table cellspacing="5" cellborder="0"  border="1">
-        <tr><td>0</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>0</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         <hr/>
-        <tr><td>1</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>1</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         <hr/>
-        <tr><td>2</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>2</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         </table>>]
     }
      
@@ -189,9 +189,9 @@ digraph D {
       label = "topic B";
       style = "rounded";
       T2[shape="none"; label=<<table cellspacing="5" cellborder="0"  border="1">
-        <tr><td>0</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>0</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         <hr/>
-        <tr><td>1</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>1</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         </table>>]
 
     }   
@@ -201,13 +201,13 @@ digraph D {
       label = "topic C";
       style = "rounded";
       T3[shape="none"; label=<<table cellspacing="5" cellborder="0"  border="1">
-        <tr><td>0</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>0</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         <hr/>
-        <tr><td>1</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>1</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         <hr/>
-        <tr><td>2</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>2</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         <hr/>
-        <tr><td>3</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>3</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         </table>>]
     }   
     
@@ -228,11 +228,11 @@ digraph D {
       label = "topic A";
       style = "rounded";
       T1[shape="none"; label=<<table cellspacing="5" cellborder="0"  border="1">
-        <tr><td>0</td><vr/><td><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>0</td><vr/><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         <hr/>
-        <tr><td>1</td><vr/><td><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>1</td><vr/><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         <hr/>
-        <tr><td>2</td><vr/><td><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>2</td><vr/><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         </table>>]
     }
      
@@ -240,9 +240,9 @@ digraph D {
       label = "topic B";
       style = "rounded";
       T2[shape="none"; label=<<table cellspacing="5" cellborder="0"  border="1">
-        <tr><td>0</td><vr/><td><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>0</td><vr/><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         <hr/>
-        <tr><td>1</td><vr/><td><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>1</td><vr/><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         </table>>]
 
     }   
@@ -252,13 +252,13 @@ digraph D {
       label = "topic C";
       style = "rounded";
       T3[shape="none"; label=<<table cellspacing="5" cellborder="0"  border="1">
-        <tr><td>0</td><vr/><td><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>0</td><vr/><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         <hr/>
-        <tr><td>1</td><vr/><td><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>1</td><vr/><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         <hr/>
-        <tr><td>2</td><vr/><td><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>2</td><vr/><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         <hr/>
-        <tr><td>3</td><vr/><td><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="src/main/asciidoc/images/message-small.png"/></td></tr>
+        <tr><td>3</td><vr/><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
         </table>>]
     }   
     
@@ -276,7 +276,7 @@ digraph G {
   msg[
     shape="none";
     label=<<table cellspacing="5" cellborder="0" style="rounded" border="1">
-                    <tr><td><IMG SCALE="TRUE" SRC="src/main/asciidoc/images/message.png"/></td></tr>
+                    <tr><td><IMG SCALE="TRUE" SRC="lecture01/src/main/asciidoc/images/message.png"/></td></tr>
                     <hr/>
                     <tr><td>Номер партиции</td></tr>
                     <hr/>
@@ -300,7 +300,7 @@ digraph G {
   msg[
     shape="none";
     label=<<table cellspacing="5" cellborder="0" style="rounded" border="1">
-                    <tr><td><IMG SCALE="TRUE" SRC="src/main/asciidoc/images/message.png"/></td></tr>
+                    <tr><td><IMG SCALE="TRUE" SRC="lecture01/src/main/asciidoc/images/message.png"/></td></tr>
                     <hr/>
                     <tr><td bgcolor="gray">Номер партиции</td></tr>
                     <hr/>
@@ -331,7 +331,7 @@ digraph G {
   rankdir="LR";
   subgraph cluster_s2{
     o1[shape="none",label="",
-                 image="src/main/asciidoc/images/worried.png"]
+                 image="lecture01/src/main/asciidoc/images/worried.png"]
     label="Consumer Group"
     style="rounded"
   }
@@ -355,10 +355,10 @@ digraph G {
       subgraph cluster_s2{
           
         o1[shape="none",label="",
-                 image="src/main/asciidoc/images/neutral.png"];
+                 image="lecture01/src/main/asciidoc/images/neutral.png"];
           
         o2[shape="none",label="",
-                 image="src/main/asciidoc/images/neutral.png"];
+                 image="lecture01/src/main/asciidoc/images/neutral.png"];
         
         label="Consumer Group";
         style="rounded"
@@ -385,13 +385,13 @@ digraph G {
       subgraph cluster_s2{
             
         o1[shape="none",label="",
-                 image="src/main/asciidoc/images/smiley.png"]
+                 image="lecture01/src/main/asciidoc/images/smiley.png"]
         
         o2[shape="none",label="",
-                 image="src/main/asciidoc/images/smiley.png"]
+                 image="lecture01/src/main/asciidoc/images/smiley.png"]
 
         o3[shape="none",label="",
-                 image="src/main/asciidoc/images/smiley.png"]
+                 image="lecture01/src/main/asciidoc/images/smiley.png"]
         
         label="Consumer Group"
         style="rounded"
@@ -421,16 +421,16 @@ digraph G {
       subgraph cluster_s2{
             
         o1[shape="none",label="",
-                 image="src/main/asciidoc/images/smiley.png"]
+                 image="lecture01/src/main/asciidoc/images/smiley.png"]
         
         o2[shape="none",label="",
-                 image="src/main/asciidoc/images/smiley.png"]
+                 image="lecture01/src/main/asciidoc/images/smiley.png"]
 
         o3[shape="none",label="",
-                 image="src/main/asciidoc/images/smiley.png"]
+                 image="lecture01/src/main/asciidoc/images/smiley.png"]
         
         o4[shape="none",label="",
-                 image="src/main/asciidoc/images/rollingeyes.png"]
+                 image="lecture01/src/main/asciidoc/images/rollingeyes.png"]
         
         o1->o4[style="invis"];
         label="Consumer Group"
@@ -458,7 +458,7 @@ digraph G {
    
       subgraph cluster_s2{
         Consumer[shape="none",label="",
-                 image="src/main/asciidoc/images/smiley.png"];
+                 image="lecture01/src/main/asciidoc/images/smiley.png"];
         Consumer2[shape="circle",style="rounded",label="C2",style="invis"]
         style="rounded";
         label="Group"
@@ -494,7 +494,7 @@ digraph G {
     rankdir="LR"
       subgraph cluster_s2{
         Consumer[shape="none",label="",
-                 image="src/main/asciidoc/images/smiley.png"];
+                 image="lecture01/src/main/asciidoc/images/smiley.png"];
         Consumer2[shape="circle",style="rounded",label="C2",style="invis"]
         style="rounded";
         label="Group"
@@ -530,7 +530,7 @@ digraph G {
     rankdir="LR"
       subgraph cluster_s2{
         Consumer[shape="none",label="",
-                 image="src/main/asciidoc/images/smiley.png"];
+                 image="lecture01/src/main/asciidoc/images/smiley.png"];
         Consumer2[shape="circle",style="rounded",label="C2",style="invis"]
         style="rounded";
         label="Group"
@@ -566,7 +566,7 @@ digraph G {
     rankdir="LR"
     subgraph cluster_s2{
         Consumer[shape="none",label="",
-                 image="src/main/asciidoc/images/dizzy.png"];
+                 image="lecture01/src/main/asciidoc/images/dizzy.png"];
         Consumer2[shape="circle",style="rounded",label="C2",style="invis"]
         style="rounded";
         label="Group"
@@ -603,9 +603,9 @@ digraph G {
     rankdir="LR"
     subgraph cluster_s2{
         Consumer[shape="none",label="",
-                 image="src/main/asciidoc/images/skull.png"];
+                 image="lecture01/src/main/asciidoc/images/skull.png"];
         Consumer2[shape="none",label="",
-                 image="src/main/asciidoc/images/smiley.png"];
+                 image="lecture01/src/main/asciidoc/images/smiley.png"];
         style="rounded";
         label="Group"
    }
@@ -643,9 +643,9 @@ digraph G {
 
     subgraph cluster_s2{
         Consumer[shape="none",label="",
-                 image="src/main/asciidoc/images/skull.png"];
+                 image="lecture01/src/main/asciidoc/images/skull.png"];
         Consumer2[shape="none",label="",
-                 image="src/main/asciidoc/images/smiley.png"];
+                 image="lecture01/src/main/asciidoc/images/smiley.png"];
         style="rounded";
         label="Group"
    }
@@ -682,9 +682,9 @@ digraph G {
 
     subgraph cluster_s2{
         Consumer[shape="none",label="",
-                 image="src/main/asciidoc/images/skull.png"];
+                 image="lecture01/src/main/asciidoc/images/skull.png"];
         Consumer2[shape="none",label="",
-                 image="src/main/asciidoc/images/smiley.png"];
+                 image="lecture01/src/main/asciidoc/images/smiley.png"];
         style="rounded";
         label="Group"
    }
@@ -1059,7 +1059,7 @@ digraph G {
   
     subgraph cluster_s2{
         o1[shape="none",label="",
-                 image="src/main/asciidoc/images/worried.png"];
+                 image="lecture01/src/main/asciidoc/images/worried.png"];
         label="APP_ID_1";
         style="rounded";
    }
@@ -1087,9 +1087,9 @@ digraph G {
   rankdir="LR";
       subgraph cluster_s2{
         o1[shape="none",label="",
-                 image="src/main/asciidoc/images/neutral.png"]
+                 image="lecture01/src/main/asciidoc/images/neutral.png"]
         o2[shape="none",label="",
-                 image="src/main/asciidoc/images/neutral.png"]
+                 image="lecture01/src/main/asciidoc/images/neutral.png"]
         label="APP_ID_1";
         style="rounded";
       }
@@ -1118,16 +1118,16 @@ digraph G {
       subgraph cluster_s2{
             
         o1[shape="none",label="",
-                 image="src/main/asciidoc/images/smiley.png"]
+                 image="lecture01/src/main/asciidoc/images/smiley.png"]
         
         o2[shape="none",label="",
-                 image="src/main/asciidoc/images/smiley.png"]
+                 image="lecture01/src/main/asciidoc/images/smiley.png"]
 
         o3[shape="none",label="",
-                 image="src/main/asciidoc/images/smiley.png"]
+                 image="lecture01/src/main/asciidoc/images/smiley.png"]
 
         o4[shape="none",label="",
-                 image="src/main/asciidoc/images/rollingeyes.png"]
+                 image="lecture01/src/main/asciidoc/images/rollingeyes.png"]
 
         label="APP_ID_1";
         style="rounded";
@@ -1471,7 +1471,7 @@ digraph D {
               label = "Partition 3"
                 
               d[shape="none", label="",
-                 image="src/main/asciidoc/images/pear.png"];
+                 image="lecture01/src/main/asciidoc/images/pear.png"];
           }
 
         d->ls1;
@@ -1480,9 +1480,9 @@ digraph D {
               label = "Partition 2"
           
               b [shape="none", label="",
-                 image="src/main/asciidoc/images/red-apple.png"];
+                 image="lecture01/src/main/asciidoc/images/red-apple.png"];
               c[shape="none", label="",
-                 image="src/main/asciidoc/images/kiwi.png"];
+                 image="lecture01/src/main/asciidoc/images/kiwi.png"];
               
           }
  
@@ -1491,15 +1491,15 @@ digraph D {
               
               
               a [shape="none", label="",
-                 image="src/main/asciidoc/images/banana.png"];
+                 image="lecture01/src/main/asciidoc/images/banana.png"];
               
           }
           
         
         ls1[shape="cylinder" label = <<table border="0" cellspacing="5">
-        <tr><td><img src="src/main/asciidoc/images/banana.png"/></td><td><font point-size="24">15</font></td>
-        <vr/><td><img src="src/main/asciidoc/images/red-apple.png"/></td><td><font point-size="24">10</font></td>
-        <vr/><td><img src="src/main/asciidoc/images/pear.png"/></td><td><font point-size="24">20</font></td></tr></table>>]
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td><font point-size="24">15</font></td>
+        <vr/><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td><font point-size="24">10</font></td>
+        <vr/><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td><font point-size="24">20</font></td></tr></table>>]
         a->ls1;
         b->ls1;
         c->ls1;
@@ -1532,7 +1532,7 @@ digraph D {
               label = "Partition 3"
                 
               d[shape="none", label="",
-                 image="src/main/asciidoc/images/pear.png"];
+                 image="lecture01/src/main/asciidoc/images/pear.png"];
           }
 
         d->ls1;
@@ -1543,9 +1543,9 @@ digraph D {
               label = "Partition 2"
           
               b [shape="none", label="",
-                 image="src/main/asciidoc/images/red-apple.png"];
+                 image="lecture01/src/main/asciidoc/images/red-apple.png"];
               c[shape="none", label="",
-                 image="src/main/asciidoc/images/kiwi.png"];
+                 image="lecture01/src/main/asciidoc/images/kiwi.png"];
               
           }
  
@@ -1554,14 +1554,14 @@ digraph D {
               
               
               a [shape="none", label="",
-                 image="src/main/asciidoc/images/banana.png"];
+                 image="lecture01/src/main/asciidoc/images/banana.png"];
               
           }
         
         ls1[shape="cylinder" label = <<table border="0"  cellspacing="5">
-        <tr><td><img src="src/main/asciidoc/images/banana.png"/></td><td><font point-size="24">15</font></td>
-        <vr/><td><img src="src/main/asciidoc/images/red-apple.png"/></td><td><font point-size="24">10</font></td>
-        <vr/><td><img src="src/main/asciidoc/images/pear.png"/></td><td><font point-size="24">20</font></td></tr></table>>]
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td><font point-size="24">15</font></td>
+        <vr/><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td><font point-size="24">10</font></td>
+        <vr/><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td><font point-size="24">20</font></td></tr></table>>]
         a->ls1;
         b->ls1;
         c->ls1;
@@ -1573,15 +1573,15 @@ digraph D {
         p1v1[shape="none"; label= <<table cellborder="0">
         <tr><td colspan="2">Partition 2</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/red-apple.png"/></td><td>10</td></tr></table>>];
+        <tr><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td>10</td></tr></table>>];
         p2v1[shape="none"; label= <<table cellborder="0">
         <tr><td colspan="2">Partition 3</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/pear.png"/></td><td>20</td></tr></table>>];
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td>20</td></tr></table>>];
         p3v1[shape="none"; label= <<table cellborder="0">
         <tr><td colspan="2">Partition 1</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/banana.png"/></td><td>15</td></tr></table>>];
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td>15</td></tr></table>>];
   }
 } 
 -----
@@ -1608,7 +1608,7 @@ digraph D {
               label = "Partition 3"
                 
               d[shape="none", label="",
-                 image="src/main/asciidoc/images/pear.png"];
+                 image="lecture01/src/main/asciidoc/images/pear.png"];
           }
 
         d->ls1;
@@ -1619,9 +1619,9 @@ digraph D {
               label = "Partition 2"
           
               b [shape="none", label="",
-                 image="src/main/asciidoc/images/red-apple.png"];
+                 image="lecture01/src/main/asciidoc/images/red-apple.png"];
               c[shape="none", label="",
-                 image="src/main/asciidoc/images/kiwi.png"];
+                 image="lecture01/src/main/asciidoc/images/kiwi.png"];
               
           }
  
@@ -1630,14 +1630,14 @@ digraph D {
               
               
               a [shape="none", label="",
-                 image="src/main/asciidoc/images/banana.png"];
+                 image="lecture01/src/main/asciidoc/images/banana.png"];
               
           }
         
         ls1[shape="cylinder" label = <<table border="0"  cellspacing="5">
-        <tr><td><img src="src/main/asciidoc/images/banana.png"/></td><td><font point-size="24">19</font></td>
-        <vr/><td><img src="src/main/asciidoc/images/red-apple.png"/></td><td><font point-size="24">12</font></td>
-        <vr/><td><img src="src/main/asciidoc/images/pear.png"/></td><td><font point-size="24">22</font></td></tr></table>>]
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td><font point-size="24">19</font></td>
+        <vr/><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td><font point-size="24">12</font></td>
+        <vr/><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td><font point-size="24">22</font></td></tr></table>>]
         a->ls1;
         b->ls1;
         c->ls1;
@@ -1649,23 +1649,23 @@ digraph D {
         p1v1[shape="none"; label= <<table cellborder="0">
         <tr><td colspan="2">Partition 2</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/red-apple.png"/></td><td>10</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td>10</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/red-apple.png"/></td><td>12</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td>12</td></tr>
         </table>>];
         p2v1[shape="none"; label= <<table cellborder="0">
         <tr><td colspan="2">Partition 3</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/pear.png"/></td><td>20</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td>20</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/pear.png"/></td><td>22</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td>22</td></tr>
         </table>>];
         p3v1[shape="none"; label= <<table cellborder="0">
         <tr><td colspan="2">Partition 1</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/banana.png"/></td><td>15</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td>15</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/banana.png"/></td><td>19</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td>19</td></tr>
         </table>>];
   }
 } 
@@ -1693,9 +1693,9 @@ digraph D {
               label = "Partition 2"
           
               b [shape="none", label="",
-                 image="src/main/asciidoc/images/red-apple.png"];
+                 image="lecture01/src/main/asciidoc/images/red-apple.png"];
               c[shape="none", label="",
-                 image="src/main/asciidoc/images/kiwi.png"];
+                 image="lecture01/src/main/asciidoc/images/kiwi.png"];
               
           }
  
@@ -1704,13 +1704,13 @@ digraph D {
               
               
               a [shape="none", label="",
-                 image="src/main/asciidoc/images/banana.png"];
+                 image="lecture01/src/main/asciidoc/images/banana.png"];
               
           }
         
         ls1[shape="cylinder" label = <<table border="0"  cellspacing="5">
-        <tr><td><img src="src/main/asciidoc/images/banana.png"/></td><td><font point-size="24">19</font></td>
-        <vr/><td><img src="src/main/asciidoc/images/red-apple.png"/></td><td><font point-size="24">12</font></td>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td><font point-size="24">19</font></td>
+        <vr/><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td><font point-size="24">12</font></td>
         </tr></table>>]
         a->ls1;
         b->ls1;
@@ -1727,11 +1727,11 @@ digraph D {
               label = "Partition 3"
                 
               d[shape="none", label="",
-                 image="src/main/asciidoc/images/pear.png"];
+                 image="lecture01/src/main/asciidoc/images/pear.png"];
           }
       
         ls2[shape="cylinder" label = <<table border="0"  cellspacing="5">
-        <tr><td><img src="src/main/asciidoc/images/pear.png"/></td><td><img src="src/main/asciidoc/images/question-mark.png"/></td></tr></table>>]
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td><img src="lecture01/src/main/asciidoc/images/question-mark.png"/></td></tr></table>>]
         d->ls2;
         ls2->p2v1[style="invis"];
     }
@@ -1739,23 +1739,23 @@ digraph D {
         p1v1[shape="none"; label= <<table cellborder="0">
         <tr><td colspan="2">Partition 2</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/red-apple.png"/></td><td>10</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td>10</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/red-apple.png"/></td><td>12</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td>12</td></tr>
         </table>>];
         p2v1[shape="none"; style="invis"; label= <<table cellborder="0">
         <tr><td colspan="2">Partition 3</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/pear.png"/></td><td>20</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td>20</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/pear.png"/></td><td>22</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td>22</td></tr>
         </table>>];
         p3v1[shape="none"; label= <<table cellborder="0">
         <tr><td colspan="2">Partition 1</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/banana.png"/></td><td>15</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td>15</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/banana.png"/></td><td>19</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td>19</td></tr>
         </table>>];
   }
 } 
@@ -1783,9 +1783,9 @@ digraph D {
               label = "Partition 2"
           
               b [shape="none", label="",
-                 image="src/main/asciidoc/images/red-apple.png"];
+                 image="lecture01/src/main/asciidoc/images/red-apple.png"];
               c[shape="none", label="",
-                 image="src/main/asciidoc/images/kiwi.png"];
+                 image="lecture01/src/main/asciidoc/images/kiwi.png"];
               
           }
  
@@ -1794,13 +1794,13 @@ digraph D {
               
               
               a [shape="none", label="",
-                 image="src/main/asciidoc/images/banana.png"];
+                 image="lecture01/src/main/asciidoc/images/banana.png"];
               
           }
         
         ls1[shape="cylinder" label = <<table border="0"  cellspacing="5">
-        <tr><td><img src="src/main/asciidoc/images/banana.png"/></td><td><font point-size="24">19</font></td>
-        <vr/><td><img src="src/main/asciidoc/images/red-apple.png"/></td><td><font point-size="24">12</font></td>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td><font point-size="24">19</font></td>
+        <vr/><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td><font point-size="24">12</font></td>
         </tr></table>>]
         a->ls1;
         b->ls1;
@@ -1817,11 +1817,11 @@ digraph D {
               label = "Partition 3"
                 
               d[shape="none", label="",
-                 image="src/main/asciidoc/images/pear.png"];
+                 image="lecture01/src/main/asciidoc/images/pear.png"];
           }
       
         ls2[shape="cylinder" label = <<table border="0"  cellspacing="5">
-        <tr><td><img src="src/main/asciidoc/images/pear.png"/></td><td><font point-size="24">22</font></td></tr></table>>]
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td><font point-size="24">22</font></td></tr></table>>]
         d->ls2;
         ls2->p2v1[dir="back"];
     }
@@ -1829,23 +1829,23 @@ digraph D {
         p1v1[shape="none"; label= <<table cellborder="0">
         <tr><td colspan="2">Partition 2</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/red-apple.png"/></td><td>10</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td>10</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/red-apple.png"/></td><td>12</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td>12</td></tr>
         </table>>];
         p2v1[shape="none"; label= <<table cellborder="0">
         <tr><td colspan="2">Partition 3</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/pear.png"/></td><td>20</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td>20</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/pear.png"/></td><td>22</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td>22</td></tr>
         </table>>];
         p3v1[shape="none"; label= <<table cellborder="0">
         <tr><td colspan="2">Partition 1</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/banana.png"/></td><td>15</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td>15</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/banana.png"/></td><td>19</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td>19</td></tr>
         </table>>];
   }
 } 
@@ -1873,9 +1873,9 @@ digraph D {
               label = "Partition 2"
           
               b [shape="none", label="",
-                 image="src/main/asciidoc/images/red-apple.png"];
+                 image="lecture01/src/main/asciidoc/images/red-apple.png"];
               c[shape="none", label="",
-                 image="src/main/asciidoc/images/kiwi.png"];
+                 image="lecture01/src/main/asciidoc/images/kiwi.png"];
               
           }
  
@@ -1884,13 +1884,13 @@ digraph D {
               
               
               a [shape="none", label="",
-                 image="src/main/asciidoc/images/banana.png"];
+                 image="lecture01/src/main/asciidoc/images/banana.png"];
               
           }
         
         ls1[shape="cylinder" label = <<table border="0"  cellspacing="5">
-        <tr><td><img src="src/main/asciidoc/images/banana.png"/></td><td><font point-size="24">21</font></td>
-        <vr/><td><img src="src/main/asciidoc/images/red-apple.png"/></td><td><font point-size="24">13</font></td>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td><font point-size="24">21</font></td>
+        <vr/><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td><font point-size="24">13</font></td>
         </tr></table>>]
         a->ls1;
         b->ls1;
@@ -1907,11 +1907,11 @@ digraph D {
               label = "Partition 3"
                 
               d[shape="none", label="",
-                 image="src/main/asciidoc/images/pear.png"];
+                 image="lecture01/src/main/asciidoc/images/pear.png"];
           }
       
         ls2[shape="cylinder" label = <<table border="0"  cellspacing="5">
-        <tr><td><img src="src/main/asciidoc/images/pear.png"/></td><td><font point-size="24">23</font></td></tr></table>>]
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td><font point-size="24">23</font></td></tr></table>>]
         d->ls2;
         ls2->p2v1;
     }
@@ -1919,29 +1919,29 @@ digraph D {
         p1v1[shape="none"; label= <<table cellborder="0">
         <tr><td colspan="2">Partition 2</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/red-apple.png"/></td><td>10</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td>10</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/red-apple.png"/></td><td>12</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td>12</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/red-apple.png"/></td><td>13</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td>13</td></tr>
         </table>>];
         p2v1[shape="none"; label= <<table cellborder="0">
         <tr><td colspan="2">Partition 3</td></tr>
         <hr/>
-         <tr><td><img src="src/main/asciidoc/images/pear.png"/></td><td>20</td></tr>
+         <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td>20</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/pear.png"/></td><td>22</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td>22</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/pear.png"/></td><td>23</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td>23</td></tr>
         </table>>];
         p3v1[shape="none"; label= <<table cellborder="0">
         <tr><td colspan="2">Partition 1</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/banana.png"/></td><td>15</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td>15</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/banana.png"/></td><td>19</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td>19</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/banana.png"/></td><td>21</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td>21</td></tr>
         </table>>];
   }
 } 
@@ -1969,9 +1969,9 @@ digraph D {
               label = "Partition 2"
           
               b [shape="none", label="",
-                 image="src/main/asciidoc/images/red-apple.png"];
+                 image="lecture01/src/main/asciidoc/images/red-apple.png"];
               c[shape="none", label="",
-                 image="src/main/asciidoc/images/kiwi.png"];
+                 image="lecture01/src/main/asciidoc/images/kiwi.png"];
               
           }
  
@@ -1980,13 +1980,13 @@ digraph D {
               
               
               a [shape="none", label="",
-                 image="src/main/asciidoc/images/banana.png"];
+                 image="lecture01/src/main/asciidoc/images/banana.png"];
               
           }
         
         ls1[shape="cylinder" label = <<table border="0"  cellspacing="5">
-        <tr><td><img src="src/main/asciidoc/images/banana.png"/></td><td><font point-size="24">21</font></td>
-        <vr/><td><img src="src/main/asciidoc/images/red-apple.png"/></td><td><font point-size="24">13</font></td>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td><font point-size="24">21</font></td>
+        <vr/><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td><font point-size="24">13</font></td>
         </tr></table>>]
         a->ls1;
         b->ls1;
@@ -2003,11 +2003,11 @@ digraph D {
               label = "Partition 3"
                 
               d[shape="none", label="",
-                 image="src/main/asciidoc/images/pear.png"];
+                 image="lecture01/src/main/asciidoc/images/pear.png"];
           }
       
         ls2[shape="cylinder" label = <<table border="0"  cellspacing="5">
-        <tr><td><img src="src/main/asciidoc/images/pear.png"/></td><td><font point-size="24">23</font></td></tr></table>>]
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td><font point-size="24">23</font></td></tr></table>>]
         d->ls2;
         ls2->p2v1;
     }
@@ -2015,17 +2015,17 @@ digraph D {
         p1v1[shape="none"; label= <<table cellborder="0">
         <tr><td colspan="2">Partition 2</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/red-apple.png"/></td><td>13</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td>13</td></tr>
         </table>>];
         p2v1[shape="none"; label= <<table cellborder="0">
         <tr><td colspan="2">Partition 3</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/pear.png"/></td><td>23</td></tr>        
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td>23</td></tr>        
         </table>>];
         p3v1[shape="none"; label= <<table cellborder="0">
         <tr><td colspan="2">Partition 1</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/banana.png"/></td><td>21</td></tr>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td>21</td></tr>
         </table>>];
   }
 } 
@@ -2053,7 +2053,7 @@ digraph D {
               label = "Partition 3"
                 
               d[shape="none", label="",
-                 image="src/main/asciidoc/images/pear.png"];
+                 image="lecture01/src/main/asciidoc/images/pear.png"];
           }
 
         d->ls1;
@@ -2064,9 +2064,9 @@ digraph D {
               label = "Partition 2"
           
               b [shape="none", label="",
-                 image="src/main/asciidoc/images/red-apple.png"];
+                 image="lecture01/src/main/asciidoc/images/red-apple.png"];
               c[shape="none", label="",
-                 image="src/main/asciidoc/images/kiwi.png"];
+                 image="lecture01/src/main/asciidoc/images/kiwi.png"];
               
           }
  
@@ -2075,14 +2075,14 @@ digraph D {
               
               
               a [shape="none", label="",
-                 image="src/main/asciidoc/images/banana.png"];
+                 image="lecture01/src/main/asciidoc/images/banana.png"];
               
           }
         
         ls1[shape="cylinder" label = <<table border="0"  cellspacing="5">
-        <tr><td><img src="src/main/asciidoc/images/banana.png"/></td><td><font point-size="24">21</font></td>
-        <vr/><td><img src="src/main/asciidoc/images/red-apple.png"/></td><td><font point-size="24">13</font></td>
-        <vr/><td><img src="src/main/asciidoc/images/pear.png"/></td><td><font point-size="24">23</font></td></tr></table>>]
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td><font point-size="24">21</font></td>
+        <vr/><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td><font point-size="24">13</font></td>
+        <vr/><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td><font point-size="24">23</font></td></tr></table>>]
         a->ls1;
         b->ls1;
         c->ls1;
@@ -2094,15 +2094,15 @@ digraph D {
         p1v1[shape="none"; label= <<table cellborder="0">
         <tr><td colspan="2">Partition 2</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/red-apple.png"/></td><td>13</td></tr></table>>];
+        <tr><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td>13</td></tr></table>>];
         p2v1[shape="none"; label= <<table cellborder="0">
         <tr><td colspan="2">Partition 3</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/pear.png"/></td><td>23</td></tr></table>>];
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td>23</td></tr></table>>];
         p3v1[shape="none"; label= <<table cellborder="0">
         <tr><td colspan="2">Partition 1</td></tr>
         <hr/>
-        <tr><td><img src="src/main/asciidoc/images/banana.png"/></td><td>21</td></tr></table>>];
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td>21</td></tr></table>>];
   }
 } 
 -----
