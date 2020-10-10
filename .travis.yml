@@ -13,8 +13,8 @@ cache:
   - $HOME/.m2
 
 before_deploy:
-  - ln -sfn lecture01/target/generated-slides slides/target/generated-slides/lecture01
-  - ln -sfn lecture02/target/generated-slides slides/target/generated-slides/lecture02
+  - cp -R lecture01/target/generated-slides slides/target/generated-slides/lecture01
+  - cp -R lecture02/target/generated-slides slides/target/generated-slides/lecture02
 
 deploy:
   provider: pages
