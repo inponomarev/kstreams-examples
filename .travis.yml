@@ -12,11 +12,15 @@ cache:
   directories:
   - $HOME/.m2
 
+after_script:
+  - ls -sfn lecture01/target/generated-slides slides/target/generated-slides/lecture01
+  - ls -sfn lecture02/target/generated-slides slides/target/generated-slides/lecture02
+
 deploy:
   provider: pages
   skip_cleanup: true
   github_token: $GH_TOKEN
-  # local_dir: slides/target/generated-slides
-  local_dir: lecture01/target/generated-slides
+  local_dir: slides/target/generated-slides
+  #local_dir: lecture01/target/generated-slides
   on:
     branch: master

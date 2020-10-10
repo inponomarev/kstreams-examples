@@ -18,8 +18,9 @@
         <module>counting2</module>
         <module>tables2</module>
         <module>windows2</module>
-        <!--<module>slides</module>-->
+        <module>slides</module>
         <module>lecture01</module>
+        <module>lecture02</module>
     </modules>
 
     <organization>
