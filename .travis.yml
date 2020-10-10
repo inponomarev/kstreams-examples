@@ -12,9 +12,9 @@ cache:
   directories:
   - $HOME/.m2
 
-after_script:
-  - ls -sfn lecture01/target/generated-slides slides/target/generated-slides/lecture01
-  - ls -sfn lecture02/target/generated-slides slides/target/generated-slides/lecture02
+before_deploy:
+  - ln -sfn lecture01/target/generated-slides slides/target/generated-slides/lecture01
+  - ln -sfn lecture02/target/generated-slides slides/target/generated-slides/lecture02
 
 deploy:
   provider: pages
