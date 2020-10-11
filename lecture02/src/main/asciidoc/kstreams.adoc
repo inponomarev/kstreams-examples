@@ -21,7 +21,7 @@ include::_doc_general_attributes.adoc[]
 :revealjs_transition: none
 :revealjs_width: 1600
 :revealjs_height: 900
-
+:stem: latexmath
 
 //== Часть 1. Введение
 :!figure-caption:
@@ -70,12 +70,50 @@ image::stream-table-animation-numVisitedLocations.gif[{image-100-width}]
 
 Производная и интеграл
 
-.Martin Kleppmann, “Designing Data Intensive Applications”
-image::derivative-and-integral.png[{image-100-width}]
+[stem] 
+++++
+\huge
+state(now) = \int\limits_{t=0}^{now} stream(t)\, \mathrm{d}t
+\quad\quad
+stream(t) = \frac{\mathrm{d}state(t)}{\mathrm{d}t}
+++++
 
-== Join
+Martin Kleppmann, “Designing Data Intensive Applications”
 
-image::derivative.png[{image-40-width}]
+== Table-table join
+
+[stem] 
+++++
+\huge
+(uv)'= u'v + uv'
+++++
+
+[.fragment]
+image::table-table.svg[{image-40-width}]
+
+== Table-Table join
+
+[stem] 
+++++
+\huge
+(uv)'= u'v + uv'
+++++
+
+
+image::table-table1.svg[{image-40-width}]
+
+== Table-Table join
+
+[stem] 
+++++
+\huge
+(uv)'= u'v + uv'
+++++
+
+
+image::table-table2.svg[{image-40-width}]
+
+== Топология Table-Table join
 
 [graphviz, "join-storages.png"]
 -----
@@ -428,6 +466,35 @@ digraph D {
   }
 } 
 -----
+
+== Foreign Key Joins: join + `ForeignKeyExtractor`
+
+[graphviz, "fkjoin.png"]
+-----
+digraph G {
+graph [ dpi = 140 ]; 
+#rankdir="LR";
+node [fontsize=18; shape="circle"; fixedsize="true"; width="1.1"];
+{rank=min; Source1; Source2};
+{rank=same; Join1; Join2; Store1;Store2};
+
+Store1 [shape="cylinder"; label="Local Store"; fixedsize="true"; width="1.7"]
+Store2 [shape="cylinder"; label="Local Store"; fixedsize="true"; width="1.7"]
+Source1 -> Join1
+Source2 -> Join2
+Join1 -> subscribe -> Join2;
+Join1 -> update -> Join2[dir=back];
+subscribe[shape=record;label=" | | | | ";xlabel="subscribe"];
+update[shape=record;label=" | | | | ";xlabel="update"];
+Join1 -> Sink
+Join1 -> Store1 [dir=both; label=" \n "]
+Join2 -> Store2 [dir=both; label=" \n "]
+
+subscribe->update[style=invis];
+
+}
+-----
+
 
 == Операции между стримами и таблицами: сводка
 .Источник: https://kafka.apache.org/20/documentation/streams/developer-guide/dsl-api.html#stateful-transformations[Kafka Streams DSL Documentation]

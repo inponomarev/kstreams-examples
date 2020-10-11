@@ -21,7 +21,7 @@ include::_doc_general_attributes.adoc[]
 :revealjs_transition: none
 :revealjs_width: 1600
 :revealjs_height: 900
-
+:stem: latexmath
 
 //== Часть 1. Введение
 :!figure-caption:
@@ -920,12 +920,23 @@ image::stream-table-animation-numVisitedLocations.gif[{image-100-width}]
 
 Производная и интеграл
 
-.Martin Kleppmann, “Designing Data Intensive Applications”
-image::derivative-and-integral.png[{image-100-width}]
+[stem] 
+++++
+\huge
+state(now) = \int\limits_{t=0}^{now} stream(t)\, \mathrm{d}t
+\quad\quad
+stream(t) = \frac{\mathrm{d}state(t)}{\mathrm{d}t}
+++++
+
+Martin Kleppmann, “Designing Data Intensive Applications”
 
 == Join
 
-image::derivative.png[{image-40-width}]
+[stem] 
+++++
+\huge
+(uv)'= u'v + uv'
+++++
 
 [graphviz, "join-storages.png"]
 -----
