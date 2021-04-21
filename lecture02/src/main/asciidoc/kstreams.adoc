@@ -487,7 +487,7 @@ Join1 -> update -> Join2[dir=back];
 subscribe[shape=record;label=" | | | | ";xlabel="subscribe"];
 update[shape=record;label=" | | | | ";xlabel="update"];
 Join1 -> Sink
-Join1 -> Store1 [dir=both; label=" \n "]
+Join2 -> Store1 [dir=both; label=" \n "]
 Join2 -> Store2 [dir=both; label=" \n "]
 
 subscribe->update[style=invis];
