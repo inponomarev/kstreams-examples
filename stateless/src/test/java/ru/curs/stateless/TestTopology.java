@@ -45,6 +45,7 @@ public class TestTopology {
 
     @Test
     void testTopology() {
+       //arrange
         Bet bet = Bet.builder()
                 .bettor("John Doe")
                 .match("Germany-Belgium")
@@ -52,7 +53,9 @@ public class TestTopology {
                 .amount(100)
                 .odds(1.7).build();
 
+        //act
         inputTopic.pipeInput(bet.key(), bet);
+        //assert
         TestRecord<String, Long> record = outputTopic.readRecord();
         assertEquals(bet.key(), record.key());
         assertEquals(170L, record.value().longValue());

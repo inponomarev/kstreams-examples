@@ -10,11 +10,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.support.serializer.JsonSerde;
 import ru.curs.counting.cli2.GUITextText;
+import ru.curs.counting.data.Total;
 import ru.curs.counting.model.Bet;
 import ru.curs.counting.model.EventScore;
 import ru.curs.counting.model.Outcome;
 import ru.curs.counting.model.Score;
 
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -44,17 +46,28 @@ public class TopologyConfiguration {
                    timestamp = 1554215083998;
                 }
         */
-        KTable<String, Long> totals = input.groupByKey().aggregate(
+
+
+        KTable<String, Long> totalValues = input.groupByKey().aggregate(
                 () -> 0L, (k, v, a) -> a + Math.round(v.getAmount() * v.getOdds()),
                 Materialized.with(Serdes.String(), new JsonSerde<>(Long.class))
         );
+                /*  Key: "Germany-Belgium:H"
+                    Value: 171340L <<total value
+                */
 
-        /*  Key: "Germany-Belgium:H" A D
-            Value: 171340L <<total value
+
+        KTable<String, Total> totals =
+                totalValues.mapValues((k, v)->new Total(k.substring(0, k.lastIndexOf(':')), v),
+                Materialized.with(Serdes.String(), new JsonSerde<>(Total.class)));
+
+        /*  Key: "Germany-Belgium:H"
+            Value: {match: "Germany-Belgium",
+                    total: 171340L }
         */
 
 
-        KStream<String, EventScore> eventScores = streamsBuilder.stream(EVENT_SCORE_TOPIC,
+        KTable<String, EventScore> eventScores = streamsBuilder.table(EVENT_SCORE_TOPIC,
                 Consumed.with(Serdes.String(), new JsonSerde<>(EventScore.class)
                 ));
         /*
@@ -65,27 +78,20 @@ public class TopologyConfiguration {
                      timestamp = 554215083998;
              }
          */
-        KStream<String, Score> scores = eventScores
-                .flatMap((k, v) ->
-                        Stream.of(Outcome.H, Outcome.A).map(o ->
-                                KeyValue.pair(
-                                        String.format("%s:%s", k, o), v))
-                                .collect(Collectors.toList()))
-                /*
-                    Key: Germany-Belgium:H
-                    Value: EventScore
+        KTable<String, String> joined = totals.join(eventScores,
+                // lambda t: return t.getMatch()
+                Total::getMatch,
+                (total, score) -> {
+                    return String.format("(%s)\t%d", score.getScore(), total.getTotal());
+                }
+        );
 
-                    Key: Germany-Belgium:A
-                    Value: EventScore
-                 */
-                .mapValues(EventScore::getScore);
 
-        KTable<String, Score> tableScores = scores.toTable(Materialized.with(Serdes.String(),
-                new JsonSerde<>(Score.class)));
-
-        KTable<String, String> joined = totals.join(tableScores,
-                (total, eventScore) -> String.format("(%s)\t%d", eventScore, total));
-
+/*
+        KTable<String, String> joined = totals.join(eventScores,
+                (String betkey) ->  betkey.substring(0, betkey.lastIndexOf(':') ),
+                (Long total, EventScore eventScore) -> String.format("(%s)\t%d", eventScore.getScore(), total));
+ */
         /*Key: Germany-Belgium:H
           Value: (1:0) 171340*/
 

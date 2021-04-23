@@ -54,9 +54,9 @@ public class Producer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        ExecutorService executorService = Executors.newFixedThreadPool(2);
+        final ExecutorService executorService = Executors.newCachedThreadPool();
         executorService.submit(this::writeBets);
-        executorService.submit(this::writeScores);
+        writeScores();
     }
 
 }
