@@ -1,12 +1,14 @@
 package ru.curs.stateless;
 
 import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.TestInputTopic;
 import org.apache.kafka.streams.TestOutputTopic;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.TopologyTestDriver;
 import org.apache.kafka.streams.test.TestRecord;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.kafka.config.KafkaStreamsConfiguration;
@@ -28,13 +30,14 @@ public class TestTopology {
     private List<String> output = new ArrayList<>();
     private TestInputTopic<String, Bet> inputTopic;
     private TestOutputTopic<String, Long> outputTopic;
+    TopologyTestDriver topologyTestDriver;
 
     @BeforeEach
     public void setUp() {
         KafkaStreamsConfiguration config = new KafkaConfiguration().getStreamsConfig();
         StreamsBuilder sb = new StreamsBuilder();
         Topology topology = new TopologyConfiguration(output::add).createTopology(sb);
-        TopologyTestDriver topologyTestDriver = new TopologyTestDriver(topology, config.asProperties());
+        topologyTestDriver = new TopologyTestDriver(topology, config.asProperties());
         inputTopic =
                 topologyTestDriver.createInputTopic(BET_TOPIC, Serdes.String().serializer(),
                         new JsonSerde<>(Bet.class).serializer());
@@ -43,9 +46,14 @@ public class TestTopology {
                         new JsonSerde<>(Long.class).deserializer());
     }
 
+    @AfterEach
+    public void tearDown() {
+        topologyTestDriver.close();
+    }
+
     @Test
     void testTopology() {
-       //arrange
+        //arrange
         Bet bet = Bet.builder()
                 .bettor("John Doe")
                 .match("Germany-Belgium")
@@ -56,8 +64,8 @@ public class TestTopology {
         //act
         inputTopic.pipeInput(bet.key(), bet);
         //assert
-        TestRecord<String, Long> record = outputTopic.readRecord();
-        assertEquals(bet.key(), record.key());
-        assertEquals(170L, record.value().longValue());
+        KeyValue<String, Long> keyValue = outputTopic.readKeyValue();
+        assertEquals(bet.key(), keyValue.key);
+        assertEquals(170L, keyValue.value.longValue());
     }
 }

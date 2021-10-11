@@ -1266,15 +1266,14 @@ A -> C -> CF
 
 == Ветвление стримов по условию
 
-Не используйте `KStream.branch`, используйте `KafkaStreamsBrancher`!
+С версии 2.8:
 [source,java]
 ----
-new KafkaStreamsBrancher<String, String>()
-   .branch((key, value) -> value.contains("A"), ks -> ks.to("A"))
-   .branch((key, value) -> value.contains("B"), ks -> ks.to("B"))
-   .defaultBranch(ks -> ks.to("C"))
-   .onTopOf(builder.stream("source"))
-   .map(...)
+gain.split()
+    .branch((key, value) -> key.contains("A"), 
+        Branched.withConsumer(ks -> ks.to("A")))
+    .branch((key, value) -> key.contains("A"), 
+        Branched.withConsumer(ks -> ks.to("B")));
 ----
 [graphviz, "switchbranch.png"]
 -----

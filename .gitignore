@@ -19,6 +19,8 @@ slides-short/
 
 #auto-generated images
 slides/src/main/asciidoc/*.png
+lecture01/src/main/asciidoc/*.png
+lecture02/src/main/asciidoc/*.png
 /old/
 /*.mp4
 /*.bat

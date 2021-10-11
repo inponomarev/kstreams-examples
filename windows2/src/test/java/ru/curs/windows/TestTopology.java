@@ -6,6 +6,7 @@ import org.apache.kafka.streams.TestInputTopic;
 import org.apache.kafka.streams.TestOutputTopic;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.TopologyTestDriver;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.kafka.config.KafkaStreamsConfiguration;
@@ -34,19 +35,24 @@ public class TestTopology {
     private TestInputTopic<String, Bet> betsTopic;
     private TestInputTopic<String, EventScore> scoreTopic;
     private TestOutputTopic<String, Fraud> fraudTopic;
-
+    private TopologyTestDriver topologyTestDriver;
     @BeforeEach
     public void setUp() {
         KafkaStreamsConfiguration config = new KafkaConfiguration().getStreamsConfig();
         StreamsBuilder sb = new StreamsBuilder();
         Topology topology = new TopologyConfiguration().createTopology(sb);
-        TopologyTestDriver topologyTestDriver = new TopologyTestDriver(topology, config.asProperties());
+        topologyTestDriver = new TopologyTestDriver(topology, config.asProperties());
         betsTopic = topologyTestDriver.createInputTopic(BET_TOPIC, Serdes.String().serializer(),
                 new JsonSerde<>(Bet.class).serializer());
         scoreTopic = topologyTestDriver.createInputTopic(EVENT_SCORE_TOPIC, Serdes.String().serializer(),
                 new JsonSerde<>(EventScore.class).serializer());
         fraudTopic = topologyTestDriver.createOutputTopic(FRAUD_TOPIC, Serdes.String().deserializer(),
                 new JsonSerde<>(Fraud.class).deserializer());
+    }
+
+    @AfterEach
+    void tearDown() {
+        topologyTestDriver.close();
     }
 
     void putBet(Bet value) {

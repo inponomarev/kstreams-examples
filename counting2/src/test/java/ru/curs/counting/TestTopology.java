@@ -6,6 +6,7 @@ import org.apache.kafka.streams.TestInputTopic;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.TopologyTestDriver;
 import org.apache.kafka.streams.state.KeyValueStore;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.kafka.config.KafkaStreamsConfiguration;
@@ -37,6 +38,11 @@ public class TestTopology {
                 topology, config.asProperties());
         inputTopic = topologyTestDriver.createInputTopic(BET_TOPIC, Serdes.String().serializer(),
                 new JsonSerde<>(Bet.class).serializer());
+    }
+
+    @AfterEach
+    public void tearDown(){
+        topologyTestDriver.close();
     }
 
     void placeBet(Bet value) {
