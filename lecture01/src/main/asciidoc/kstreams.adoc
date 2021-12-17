@@ -1272,7 +1272,7 @@ A -> C -> CF
 gain.split()
     .branch((key, value) -> key.contains("A"), 
         Branched.withConsumer(ks -> ks.to("A")))
-    .branch((key, value) -> key.contains("A"), 
+    .branch((key, value) -> key.contains("B"), 
         Branched.withConsumer(ks -> ks.to("B")));
 ----
 [graphviz, "switchbranch.png"]
@@ -2115,17 +2115,16 @@ digraph G
     graph [ dpi = 150 ]; 
     rankdir="LR";
     node [shape=record, width=.1, height=.1];
-    node1 [label="{ | | | | }", fontsize = 18, xlabel= "through(. . .)"];
+    node1 [label="{ | | | | }", fontsize = 18, xlabel= "repartition(. . .)"];
     
     node [label = " "; shape="circle"; fixedsize="true"; width="1.1"];
     Source -> node1
     node1 -> Sink
-    
 }
 -----
 
 * Явное при помощи +
-`through(String topic, Produced<K, V> produced)`
+`repartition(Repartitioned<K, V> repartitioned)`
 * Неявное при операциях, меняющих ключ + stateful-операциях
 
 == Дублирующееся неявное репартиционирование
@@ -2166,7 +2165,7 @@ throughJoin [shape="record"; label="{ | | | | }"; height = "0.2"]
 [source,java]
 ----
 KStream source = builder.stream("topic1");
-KStream shuffled = source.map(...).through("topic2",..);
+KStream shuffled = source.map(...).repartition(...);
 KTable counts = shuffled.groupByKey().aggregate(...);
 KStream sink = shuffled.leftJoin(counts, ...);
 ----
@@ -2181,7 +2180,7 @@ Start, Finish [style="invis"]
 Start -> A
 A[label="map"]
 A -> throughAgg
-throughAgg[xlabel="through"]
+throughAgg[xlabel="repartition"]
 throughAgg -> Agg
 throughAgg -> Join
 Agg[label="Agg"]
