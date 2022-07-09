@@ -69,8 +69,10 @@ public class TestTopology {
         long current = System.currentTimeMillis();     //1:0
         putScore(new EventScore("Turkey-Moldova", new Score().goalHome(), current));
         putBet(new Bet("alice", "Turkey-Moldova", Outcome.A, 1, 1.5, current - 100));
-        putBet(new Bet("bob", "Turkey-Moldova", Outcome.H, 1, 1.5, current - 100));
+        putBet(new Bet("bob", "Turkey-Moldova", Outcome.H, 1, 1.5, current - 100)); //<<<<
+        putBet(new Bet("bob", "Turkey-Moldova", Outcome.H, 1, 1.5, current + 100));
         putBet(new Bet("bob", "Turkey-Moldova", Outcome.H, 1, 1.5, current - 5000));
+
         Fraud expectedFraud = Fraud.builder()
                 .bettor("bob")
                 .match("Turkey-Moldova")
@@ -81,8 +83,9 @@ public class TestTopology {
                 .build();
 
 
-        assertEquals(expectedFraud, fraudTopic.readValue());
-        assertTrue(fraudTopic.isEmpty());
+        List<Fraud> frauds = fraudTopic.readValuesToList();
+        assertEquals(1, frauds.size());
+        assertEquals(expectedFraud, frauds.get(0));
     }
 
 

@@ -35,7 +35,7 @@ services:
 
   kafkacat:
     container_name: kafkacat
-    image: confluentinc/cp-kafkacat:6.2.1
+    image: edenhill/kcat:1.7.1
     depends_on:
       - broker
     entrypoint: /bin/sh
