@@ -737,11 +737,11 @@ class MyTransformer implements Transformer<...> {
 [.custom-style]
 [cols="30a,70a"]
 |===
-|image::KSIA.jpg[]
+|image::KSIA.png[]
 |
 * **William Bejeck**, + 
-“Kafka Streams in Action”, November 2018
-* Примеры кода для Kafka 1.x
+“Kafka Streams in Action, Second Edition”, Spring 2023?
+* Первое издание устарело!
 |===
 
 == Kafka: The Definitive Guide
@@ -751,8 +751,8 @@ class MyTransformer implements Transformer<...> {
 |===
 |image::kafka-the-definitive-guide.jpg[]
 |
-* Gwen Shapira, Neha Narkhede, Todd Palino
-* September 2017
+* Gwen Shapira, Todd Palino, Rajini Sivaram, Krit Petty
+* November 2021
 |===
 
 
