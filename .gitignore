@@ -24,3 +24,6 @@ lecture02/src/main/asciidoc/*.png
 /old/
 /*.mp4
 /*.bat
+
+#i18n gettext
+*.po~

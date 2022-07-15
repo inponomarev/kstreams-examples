@@ -1,0 +1,791 @@
+= Kafka Streams API: Шаг за рамки Hello World
+Иван Пономарёв, КУРС/МФТИ
+:revealjs_theme: black
+:revealjs_customtheme: white_course.css
+:revealjs_slideNumber:
+:revealjs_history:
+:revealjs_progress:
+:encoding: UTF-8
+:lang: ru
+include::_doc_general_attributes.adoc[]
+:doctype: article
+:toclevels: 3
+:imagesdir: images
+:source-highlighter: highlightjs
+:highlightjsdir: highlight
+:icons: font
+:iconfont-remote!:
+:iconfont-name: font-awesome-4.7.0/css/font-awesome
+:revealjs_mouseWheel: true
+:revealjs_center: false
+:revealjs_transition: none
+:revealjs_width: 1600
+:revealjs_height: 900
+:stem: latexmath
+
+//== Part 1. Intro
+:!figure-caption:
+
+ponomarev@corchestra.ru
+
+icon:twitter[size=lg] @inponomarev
+
+== Наш план
+
+[cols="20a,60a,20a"]
+|===
+.^|image::kafka.jpg[]
+.^|
+
+Лекция 1.
+
+. [line-through]#Kafka (краткое напоминание) и Data Streaming#
+. [line-through]#Конфигурация приложения. Простые (stateless) трансформации#
+. [line-through]#Трансформации с использованием локального состояния#
+
+Лекция 2.
+
+. *Дуализм «поток—таблица» и табличные join-ы*
+. Время и оконные операции
+
+.^|image::kafka.jpg[]
+|===
+
+
+== Таблицы vs стримы
+
+Местонахождение пользователя
+
+.Michael G. Noll. Of Streams and Tables in Kafka and Stream Processing
+image::stream-table-animation-latestLocation.gif[{image-100-width}]
+
+== Таблицы vs стримы
+
+Количество посещенных мест
+
+.Michael G. Noll. Of Streams and Tables in Kafka and Stream Processing
+image::stream-table-animation-numVisitedLocations.gif[{image-100-width}]
+
+== Таблицы vs стримы
+
+Производная и интеграл
+
+[stem] 
+++++
+\huge
+state(now) = \int\limits_{t=0}^{now} stream(t)\, \mathrm{d}t
+\quad\quad
+stream(t) = \frac{\mathrm{d}state(t)}{\mathrm{d}t}
+++++
+
+Martin Kleppmann, “Designing Data Intensive Applications”
+
+== Table-table join
+
+[stem] 
+++++
+\huge
+(uv)'= u'v + uv'
+++++
+
+[.fragment]
+image::table-table.svg[{image-40-width}]
+
+== Table-Table join
+
+[stem] 
+++++
+\huge
+(uv)'= u'v + uv'
+++++
+
+
+image::table-table1.svg[{image-40-width}]
+
+== Table-Table join
+
+[stem] 
+++++
+\huge
+(uv)'= u'v + uv'
+++++
+
+
+image::table-table2.svg[{image-40-width}]
+
+== Топология Table-Table join
+
+[graphviz, "join-storages.png"]
+-----
+digraph G {
+graph [ dpi = 150 ]; 
+rankdir="LR";
+node [fontsize=18; shape="circle"; fixedsize="true"; width="1.1"];
+Store1 [shape="cylinder"; label="Local Store 1"; fixedsize="true"; width="1.7"]
+Store2 [shape="cylinder"; label="Local Store 2"; fixedsize="true"; width="1.7"]
+Source1 -> Join
+Source2 -> Join
+
+Join -> Sink
+Join -> Store1 [dir=both; label=" \n "]
+Join -> Store2 [dir=both; label=" \n "]
+Store1 -> Store2 [style=invis]
+{rank = same; Store1; Join }
+}
+-----
+
+== Переписываем totalling app при помощи KTable
+
+[source,java]
+----
+KTable<String, Long> totals = input.groupByKey().aggregate(
+    () -> 0L, 
+    (k, v, a) -> a + Math.round(v.getAmount() * v.getOdds()),
+    Materialized.with(Serdes.String(), Serdes.Long())
+);
+----
+
+[source,code]
+----
+$kafka-topics --zookeeper localhost --describe
+
+Topic: 
+table2-demo-KSTREAM-AGGREGATE-STATE-STORE-0000000001-changelog 
+PartitionCount:10
+ReplicationFactor:1
+Configs:cleanup.policy=compact
+----
+
+
+== Получаем таблицу счетов матчей
+[source,java]
+----
+KStream<String, Score> scores = 
+    eventScores.flatMap((k, v) ->
+        Stream.of(Outcome.H, Outcome.A).map(o ->
+            KeyValue.pair(String.format("%s:%s", k, o), v))
+            .collect(Collectors.toList()))
+    .mapValues(EventScore::getScore);
+
+KTable<String, Score> tableScores =
+    scores.groupByKey(Grouped.with(...).reduce((a, b) -> b);
+
+----
+[source,code]
+----
+$kafka-topics --zookeeper localhost --list
+
+table2-demo-KSTREAM-REDUCE-STATE-STORE-0000000006-repartition
+table2-demo-KSTREAM-REDUCE-STATE-STORE-0000000006-changelog
+----
+
+== Демо: Объединяем сумму ставок с текущим счётом
+[source,java]
+----
+KTable<String, String> joined = 
+    totals.join(tableScores,
+            (total, eventScore) -> 
+                String.format("(%s)\t%d", eventScore, total));
+----
+
+
+== Копартиционирование
+
+Join работает
+
+[graphviz, "copart-norm.png"]
+-----
+digraph D {
+  graph [ dpi = 150 ]; 
+  subgraph system {
+     subgraph cluster_s2{
+          style = "invis"
+          S1 [shape=plaintext label = "Source 1"];
+          S2 [shape=plaintext label = "Source 2"];
+          S1->S2 [style="invis"]
+      }
+    subgraph cluster_p1 {
+      label = "Worker 1";
+        
+          
+          subgraph cluster_pp11{
+              label = "Partition 2"
+          
+              b [label = "B"];
+              c[label = "C"];
+              
+          }
+          subgraph cluster_pp12{
+              label = "Partition 2"
+              labelloc ="b"
+          
+              b1 [label = "B"];
+              
+              c1[label = "C"];
+          }
+          
+          subgraph cluster_p1{
+              label = "Partition 1"
+          labelloc = "b"
+              
+              a1 [label = "A"]
+              
+          }
+          
+        subgraph cluster_pp1{
+              label = "Partition 1"
+              
+              
+              a [label = "A"];
+              
+          }
+          
+          a->a1[style="dashed" dir="none"];
+          b->b1[style="dashed" dir="none"];
+          c->c1[style="dashed" dir="none"];
+    }
+    subgraph cluster_p2 {
+      label = "Worker 2";
+      subgraph cluster_pp2{
+              label = "Partition 3"
+                
+              d[label = "D"];
+              
+              
+          }
+          subgraph cluster_p2{
+              label = "Partition 3"
+              labelloc = "b"
+              d1[label = "D"];
+              
+              
+          }
+          
+          d->d1[style="dashed" dir="none"];
+    }
+  }
+} 
+-----
+
+== Несовпадение количества партиций
+
+Join не работает (Runtime Exception)
+
+[graphviz, "copart-diff.png"]
+-----
+digraph D {
+  graph [ dpi = 150 ]; 
+  subgraph system {
+     subgraph cluster_s2{
+          style = "invis"
+          S1 [shape=plaintext label = "Source 1"];
+          S2 [shape=plaintext label = "Source 2"];
+          S1->S2 [style="invis"]
+      }
+    subgraph cluster_p1 {
+      label = "Worker 1";
+        subgraph cluster_p1{
+              label = "Partition 1"
+              labelloc = "b"
+              b1 [label = "B"]
+              a1 [label = "A"]
+          }
+          
+        subgraph cluster_pp1{
+              label = "Partition 1"
+          
+              
+              a [label = "A"];
+              
+          }
+          
+          subgraph cluster_pa2{
+              label = "Partition 2"
+          b [label = "B"];
+              c [label = "C" color="red"];
+              
+          }
+          a->a1[style="dashed" dir="none"];
+          b->b1[style="dashed" dir="none"];
+          
+          
+    }
+    subgraph cluster_p2 {
+      label = "Worker 2";
+      subgraph cluster_pp2{
+              label = "Partition 3"
+          
+              d[label = "D"];
+              
+              
+          }
+          subgraph cluster_pa3{
+              label = "Partition 2"
+              labelloc = "b"
+          
+              d1[label = "D"];
+              c1[label = "C" color ="red"];
+              
+          }
+          c->c1[ dir="none" color="red"];
+          d->d1[style="dashed" dir="none"];
+    }
+  }
+} 
+-----
+
+== Несовпадение алгоритма партицирования
+
+Join не работает молча!
+
+[graphviz, "copart-diff-algorithm.png"]
+-----
+digraph D {
+  graph [ dpi = 150 ]; 
+  subgraph system {
+     subgraph cluster_s2{
+          style = "invis"
+          S1 [shape=plaintext label = "Source 1"];
+          S2 [shape=plaintext label = "Source 2"];
+          S1->S2 [style="invis"]
+      }
+    subgraph cluster_p1 {
+      label = "Worker 1";
+        subgraph cluster_p1{
+              label = "Partition 1"
+              labelloc = "b"
+          
+              b1 [label = "B" color="red"]
+              a1 [label = "A"]
+              
+          }
+          
+        subgraph cluster_pp1{
+              label = "Partition 1"
+          
+               c[label = "C" color= "red"];
+              a [label = "A"];
+              
+          }
+          
+    }
+    subgraph cluster_p2 {
+      label = "Worker 2";
+      subgraph cluster_pp2{
+              label = "Partition 2"
+          b [label = "B" color="red"];
+              d[label = "D"];
+             
+              
+          }
+          subgraph cluster_p2{
+              label = "Partition 2"
+              labelloc = "b"
+              d1[label = "D"];
+              c1[label = "C" color = "red"];
+              
+          }
+          a->a1[style="dashed" dir="none"];
+          b->b1[color="red" dir="none"];
+          c->c1[color="red" dir="none"];
+          d->d1[style="dashed" dir="none"];
+    }
+  }
+} 
+-----
+
+== GlobalKTable
+
+Реплицируется всюду целиком
+
+[source,java]
+----
+GlobalKTable<...> global = streamsBuilder.globalTable("global", ...);
+----
+
+[graphviz, "globalktable.png"]
+-----
+digraph D {
+  graph [ dpi = 150 ]; 
+  subgraph system {
+     subgraph cluster_s2{
+          style = "invis"
+          S1 [shape=plaintext label = "Source 1"];
+          S2 [shape=plaintext label = "GlobalKTable"];
+          S1->S2 [style="invis"]
+      }
+    subgraph cluster_p1 {
+      label = "Worker 1";
+        subgraph cluster_p1{
+              label = ""
+          
+              b1 [label = "B"]
+              a1 [label = "A"]
+              cc [label = "C"] 
+              dd [label = "D"]
+              a1->cc[style="invis"];
+              b1->dd[style="invis"];
+          }
+          
+        subgraph cluster_pp1{
+              label = "Partition 1"
+          
+             
+              a [label = "A"];
+              b [label = "B"];
+          }
+          
+    }
+    subgraph cluster_p2 {
+      label = "Worker 2";
+      subgraph cluster_pp2{
+              label = "Partition 2"
+                c[label = "C"];
+              
+              d[label = "D"];
+              
+             
+              
+          }
+          subgraph cluster_p2{
+              label = ""
+              labelloc = "b"
+              d1[label = "D"];
+              c1[label = "C" ];
+              aa[label = "A"];
+              bbb[label = "B"];
+              c1->aa [style= "invis"];
+              d1->bbb [style= "invis"];
+              
+          }
+          a->a1[style="dashed" dir="none"];
+          b->b1[style="dashed" dir="none"];
+          c->c1[style="dashed" dir="none"];
+          d->d1[style="dashed" dir="none"];
+    }
+  }
+} 
+-----
+
+== Foreign Key Joins: join + `ForeignKeyExtractor`
+
+[graphviz, "fkjoin.png"]
+-----
+digraph G {
+graph [ dpi = 140 ]; 
+#rankdir="LR";
+node [fontsize=18; shape="circle"; fixedsize="true"; width="1.1"];
+{rank=min; Source1; Source2};
+{rank=same; Join1; Join2; Store1;Store2};
+
+Store1 [shape="cylinder"; label="Local Store"; fixedsize="true"; width="1.7"]
+Store2 [shape="cylinder"; label="Local Store"; fixedsize="true"; width="1.7"]
+Source1 -> Join1
+Source2 -> Join2
+Join1 -> subscribe -> Join2;
+Join1 -> update -> Join2[dir=back];
+subscribe[shape=record;label=" | | | | ";xlabel="subscribe"];
+update[shape=record;label=" | | | | ";xlabel="update"];
+Join1 -> Sink
+Join2 -> Store1 [dir=both; label=" \n "]
+Join2 -> Store2 [dir=both; label=" \n "]
+
+subscribe->update[style=invis];
+
+}
+-----
+
+
+== Операции между стримами и таблицами: сводка
+.Источник: https://kafka.apache.org/20/documentation/streams/developer-guide/dsl-api.html#stateful-transformations[Kafka Streams DSL Documentation]
+image::streams-stateful_operations.png[{image-50-width}]
+
+== Виды Join-ов: Table-Table
+
+image::table-table.svg[{image-40-width}]
+
+== Виды Join-ов: Table-Table
+
+image::table-table1.svg[{image-40-width}]
+
+== Виды Join-ов: Table-Table
+
+image::table-table2.svg[{image-40-width}]
+
+== Виды Join-ов: Stream-Table
+
+image::stream-table.svg[{image-40-width}]
+
+== Виды Join-ов: Stream-Stream
+
+image::stream-stream.svg[{image-40-width}]
+
+
+== Наш план
+[cols="20a,60a,20a"]
+|===
+.^|image::kafka.jpg[]
+.^|
+
+Лекция 1.
+
+. [line-through]#Kafka (краткое напоминание) и Data Streaming#
+. [line-through]#Конфигурация приложения. Простые (stateless) трансформации#
+. [line-through]#Трансформации с использованием локального состояния#
+
+Лекция 2.
+
+. [line-through]#Дуализм «поток—таблица» и табличные join-ы#
+. *Время и оконные операции*
+
+.^|image::kafka.jpg[]
+|===
+
+
+
+== Сохранение Timestamped-значений в{nbsp}RocksDB
+
+WindowKeySchema.java
+
+[source,java]
+----
+static Bytes toStoreKeyBinary(byte[] serializedKey,
+                              long timestamp,
+                              int seqnum) {
+    ByteBuffer buf = ByteBuffer.allocate(
+                                serializedKey.length
+                                + TIMESTAMP_SIZE 
+                                + SEQNUM_SIZE);
+    buf.put(serializedKey);
+    buf.putLong(timestamp);
+    buf.putInt(seqnum);
+    return Bytes.wrap(buf.array());
+}
+----
+
+== Быстрое извлечение значений по ключу из диапазона времени
+
+[graphviz, "timestamped-record.png"]
+-----
+digraph G
+{
+    graph [ dpi = 150 ]; 
+    node [shape=record, fontsize=18];
+    node0 [label="..."];
+    node1 [label="<f0> key|<f1> timestamp|<f2> seqnum"];
+    node2 [label="..."];
+    node0 -> node1;
+    node0 -> node2;
+}
+-----
+
+== Демо: Windowed Joins
+
+* «Послегольщик» — игрок, пытающийся протолкнуть правильную ставку в момент смены счёта в матче
+* Штамп времени ставки и события смены счёта должны «почти совпадать».
+
+image::livebet.jpg[{image-50-width}]
+
+== Время, вперёд!
+
+[source,java]
+----
+KStream<String, Bet> bets = streamsBuilder.stream(BET_TOPIC,
+    Consumed.with(
+            Serdes...)
+            .withTimestampExtractor(
+                
+                (record, previousTimestamp) ->
+                    ((Bet) record.value()).getTimestamp()
+
+            ));
+----
+(Ещё время можно извлечь из WallClock и RecordMetadata.)
+
+
+== Демо: Windowed Joins
+По событию смены счёта понимаем, какая ставка будет «правильной»:
+[source,java]
+----
+
+Score current = Optional.ofNullable(stateStore.get(key))
+                .orElse(new Score());
+stateStore.put(key, value.getScore());
+
+Outcome currenOutcome = 
+    value.getScore().getHome() > current.getHome() 
+    ?
+    Outcome.H : Outcome.A;
+----
+
+== Демо: Windowed Joins
+[source, java]
+----
+KStream<String, String> join = bets.join(outcomes,
+    (bet, sureBet) -> 
+    
+    String.format("%s %dms before goal", 
+                bet.getBettor(),
+                sureBet.getTimestamp() - bet.getTimestamp()),
+                JoinWindows.of(Duration.ofSeconds(1)).before(Duration.ZERO),
+                StreamJoined.with(Serdes....
+    ));
+----
+
+
+== Tumbling window
+
+[source,java]
+----
+TimeWindowedKStream<..., ...> windowed = 
+    stream.groupByKey()
+        .windowedBy(TimeWindows.of(Duration.ofSeconds(20)));
+----
+.Источник: Kafka Streams in Action
+image::tumbling-window.png[{image-70-width}]
+
+== Tumbling window
+[source,java]
+----
+TimeWindowedKStream<..., ...> windowed = 
+    stream.groupByKey()
+        .windowedBy(TimeWindows.of(Duration.ofSeconds(20)));
+    
+KTable<Windowed<...>, Long> count = windowed.count();
+
+/*
+* Windowed<K> interface:
+* - K key()
+* - Window window()
+* -- Instant startTime()
+* -- Instant endTime()
+*/
+----
+
+== Hopping Window
+[source,java]
+----
+TimeWindowedKStream<..., ...> windowed = 
+    stream.groupByKey()
+        .windowedBy(TimeWindows.of(Duration.ofSeconds(20))
+                        .advanceBy(Duration.ofSeconds(10)));
+----
+.Источник: Kafka Streams in Action
+image::hopping-window.png[{image-50-width}]
+
+== Session Window
+[source,java]
+----
+SessionWindowedKStream<..., ...> windowed = 
+    stream.groupByKey()
+        .windowedBy(SessionWindows.with(Duration.ofMinutes(5)));
+----
+image::streams-session-windows-02.png[{image-50-width}]
+
+== Window Retention time vs. Grace Time
+
+image::window-retention.png[]
+
+
+== Иногда нужны не окна, а Punctuator
+
+[.custom-style]
+[cols="30a,70a"]
+|===
+|image::metronome.jpg[]
+|
+[source,java]
+----
+class MyTransformer implements Transformer<...> {
+    @Override
+    public void init(ProcessorContext context) {
+    
+        context.schedule(
+            Duration.ofSeconds(10),
+            PunctuationType.WALL_CLOCK_TIME,
+            timestamp->{. . .});
+            
+    }
+----
+|===
+
+== Наш план
+
+[cols="20a,60a,20a"]
+|===
+.^|image::kafka.jpg[]
+.^|
+
+Лекция 1.
+
+. [line-through]#Kafka (краткое напоминание) и Data Streaming#
+. [line-through]#Конфигурация приложения. Простые (stateless) трансформации#
+. [line-through]#Трансформации с использованием локального состояния#
+
+Лекция 2.
+
+. [line-through]#Дуализм «поток—таблица» и табличные join-ы#
+. [line-through]#Время и оконные операции#
+
+.^|image::kafka.jpg[]
+|===
+
+*Пора закругляться!*
+
+== Kafka Streams in Action
+
+[.custom-style]
+[cols="30a,70a"]
+|===
+|image::KSIA.png[]
+|
+* **William Bejeck**, + 
+“Kafka Streams in Action, Second Edition”, Spring 2023?
+* Первое издание устарело!
+|===
+
+== Kafka: The Definitive Guide
+
+[.custom-style]
+[cols="30a,70a"]
+|===
+|image::kafka-the-definitive-guide.jpg[]
+|
+* Gwen Shapira, Todd Palino, Rajini Sivaram, Krit Petty
+* November 2021
+|===
+
+
+
+== Другие источники
+
+- https://docs.confluent.io/current/streams/developer-guide/index.html[docs.confluent.io: Streams Developer Guide]
+- https://www.confluent.io/blog/stream-processing-part-1-tutorial-developing-streaming-applications[Getting Your Feet Wet with Stream Processing (Confluent tutorials)]
+- Исходники!
+** https://github.com/apache/kafka/
+** https://github.com/spring-projects/spring-kafka
+
+== Сообщества, конференции
+- Телеграм: Грефневая Кафка
+** https://t.me/AwesomeKafka_ru
+** https://t.me/proKafka
+- Kafka Summit Conference
+
+== Некоторые итоги
+
+[%step]
+* Kafka StreamsAPI -- это удобная абстракция над «сырой» Кафкой
+* Чтобы начать пользоваться, надо настроить мышление под потоковую обработку
+* Технология переживает бурное развитие
+** + живой community, есть шанс повлиять на процесс самому 
+** - публичные интерфейсы изменяются очень быстро
+
+== На этом всё!
+
+icon:github[size=lg] https://github.com/inponomarev/kstreams-examples[inponomarev/kstreams-examples]
+
+icon:twitter[size=lg] https://twitter.com/inponomarev[@inponomarev]
+
+ponomarev@corchestra.ru
+
+*Спасибо!*

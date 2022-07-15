@@ -1,0 +1,2218 @@
+= Kafka Streams API: Шаг за рамки Hello World
+Иван Пономарёв, КУРС/МФТИ
+:revealjs_theme: black
+:revealjs_customtheme: white_course.css
+:revealjs_slideNumber:
+:revealjs_history:
+:revealjs_progress:
+:encoding: UTF-8
+:lang: ru
+include::_doc_general_attributes.adoc[]
+:doctype: article
+:toclevels: 3
+:imagesdir: images
+:source-highlighter: highlightjs
+:highlightjsdir: highlight
+:icons: font
+:iconfont-remote!:
+:iconfont-name: font-awesome-4.7.0/css/font-awesome
+:revealjs_mouseWheel: true
+:revealjs_center: false
+:revealjs_transition: none
+:revealjs_width: 1600
+:revealjs_height: 900
+
+
+//== Part 1. Intro
+:!figure-caption:
+
+ponomarev@corchestra.ru
+
+icon:twitter[size=lg] @inponomarev
+
+[%notitle]
+== Кто я такой
+
+[cols="30a,70a"]
+|===
+.^|image::me.jpg[]
+.^|
+* Tech Lead at KURS
+* ERP systems & Java background
+* Speaker at JPoint, Devoops, Heisenbug, JUG.MSK, PermDevDay, DevopsForum, Стачка etc.
+* Heisenbug Program Committee member.
+* Текущий проект: Real-time Webscraping
+|===
+
+
+== Всё, что я показываю, есть на гитхабе
+
+[cols="30a,70a"]
+|===
+.^|image::octocat.jpg[]
+.^|
+* Слайды: https://inponomarev.github.io/kstreams-examples[inponomarev.github.io/kstreams-examples]
+
+* Исходники: https://github.com/inponomarev/kstreams-examples[github.com/inponomarev/kstreams-examples]
+|===
+
+== Наш план
+
+[cols="20a,60a,20a"]
+|===
+.^|image::kafka.jpg[]
+.^|
+
+Лекция 1.
+
+. *Kafka (краткое напоминание) и Data Streaming*
+. Конфигурация приложения. Простые (stateless) трансформации
+. Трансформации с использованием локального состояния
+
+Лекция 2.
+
+. Дуализм «поток—таблица» и табличные join-ы
+. Время и оконные операции
+
+.^|image::kafka.jpg[]
+|===
+
+== Kafka это
+
+[cols="1a,2a,3a,1a"]
+|===
+<.^|
+|image::kafka-logo.svg[]
+<.^|
+* распределённый
+* масштабируемый
+* отказоустойчивый лог
+* https://engineering.linkedin.com/kafka/benchmarking-apache-kafka-2-million-writes-second-three-cheap-machines[миллионы записей в секунду]
+<.^|
+|===
+
+== В Кафке можно
+
+[cols="1a,2a"]
+|===
+| image::okay.png[]
+|* Записать нечто в именованный лог (topic)
+* Прочитать записи из топика в FIFO порядке (в пределах партиции)
+* Зафиксировать место, до которого дочитал
+
+|===
+
+== В Кафке нельзя
+
+[cols="1a,2a"]
+|===
+| image::noway.png[]
+|* Стереть запись
+* Изменить запись
+* Найти в логе запись иначе, как по её порядковому номеру
+|===
+
+
+== Топики, партиции и сообщения
+
+[graphviz,topics-partitions,png]
+----
+digraph D {
+  graph [ dpi = 180 ]; 
+
+   rankdir = LR;
+    subgraph cluster_t1 {
+      label = "topic A";
+      style = "rounded";
+      T1[shape="none"; style="invis"; label=<<table cellspacing="5" cellborder="0"  border="1">
+        <tr><td>0</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        <hr/>
+        <tr><td>1</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        <hr/>
+        <tr><td>2</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        </table>>]
+    }
+     
+    subgraph cluster_t2 {
+      label = "topic B";
+      style = "rounded";
+      T2[shape="none"; style="invis"; label=<<table cellspacing="5" cellborder="0"  border="1">
+        <tr><td>0</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        <hr/>
+        <tr><td>1</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        </table>>]
+
+    }   
+
+
+    subgraph cluster_t3 {
+      label = "topic C";
+      style = "rounded";
+      T3[shape="none"; style="invis"; label=<<table cellspacing="5" cellborder="0"  border="1">
+        <tr><td>0</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        <hr/>
+        <tr><td>1</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        <hr/>
+        <tr><td>2</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        <hr/>
+        <tr><td>3</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        </table>>]
+    }   
+    
+    T1:p0->T2:p0->T3:p0[style="invis"]
+    
+} 
+----
+
+
+== Топики, партиции и сообщения
+
+[graphviz,topics-partitions1,png]
+----
+digraph D {
+  graph [ dpi = 180 ]; 
+
+   rankdir = LR;
+    subgraph cluster_t1 {
+      label = "topic A";
+      style = "rounded";
+      T1[shape="none"; label=<<table cellspacing="5" cellborder="0"  border="1">
+        <tr><td>0</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        <hr/>
+        <tr><td>1</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        <hr/>
+        <tr><td>2</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        </table>>]
+    }
+     
+    subgraph cluster_t2 {
+      label = "topic B";
+      style = "rounded";
+      T2[shape="none"; label=<<table cellspacing="5" cellborder="0"  border="1">
+        <tr><td>0</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        <hr/>
+        <tr><td>1</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        </table>>]
+
+    }   
+
+
+    subgraph cluster_t3 {
+      label = "topic C";
+      style = "rounded";
+      T3[shape="none"; label=<<table cellspacing="5" cellborder="0"  border="1">
+        <tr><td>0</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        <hr/>
+        <tr><td>1</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        <hr/>
+        <tr><td>2</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        <hr/>
+        <tr><td>3</td><vr/><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td style="invis"><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        </table>>]
+    }   
+    
+    T1:p0->T2:p0->T3:p0[style="invis"]
+    
+} 
+----
+
+== Топики, партиции и сообщения
+
+[graphviz,topics-partitions2,png]
+----
+digraph D {
+  graph [ dpi = 180 ]; 
+
+   rankdir = LR;
+    subgraph cluster_t1 {
+      label = "topic A";
+      style = "rounded";
+      T1[shape="none"; label=<<table cellspacing="5" cellborder="0"  border="1">
+        <tr><td>0</td><vr/><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        <hr/>
+        <tr><td>1</td><vr/><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        <hr/>
+        <tr><td>2</td><vr/><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        </table>>]
+    }
+     
+    subgraph cluster_t2 {
+      label = "topic B";
+      style = "rounded";
+      T2[shape="none"; label=<<table cellspacing="5" cellborder="0"  border="1">
+        <tr><td>0</td><vr/><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        <hr/>
+        <tr><td>1</td><vr/><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        </table>>]
+
+    }   
+
+
+    subgraph cluster_t3 {
+      label = "topic C";
+      style = "rounded";
+      T3[shape="none"; label=<<table cellspacing="5" cellborder="0"  border="1">
+        <tr><td>0</td><vr/><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        <hr/>
+        <tr><td>1</td><vr/><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        <hr/>
+        <tr><td>2</td><vr/><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        <hr/>
+        <tr><td>3</td><vr/><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td><td><IMG SCALE="BOTH" SRC="lecture01/src/main/asciidoc/images/message-small.png"/></td></tr>
+        </table>>]
+    }   
+    
+    T1:p0->T2:p0->T3:p0[style="invis"]
+    
+} 
+----
+
+== Анатомия сообщения
+
+[graphviz,message-anatomy,png]
+----
+digraph G {
+  graph [ dpi = 200 ];
+  msg[
+    shape="none";
+    label=<<table cellspacing="5" cellborder="0" style="rounded" border="1">
+                    <tr><td><IMG SCALE="TRUE" SRC="lecture01/src/main/asciidoc/images/message.png"/></td></tr>
+                    <hr/>
+                    <tr><td>Номер партиции</td></tr>
+                    <hr/>
+                    <tr><td>Ключ</td></tr>
+                    <hr/>
+                    <tr><td>Значение</td></tr>
+                    <hr/>
+                    <tr><td>Заголовки</td></tr>
+            </table>>;
+            
+  ]
+}
+----
+
+== Анатомия сообщения
+
+[graphviz,message-anatomy2,png]
+----
+digraph G {
+  graph [ dpi = 200 ];
+  msg[
+    shape="none";
+    label=<<table cellspacing="5" cellborder="0" style="rounded" border="1">
+                    <tr><td><IMG SCALE="TRUE" SRC="lecture01/src/main/asciidoc/images/message.png"/></td></tr>
+                    <hr/>
+                    <tr><td bgcolor="gray">Номер партиции</td></tr>
+                    <hr/>
+                    <tr><td bgcolor="gray">Ключ</td></tr>
+                    <hr/>
+                    <tr><td>Значение</td></tr>
+                    <hr/>
+                    <tr><td>Заголовки</td></tr>
+            </table>>;
+            
+  ]
+}
+----
+
+[source,java]
+----
+// hash the keyBytes to choose a partition
+return Utils.toPositive(Utils.murmur2(keyBytes)) % numPartitions;
+----
+
+== Чтение из Кафки
+
+[graphviz,ConsumerG0,png]
+----
+digraph G {
+  node [shape="rectangle"]
+  graph [ dpi = 180 ];
+  rankdir="LR";
+  subgraph cluster_s2{
+    o1[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/worried.png"]
+    label="Consumer Group"
+    style="rounded"
+  }
+  
+  subgraph cluster_s1{
+    "partition 1"->o1
+    "partition 2"->o1
+    "partition 3"->o1
+  }
+}
+----
+
+== Чтение из Кафки
+
+[graphviz,ConsumerG,png]
+----
+digraph G {
+  node [shape="rectangle"]
+  graph [ dpi = 180 ];
+  rankdir="LR";
+      subgraph cluster_s2{
+          
+        o1[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/neutral.png"];
+          
+        o2[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/neutral.png"];
+        
+        label="Consumer Group";
+        style="rounded"
+      }
+  
+  subgraph cluster_s1{
+    "partition 1"->o1
+    "partition 2"->o1
+    "partition 3"->o2    
+  }
+}
+----
+
+== Чтение из Кафки
+[graphviz,ConsumerG2,png]
+----
+digraph G {
+  node [shape="rectangle"]
+  graph [ dpi = 180 ];
+  rankdir="LR";
+  
+  
+  
+      subgraph cluster_s2{
+            
+        o1[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/smiley.png"]
+        
+        o2[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/smiley.png"]
+
+        o3[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/smiley.png"]
+        
+        label="Consumer Group"
+        style="rounded"
+        
+      }
+  
+  subgraph cluster_s1{
+    "partition 1"->o1
+    "partition 2"->o2
+    "partition 3"->o3 
+    label="source-topic"
+  }
+  
+}
+----
+
+== Чтение из Кафки
+[graphviz,ConsumerG3,png]
+----
+digraph G {
+  node [shape="rectangle"]
+  graph [ dpi = 180 ];
+  rankdir="LR";
+  
+  
+  
+      subgraph cluster_s2{
+            
+        o1[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/smiley.png"]
+        
+        o2[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/smiley.png"]
+
+        o3[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/smiley.png"]
+        
+        o4[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/rollingeyes.png"]
+        
+        o1->o4[style="invis"];
+        label="Consumer Group"
+        style="rounded"
+        
+      }
+  
+  subgraph cluster_s1{
+    "partition 1"->o1
+    "partition 2"->o2
+    "partition 3"->o3 
+    label="source-topic"
+  }
+  
+}
+----
+
+== Offset Commit
+
+[graphviz,offcommit1,png]
+----
+digraph G {
+    graph [ dpi = 200 ];
+    rankdir="LR"
+   
+      subgraph cluster_s2{
+        Consumer[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/smiley.png"];
+        Consumer2[shape="circle",style="rounded",label="C2",style="invis"]
+        style="rounded";
+        label="Group"
+   }
+    Ledger
+    [
+        shape = none
+        label = <<table border="0" cellspacing="0">
+                    <tr>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    </tr>
+                </table>>
+    ]
+   Ledger->Consumer[dir=back] 
+   Ledger->Consumer2[dir=back, style=invis]
+}
+----
+
+== Offset Commit
+
+[graphviz,offcommit2,png]
+----
+digraph G {
+    graph [ dpi = 200 ];
+    rankdir="LR"
+      subgraph cluster_s2{
+        Consumer[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/smiley.png"];
+        Consumer2[shape="circle",style="rounded",label="C2",style="invis"]
+        style="rounded";
+        label="Group"
+   }
+    Ledger
+    [
+        shape = none
+        label = <<table border="0" cellspacing="0">
+                    <tr>
+                    <td border="1" bgcolor="#4db34d">&nbsp;</td>
+                    <td border="1" bgcolor="#4db34d">&nbsp;</td>
+                    <td border="1" bgcolor="#4db34d">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    </tr>
+                </table>>
+    ]
+   Ledger->Consumer[dir=back] 
+   Ledger->Consumer2[dir=back, style=invis]
+}
+----
+
+== Offset Commit
+
+[graphviz,offcommit3,png]
+----
+digraph G {
+    graph [ dpi = 200 ];
+    rankdir="LR"
+      subgraph cluster_s2{
+        Consumer[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/smiley.png"];
+        Consumer2[shape="circle",style="rounded",label="C2",style="invis"]
+        style="rounded";
+        label="Group"
+   }
+    Ledger
+    [
+        shape = none
+        label = <<table border="0" cellspacing="0">
+                    <tr>
+                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
+                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
+                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
+                    <td border="1" bgcolor="#4db34d">&nbsp;</td>
+                    <td border="1" bgcolor="#4db34d">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    </tr>
+                </table>>
+    ]
+   Ledger->Consumer[dir=back]
+   Ledger->Consumer2[dir=back, style=invis]
+}
+----
+
+== Offset Commit
+
+[graphviz,offcommit4,png]
+----
+digraph G {
+    graph [ dpi = 200 ];
+    rankdir="LR"
+    subgraph cluster_s2{
+        Consumer[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/dizzy.png"];
+        Consumer2[shape="circle",style="rounded",label="C2",style="invis"]
+        style="rounded";
+        label="Group"
+   }
+    Ledger
+    [
+        shape = none
+        label = <<table border="0" cellspacing="0">
+                    <tr>
+                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
+                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
+                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
+                    <td border="1" bgcolor="#4db34d">&nbsp;</td>
+                    <td border="1" bgcolor="#4db34d">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    </tr>
+                </table>>
+    ]
+   Ledger->Consumer[dir=back] 
+   Ledger->Consumer2[dir=back, style=invis]
+}
+----
+
+
+== Offset Commit
+
+[graphviz,offcommit5,png]
+----
+digraph G {
+   graph [ dpi = 200 ];
+    rankdir="LR"
+    subgraph cluster_s2{
+        Consumer[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/skull.png"];
+        Consumer2[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/smiley.png"];
+        style="rounded";
+        label="Group"
+   }
+    
+
+    Ledger
+    [
+        shape = none
+        label = <<table border="0" cellspacing="0">
+                    <tr>
+                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
+                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
+                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    </tr>
+                </table>>
+    ]
+    Ledger->Consumer[dir=back, style="invis"]
+    Ledger->Consumer2[dir=back] 
+}
+----
+
+== Offset Commit
+
+[graphviz,offcommit6,png]
+----
+digraph G {
+    graph [ dpi = 200 ];
+    rankdir="LR"
+
+    subgraph cluster_s2{
+        Consumer[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/skull.png"];
+        Consumer2[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/smiley.png"];
+        style="rounded";
+        label="Group"
+   }
+   
+    Ledger
+    [
+        shape = none
+        label = <<table border="0" cellspacing="0">
+                    <tr>
+                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
+                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
+                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
+                    <td border="1" bgcolor="#4db34d">&nbsp;</td>
+                    <td border="1" bgcolor="#4db34d">&nbsp;</td>
+                    <td border="1" bgcolor="#4db34d">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    </tr>
+                </table>>
+    ]
+    Ledger->Consumer[dir=back, style="invis"]
+    Ledger->Consumer2[dir=back]  
+}
+----
+
+== Offset Commit
+
+[graphviz,offcommit7,png]
+----
+digraph G {
+    graph [ dpi = 200 ];
+    rankdir="LR"
+
+    subgraph cluster_s2{
+        Consumer[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/skull.png"];
+        Consumer2[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/smiley.png"];
+        style="rounded";
+        label="Group"
+   }
+   
+    Ledger
+    [
+        shape = none
+        label = <<table border="0" cellspacing="0">
+                    <tr>
+                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
+                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
+                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
+                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
+                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
+                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
+                    <td border="1" bgcolor="#4db34d">&nbsp;</td>
+                    <td border="1" bgcolor="#4db34d">&nbsp;</td>
+                    <td border="1" bgcolor="white">&nbsp;</td>
+                    </tr>
+                </table>>
+    ]
+    Ledger->Consumer[dir=back, style="invis"]
+    Ledger->Consumer2[dir=back]  
+}
+----
+
+== Compacted topics
+.Источник: Kafka Documentation
+image::log_compaction.png[{image-60-width}]
+
+== Как работает Retention
+
+image::tapeloop.jpg[{image-60-width}]
+
+
+== Потоковая обработка данных: архитектура
+
+[graphviz,streaming-arch1,png]
+----
+digraph G {
+  graph [ dpi = 190 ];
+  rankdir="LR";
+  A[label="Collection\ntier",shape="rectangle",style="rounded"];
+
+  Ledger1 [shape="record",label="{ | | | | }"];
+  Caption1[label="Log\n(Kafka)",shape="plaintext"];
+  {rank = same; Ledger1; Caption1;}
+  C[label="Analysis tier",shape="rectangle",style="rounded"];
+  Ledger2 [shape="record",label="{ | | | | }"];
+  Caption2[label="Log\n(Kafka)",shape="plaintext"];
+  {rank = same; Ledger2; Caption2;}
+  D[label="In-memory\ndata store",shape="cylinder"];
+  E[label="Data\naccess tier",shape="rectangle",style="rounded"];
+  A->Ledger1->C->Ledger2->D->E;
+  {rank = same; C; D;} 
+}
+----
+
+== Где нужны потоковые системы?
+
+* Мониторинг! Логи!
+* Отслеживание действий пользователей
+* Выявление аномалий (в т. ч. попыток мошенничества)
+
+[%notitle]
+== Всюду, где ценность/влияние данных уменьшается с их «возрастом»
+
+[cols="1a,2a"]
+|===
+| image::okay.png[]
+|
+image::streams-ok.svg[{image-90-width}]
+|===
+
+[%notitle]
+== Где использовать Kafka не очень удобно
+
+[cols="1a,2a"]
+|===
+| image::noway.png[]
+|
+image::streams-noway.svg[{image-90-width}]
+|===
+
+== Существующие фреймворки потоковой обработки
+
+[cols=".^1a,.^1a,.^1a,.^1a,.^1a"]
+|===
+|image::spark-logo.svg[]
+|image::samza-logo.svg[]
+|image::storm-logo.svg[]
+|image::flink-logo.svg[]
+|image::kafka-logo.svg[]
+|===
+
+== Наш план
+
+[cols="20a,60a,20a"]
+|===
+.^|image::kafka.jpg[]
+.^|
+
+Лекция 1.
+
+. [line-through]#Kafka (краткое напоминание) и Data Streaming#
+. *Конфигурация приложения. Простые (stateless) трансформации*
+. Трансформации с использованием локального состояния
+
+Лекция 2.
+
+. Дуализм «поток—таблица» и табличные join-ы
+. Время и оконные операции
+
+.^|image::kafka.jpg[]
+|===
+
+
+== Kafka Streams API: общая структура KStreams-приложения
+
+[source,java]
+----
+StreamsConfig config = ...;
+//Здесь устанавливаем всякие опции
+
+Topology topology = new StreamsBuilder()
+//Здесь строим топологию
+....build();
+----
+
+== Kafka Streams API: общая структура KStreams-приложения
+Топология -- конвейер обработчиков:
+
+[graphviz,"topology-sample.png"]
+----
+digraph G {
+
+graph [ dpi = 140 ];
+rankdir="LR";
+node [shape="circle" fontsize=14; fixedsize="true"; width="1.3" ];
+
+
+a[label="source"];
+b[label="source"];
+c[label="branch /\nsplit"];
+
+d[label="process"];
+e[label="join /\nmerge"];
+f[label="sink"];
+g[label="sink"];
+{rank = same; a; b;}
+a->c;
+b->e;
+c->e;
+c->d;
+d->f;
+e->g;
+
+}
+----
+
+== Преобразуем поток в поток
+
+[cols="^40a,60a"]
+|===
+
+|
+`blockStream`
+
+image::map.svg[]
+
+`squashedStream`
+|[source,java]
+----
+List<Block> blocks = ...;
+
+Stream<Block> blocksStream = blocks.stream();
+
+Stream<SquashedBlock> squashedStream =
+  blocksStream.map(Block::squash);
+----
+
+(Автор анимаций -- Тагир Валеев, движущиеся картинки см. https://stackoverflow.com/questions/35150231/java-streams-lazy-vs-fusion-vs-short-circuiting[здесь])
+|===
+
+
+== Фильтруем
+
+[cols="^40a,60a"]
+|===
+
+|
+`squashedStream`
+
+image::filter.svg[]
+
+`filteredStream`
+|[source,java]
+----
+Stream<SquashedBlock> filteredStream =
+  squashedStream.filter(block ‑> 
+         block.getColor() != YELLOW);
+----
+|===
+
+== Отображаем в консоль (терминальная операция)
+
+[cols="^40a,60a"]
+|===
+
+|
+`filteredStream`
+
+image::display.svg[]
+
+|[source,java]
+----
+filteredStream
+  .forEach(System.out::println);
+----
+|===
+
+
+== Всё вместе в одну строку
+
+[cols="^40a,60a"]
+|===
+|image::fuse.svg[]
+|[source,java]
+----
+blocks.stream()
+      .map(Block::squash)
+      .filter(block ‑> 
+         block.getColor() != YELLOW)
+      .forEach(System.out::println);
+----
+|===
+
+== Ничего не напоминает?
+
+«Соединить два файла, привести их строки к lowercase, отсортировать, вывести три последних строки в алфавитном порядке»
+
+[source,sh]
+cat file1 file2 | tr "[A-Z]" "[a-z]" | sort | tail -3
+
+
+== Kafka Streams API: общая структура KStreams-приложения
+
+[source,java]
+----
+StreamsConfig config = ...;
+//Здесь устанавливаем всякие опции
+
+Topology topology = new StreamsBuilder()
+//Здесь строим топологию
+....build(); 
+
+
+//Это за нас делает SPRING-KAFKA
+KafkaStreams streams = new KafkaStreams(topology, config); 
+streams.start(); 
+...
+streams.close();
+
+----
+
+
+
+== В Спринге достаточно определить две вещи
+
+* `@Bean KafkaStreamsConfiguration`
+* `@Bean Topology`
+
+== Легенда
+
+[cols="30a,70a"]
+|===
+.^|image::betting.jpg[]
+.^|
+* Идут футбольные матчи (меняется счёт)
+* Делаются ставки: H, D, A.
+* Поток ставок, ключ: `Cyprus-Belgium:A`
+* Поток ставок, значение:
+[source,java]
+----
+class Bet {
+  String bettor;   //John Doe
+  String match;    //Cyprus-Belgium
+  Outcome outcome; //A (or H or D)
+  long amount;     //100
+  double odds;     //1.7
+  long timestamp;  //1554215083998
+}
+----
+|===
+
+
+== @Bean KafkaConfiguration 
+
+[source,java]
+----
+//ВАЖНО!
+@Bean(name = 
+    KafkaStreamsDefaultConfiguration
+                .DEFAULT_STREAMS_CONFIG_BEAN_NAME)
+public KafkaStreamsConfiguration getStreamsConfig() {
+    Map<String, Object> props = new HashMap<>();
+    //ВАЖНО!
+    props.put(StreamsConfig.APPLICATION_ID_CONFIG,
+        "stateless-demo-app");
+    //ВАЖНО!
+    props.put(StreamsConfig.NUM_STREAM_THREADS_CONFIG, 4);
+    props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+    ...
+    KafkaStreamsConfiguration streamsConfig = 
+            new KafkaStreamsConfiguration(props);
+    return streamsConfig;
+}
+----
+
+== @Bean NewTopic
+
+[source,java]
+----
+@Bean
+NewTopic getFilteredTopic() {
+    Map<String, String> props = new HashMap<>();
+    props.put(
+      TopicConfig.CLEANUP_POLICY_CONFIG,
+      TopicConfig.CLEANUP_POLICY_COMPACT);
+    return new NewTopic("mytopic", 10, (short) 1).configs(props);
+}
+----
+
+
+== @Bean Topology
+[graphviz, "yelling-topology.png"]
+-----
+digraph G {
+graph [ dpi = 150 ]; 
+rankdir="LR";
+node [fontsize=16; shape="circle"; fixedsize="true"; width="1.1"];
+
+Source -> MapVal -> Sink
+
+}
+-----
+
+[source,java]
+----
+@Bean
+public Topology createTopology(StreamsBuilder streamsBuilder) {
+    KStream<String, Bet> input = streamsBuilder.stream(...);
+    KStream<String, Long> gain
+            = input.mapValues(v -> Math.round(v.getAmount() * v.getOdds()));
+    gain.to(GAIN_TOPIC, Produced.with(Serdes.String(),
+                new JsonSerde<>(Long.class)));
+    return streamsBuilder.build();
+}
+----
+
+
+== Три строчки кода, и что тут такого?
+
+* Больше сообщений в секунду? -- больше машин с одинаковым  `application.id`!
+
+[graphviz,w1,png]
+----
+digraph G {
+  node [shape="rectangle"]
+  graph [ dpi = 140 ];
+  rankdir="LR";
+  
+    subgraph cluster_s2{
+        o1[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/worried.png"];
+        label="APP_ID_1";
+        style="rounded";
+   }
+  
+  subgraph cluster_s1{
+    "partition 1"->o1
+    "partition 2"->o1
+    "partition 3"->o1  
+    label="source-topic"
+    
+  }
+  
+  sink[label="sink-topic"]
+  o1->sink
+}
+----
+
+== Добавляем ноды
+
+[graphviz,w2,png]
+----
+digraph G {
+  node [shape="rectangle"]
+  graph [ dpi = 140 ];
+  rankdir="LR";
+      subgraph cluster_s2{
+        o1[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/neutral.png"]
+        o2[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/neutral.png"]
+        label="APP_ID_1";
+        style="rounded";
+      }
+  
+  subgraph cluster_s1{
+    "partition 1"->o1
+    "partition 2"->o1
+    "partition 3"->o2 
+    label="source-topic"
+  }
+  
+  sink[label="sink-topic"]
+  o1->sink
+  o2->sink
+}
+----
+
+== Ограничены только числом партиций
+
+[graphviz,w4,png]
+----
+digraph G {
+  node [shape="rectangle"]
+  graph [ dpi = 140 ];
+  rankdir="LR";
+      subgraph cluster_s2{
+            
+        o1[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/smiley.png"]
+        
+        o2[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/smiley.png"]
+
+        o3[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/smiley.png"]
+
+        o4[shape="none",label="",
+                 image="lecture01/src/main/asciidoc/images/rollingeyes.png"]
+
+        label="APP_ID_1";
+        style="rounded";
+      }
+  
+  subgraph cluster_s1{
+    "partition 1"->o1
+    "partition 2"->o2
+    "partition 3"->o3 
+    label="source-topic"
+  }
+  
+  sink[label="sink-topic"]
+  o1->sink
+  o2->sink
+  o3->sink
+}
+----
+
+== TopologyTestDriver: создание
+
+[source,java]
+----
+KafkaStreamsConfiguration config = new KafkaConfiguration()
+                                        .getStreamsConfig();
+StreamsBuilder sb = new StreamsBuilder();
+Topology topology = new TopologyConfiguration().createTopology(sb);
+TopologyTestDriver topologyTestDriver = 
+        new TopologyTestDriver(topology, 
+                               config.asProperties());
+----
+
+== TestInput/OutputTopic: создание
+[source,java]
+----
+TestInputTopic<String, Bet> inputTopic =
+        topologyTestDriver.createInputTopic(BET_TOPIC,
+            Serdes.String().serializer(),
+            new JsonSerde<>(Bet.class).serializer());
+TestOutputTopic<String, Long> outputTopic =
+        topologyTestDriver.createOutputTopic(GAIN_TOPIC,
+            Serdes.String().deserializer(),
+            new JsonSerde<>(Long.class).deserializer());
+----
+
+== TopologyTestDriver: использование
+
+[source,java]
+----
+Bet bet = Bet.builder()
+            .bettor("John Doe")
+            .match("Germany-Belgium")
+            .outcome(Outcome.H)
+            .amount(100)
+            .odds(1.7).build();
+
+inputTopic.pipeInput(bet.key(), bet);
+----
+
+== TopologyTestDriver: использование
+
+[source,java]
+----
+TestRecord<String, Long> record = outputTopic.readRecord();
+
+assertEquals(bet.key(), record.key());
+assertEquals(170L, record.value().longValue());
+----
+
+== Если что-то пошло не так...
+
+* `default.deserialization.exception.handler` -- не смогли десериализовать
+* `default.production.exception.handler` -- брокер отверг сообщение (например, оно слишком велико)
+
+image::failure.jpg[{image-50-width}]
+
+== Если всё совсем развалилось
+
+[source,java]
+----
+streams.setUncaughtExceptionHandler(
+  (Thread thread, Throwable throwable) -> {
+    . . .
+   });
+----
+
+image::uncaughtexception.jpg[{image-100-width}]
+
+[.fragment]
+В Спринге всё сложнее (см. код)
+
+== Состояния приложения KafkaStreams
+
+[graphviz, "kstreamsstates.png"]
+-----
+digraph G {
+  graph [ dpi = 150 ]; 
+  Created -> Running;
+  Running -> Rebalancing;
+  Rebalancing -> Running;
+  Rebalancing -> PendingShutdown;
+  PendingShutdown -> NotRunning;
+  Created -> PendingShutdown; 
+  Running -> PendingShutdown; 
+  Running -> Error;
+  Rebalancing -> Error;
+  Error -> PendingShutdown; 
+  {rank = same; Created; Running;}
+  {rank = same; Rebalancing; Error;}
+  {rank = same; PendingShutdown; NotRunning;}
+}
+-----
+
+== Что ещё нужно знать про stateless-трансформации?
+
+== Простое ветвление стримов
+Java-стримы так не могут:
+[source,java]
+----
+KStream<..> foo = ...
+KStream<..> bar = foo.mapValues(…).map... to...
+Kstream<..> baz = foo.filter(…).map... forEach...
+----
+[graphviz, "simplebranch.png"]
+-----
+digraph G {
+graph [ dpi = 150 ]; 
+rankdir="LR";
+node [fontsize=16; shape="circle"; fixedsize="true"; width="0.5"; label=""];
+Start, BF, CF, DF [style="invis"]
+Start -> A
+A -> B -> BF
+A -> C -> CF
+}
+-----
+
+== Ветвление стримов по условию
+
+С версии 2.8:
+[source,java]
+----
+gain.split()
+    .branch((key, value) -> key.contains("A"), 
+        Branched.withConsumer(ks -> ks.to("A")))
+    .branch((key, value) -> key.contains("B"), 
+        Branched.withConsumer(ks -> ks.to("B")));
+----
+[graphviz, "switchbranch.png"]
+-----
+digraph G {
+graph [ dpi = 150 ]; 
+rankdir="LR";
+node [fontsize=16; shape="circle"; fixedsize="true"; width="0.5"; label=""];
+Start, BF, CF, DF [style="invis"]
+Branch [shape="diamond", label="?"]
+Start -> A -> Branch
+Branch -> B -> BF
+Branch -> C -> CF
+}
+-----
+
+== Простое слияние
+[source,java]
+----
+KStream<String, Integer> foo = ... 
+KStream<String, Integer> bar = ...
+KStream<String, Integer> merge = foo.merge(bar);
+----
+[graphviz, "merge.png"]
+-----
+digraph G {
+graph [ dpi = 150 ]; 
+rankdir="LR";
+node [fontsize=16; shape="circle"; fixedsize="true"; width="0.5"; label=""];
+Finish, BF, CF, DF [style="invis"]
+BF -> A
+CF -> B 
+A -> C -> Finish
+B -> C 
+}
+-----
+
+== Наш план
+
+[cols="20a,60a,20a"]
+|===
+.^|image::kafka.jpg[]
+.^|
+
+Лекция 1.
+
+. [line-through]#Kafka (краткое напоминание) и Data Streaming#
+. [line-through]#Конфигурация приложения. Простые (stateless) трансформации#
+. *Трансформации с использованием локального состояния*
+
+Лекция 2.
+
+. Дуализм «поток—таблица» и табличные join-ы
+. Время и оконные операции
+
+.^|image::kafka.jpg[]
+|===
+
+
+== Локальное состояние
+
+Facebook's RocksDB -- что это и зачем?
+
+[.custom-style]
+[cols="25a,75a"]
+|===
+.^|image::rocksdb.png[]
+.^|
+* Embedded key/value storage
+* LSM Tree (Log-Structured Merge-Tree)
+* High-performant (data locality)
+* Persistent, optimized for SSD
+|===
+
+== RocksDB похож на `TreeMap<K,V>`
+
+* Сохранение K,V в бинарном формате
+* Лексикографическая сортировка
+* Iterator (snapshot view)
+* Удаление диапазона (deleteRange)
+
+== Пишем “Bet Totalling App”
+
+Какова сумма выплат по сделанным ставкам, если сыграет исход?
+
+[graphviz, "counting-topology.png"]
+-----
+digraph G {
+graph [ dpi = 150 ]; 
+rankdir="LR";
+node [fontsize=18; shape="circle"; fixedsize="true"; width="1.1"];
+Store [shape="cylinder"; label="Local Store"; fixedsize="true"; width="1.5"]
+Source -> MapVal -> Sum -> Sink
+Sum -> Store [dir=both; label=" \n "]
+{rank = same; Store; Sum;}
+}
+-----
+
+== @Bean Topology
+
+[source,java]
+----
+KStream<String, Bet> input = streamsBuilder.
+    stream(BET_TOPIC, Consumed.with(Serdes.String(),
+                      new JsonSerde<>(Bet.class)));
+
+KStream<String, Long> counted =
+    new TotallingTransformer()
+        .transformStream(streamsBuilder, input);
+----
+
+== Суммирование ставок
+[source,java]
+----
+@Override
+public KeyValue<String, Long> transform(String key, Bet value,
+                    KeyValueStore<String, Long> stateStore) {
+    long current = Optional
+        .ofNullable(stateStore.get(key))
+        .orElse(0L);
+    current += value.getAmount();
+    stateStore.put(key, current);
+    return KeyValue.pair(key, current);
+}
+----
+
+== StateStore доступен в тестах
+[source,java]
+----
+@Test
+void testTopology() {
+    topologyTestDriver.pipeInput(...);
+    topologyTestDriver.pipeInput(...);
+
+    KeyValueStore<String, Long> store =
+        topologyTestDriver
+        .getKeyValueStore(TotallingTransformer.STORE_NAME);
+    
+    assertEquals(..., store.get(...));
+    assertEquals(..., store.get(...));
+}
+----
+
+
+== Демо: Ребалансировка / репликация
+
+* Ребалансировка / репликация партиций state при запуске / выключении обработчиков.
+
+== Сохранение локального состояния в{nbsp}топик
+
+[source,code]
+----
+$kafka-topics --zookeeper localhost --describe
+
+Topic:bet-totalling-demo-app-totalling-store-changelog
+PartitionCount:10       
+ReplicationFactor:1 
+Configs:cleanup.policy=compact
+----
+
+[.fragment]
+[graphviz, "counting-topology-changelog.png"]
+-----
+digraph G {
+graph [ dpi = 150 ]; 
+rankdir="LR";
+node [fontsize=18; shape="circle"; fixedsize="true"; width="1.1"];
+Store [shape="cylinder"; label="Local Store"; fixedsize="true"; width="1.5"]
+Source -> MapVal -> Sum -> Sink
+Sum -> Store [dir=both; label=" \n "]
+{rank = same; Store; Sum;}
+Store -> Changelog[style="dashed"]
+Changelog[shape="box"; style="dashed"; width="1.5"]
+}
+-----
+
+== Партиционирование и local state
+[graphviz, "local-partitioning-oneworker.png"]
+-----
+digraph D {
+  graph [ dpi = 150 ]; 
+  subgraph system {
+
+     subgraph cluster_s2{
+          style = "invis"
+          S1 [shape=plaintext label = "Source"];
+          S2 [shape=plaintext label = "Local store"];
+          S1->S2 [style="invis"]
+      }
+
+    subgraph cluster_p1 {
+      label = "Worker 1";
+        
+        subgraph cluster_pp2{
+              label = "Partition 3"
+                
+              d[shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/pear.png"];
+          }
+
+        d->ls1;
+          
+          subgraph cluster_pp11{
+              label = "Partition 2"
+          
+              b [shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/red-apple.png"];
+              c[shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/kiwi.png"];
+              
+          }
+ 
+        subgraph cluster_pp1{
+              label = "Partition 1"
+              
+              
+              a [shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/banana.png"];
+              
+          }
+          
+        
+        ls1[shape="cylinder" label = <<table border="0" cellspacing="5">
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td><font point-size="24">15</font></td>
+        <vr/><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td><font point-size="24">10</font></td>
+        <vr/><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td><font point-size="24">20</font></td></tr></table>>]
+        a->ls1;
+        b->ls1;
+        c->ls1;
+        
+    }
+
+  }
+} 
+-----
+
+== Партиционирование и local state
+[graphviz, "local-partitioning-1.png"]
+-----
+digraph D {
+  graph [ dpi = 150 ]; 
+  subgraph system {
+
+     subgraph cluster_s2{
+          style = "invis"
+          S1 [shape=plaintext label = "Source"];
+          S2 [shape=plaintext label = "Local store"];
+          S3 [shape=plaintext label = "Changelog"];
+          S1->S2->S3 [style="invis"]
+      }
+
+    subgraph cluster_p1 {
+      label = "Worker 1";
+        
+        subgraph cluster_pp2{
+              label = "Partition 3"
+                
+              d[shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/pear.png"];
+          }
+
+        d->ls1;
+        
+        ls1->p3v1;
+          
+          subgraph cluster_pp11{
+              label = "Partition 2"
+          
+              b [shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/red-apple.png"];
+              c[shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/kiwi.png"];
+              
+          }
+ 
+        subgraph cluster_pp1{
+              label = "Partition 1"
+              
+              
+              a [shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/banana.png"];
+              
+          }
+        
+        ls1[shape="cylinder" label = <<table border="0"  cellspacing="5">
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td><font point-size="24">15</font></td>
+        <vr/><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td><font point-size="24">10</font></td>
+        <vr/><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td><font point-size="24">20</font></td></tr></table>>]
+        a->ls1;
+        b->ls1;
+        c->ls1;
+        
+        ls1->p1v1;
+        ls1->p2v1;
+    }
+
+        p1v1[shape="none"; label= <<table cellborder="0">
+        <tr><td colspan="2">Partition 2</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td>10</td></tr></table>>];
+        p2v1[shape="none"; label= <<table cellborder="0">
+        <tr><td colspan="2">Partition 3</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td>20</td></tr></table>>];
+        p3v1[shape="none"; label= <<table cellborder="0">
+        <tr><td colspan="2">Partition 1</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td>15</td></tr></table>>];
+  }
+} 
+-----
+
+== Партиционирование и local state
+[graphviz, "local-partitioning-2.png"]
+-----
+digraph D {
+  graph [ dpi = 150 ]; 
+  subgraph system {
+
+     subgraph cluster_s2{
+          style = "invis"
+          S1 [shape=plaintext label = "Source"];
+          S2 [shape=plaintext label = "Local store"];
+          S3 [shape=plaintext label = "Changelog"];
+          S1->S2->S3 [style="invis"]
+      }
+
+    subgraph cluster_p1 {
+      label = "Worker 1";
+        
+        subgraph cluster_pp2{
+              label = "Partition 3"
+                
+              d[shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/pear.png"];
+          }
+
+        d->ls1;
+        
+        ls1->p3v1;
+          
+          subgraph cluster_pp11{
+              label = "Partition 2"
+          
+              b [shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/red-apple.png"];
+              c[shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/kiwi.png"];
+              
+          }
+ 
+        subgraph cluster_pp1{
+              label = "Partition 1"
+              
+              
+              a [shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/banana.png"];
+              
+          }
+        
+        ls1[shape="cylinder" label = <<table border="0"  cellspacing="5">
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td><font point-size="24">19</font></td>
+        <vr/><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td><font point-size="24">12</font></td>
+        <vr/><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td><font point-size="24">22</font></td></tr></table>>]
+        a->ls1;
+        b->ls1;
+        c->ls1;
+        
+        ls1->p1v1;
+        ls1->p2v1;
+    }
+
+        p1v1[shape="none"; label= <<table cellborder="0">
+        <tr><td colspan="2">Partition 2</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td>10</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td>12</td></tr>
+        </table>>];
+        p2v1[shape="none"; label= <<table cellborder="0">
+        <tr><td colspan="2">Partition 3</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td>20</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td>22</td></tr>
+        </table>>];
+        p3v1[shape="none"; label= <<table cellborder="0">
+        <tr><td colspan="2">Partition 1</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td>15</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td>19</td></tr>
+        </table>>];
+  }
+} 
+-----
+
+== Партиционирование и local state
+[graphviz, "local-partitioning-25.png"]
+-----
+digraph D {
+  graph [ dpi = 150 ]; 
+  subgraph system {
+
+     subgraph cluster_s2{
+          style = "invis"
+          S1 [shape=plaintext label = "Source"];
+          S2 [shape=plaintext label = "Local store"];
+          S3 [shape=plaintext label = "Changelog"];
+          S1->S2->S3 [style="invis"]
+      }
+
+    subgraph cluster_p1 {
+      label = "Worker 1";
+
+          subgraph cluster_pp11{
+              label = "Partition 2"
+          
+              b [shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/red-apple.png"];
+              c[shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/kiwi.png"];
+              
+          }
+ 
+        subgraph cluster_pp1{
+              label = "Partition 1"
+              
+              
+              a [shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/banana.png"];
+              
+          }
+        
+        ls1[shape="cylinder" label = <<table border="0"  cellspacing="5">
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td><font point-size="24">19</font></td>
+        <vr/><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td><font point-size="24">12</font></td>
+        </tr></table>>]
+        a->ls1;
+        b->ls1;
+        c->ls1;
+        
+        ls1->p1v1;
+        ls1->p3v1;
+    }
+
+
+    subgraph cluster_p2 {
+      label = "Worker 2";
+         subgraph cluster_pp2{
+              label = "Partition 3"
+                
+              d[shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/pear.png"];
+          }
+      
+        ls2[shape="cylinder" label = <<table border="0"  cellspacing="5">
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td><img src="lecture01/src/main/asciidoc/images/question-mark.png"/></td></tr></table>>]
+        d->ls2;
+        ls2->p2v1[style="invis"];
+    }
+
+        p1v1[shape="none"; label= <<table cellborder="0">
+        <tr><td colspan="2">Partition 2</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td>10</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td>12</td></tr>
+        </table>>];
+        p2v1[shape="none"; style="invis"; label= <<table cellborder="0">
+        <tr><td colspan="2">Partition 3</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td>20</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td>22</td></tr>
+        </table>>];
+        p3v1[shape="none"; label= <<table cellborder="0">
+        <tr><td colspan="2">Partition 1</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td>15</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td>19</td></tr>
+        </table>>];
+  }
+} 
+-----
+
+== Партиционирование и local state
+[graphviz, "local-partitioning-3.png"]
+-----
+digraph D {
+  graph [ dpi = 150 ]; 
+  subgraph system {
+
+     subgraph cluster_s2{
+          style = "invis"
+          S1 [shape=plaintext label = "Source"];
+          S2 [shape=plaintext label = "Local store"];
+          S3 [shape=plaintext label = "Changelog"];
+          S1->S2->S3 [style="invis"]
+      }
+
+    subgraph cluster_p1 {
+      label = "Worker 1";
+
+          subgraph cluster_pp11{
+              label = "Partition 2"
+          
+              b [shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/red-apple.png"];
+              c[shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/kiwi.png"];
+              
+          }
+ 
+        subgraph cluster_pp1{
+              label = "Partition 1"
+              
+              
+              a [shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/banana.png"];
+              
+          }
+        
+        ls1[shape="cylinder" label = <<table border="0"  cellspacing="5">
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td><font point-size="24">19</font></td>
+        <vr/><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td><font point-size="24">12</font></td>
+        </tr></table>>]
+        a->ls1;
+        b->ls1;
+        c->ls1;
+        
+        ls1->p1v1;
+        ls1->p3v1;
+    }
+
+
+    subgraph cluster_p2 {
+      label = "Worker 2";
+         subgraph cluster_pp2{
+              label = "Partition 3"
+                
+              d[shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/pear.png"];
+          }
+      
+        ls2[shape="cylinder" label = <<table border="0"  cellspacing="5">
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td><font point-size="24">22</font></td></tr></table>>]
+        d->ls2;
+        ls2->p2v1[dir="back"];
+    }
+
+        p1v1[shape="none"; label= <<table cellborder="0">
+        <tr><td colspan="2">Partition 2</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td>10</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td>12</td></tr>
+        </table>>];
+        p2v1[shape="none"; label= <<table cellborder="0">
+        <tr><td colspan="2">Partition 3</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td>20</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td>22</td></tr>
+        </table>>];
+        p3v1[shape="none"; label= <<table cellborder="0">
+        <tr><td colspan="2">Partition 1</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td>15</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td>19</td></tr>
+        </table>>];
+  }
+} 
+-----
+
+== Партиционирование и local state
+[graphviz, "local-partitioning-4.png"]
+-----
+digraph D {
+  graph [ dpi = 150 ]; 
+  subgraph system {
+
+     subgraph cluster_s2{
+          style = "invis"
+          S1 [shape=plaintext label = "Source"];
+          S2 [shape=plaintext label = "Local store"];
+          S3 [shape=plaintext label = "Changelog"];
+          S1->S2->S3 [style="invis"]
+      }
+
+    subgraph cluster_p1 {
+      label = "Worker 1";
+
+          subgraph cluster_pp11{
+              label = "Partition 2"
+          
+              b [shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/red-apple.png"];
+              c[shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/kiwi.png"];
+              
+          }
+ 
+        subgraph cluster_pp1{
+              label = "Partition 1"
+              
+              
+              a [shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/banana.png"];
+              
+          }
+        
+        ls1[shape="cylinder" label = <<table border="0"  cellspacing="5">
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td><font point-size="24">21</font></td>
+        <vr/><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td><font point-size="24">13</font></td>
+        </tr></table>>]
+        a->ls1;
+        b->ls1;
+        c->ls1;
+        
+        ls1->p1v1;
+        ls1->p3v1;
+    }
+
+
+    subgraph cluster_p2 {
+      label = "Worker 2";
+         subgraph cluster_pp2{
+              label = "Partition 3"
+                
+              d[shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/pear.png"];
+          }
+      
+        ls2[shape="cylinder" label = <<table border="0"  cellspacing="5">
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td><font point-size="24">23</font></td></tr></table>>]
+        d->ls2;
+        ls2->p2v1;
+    }
+
+        p1v1[shape="none"; label= <<table cellborder="0">
+        <tr><td colspan="2">Partition 2</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td>10</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td>12</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td>13</td></tr>
+        </table>>];
+        p2v1[shape="none"; label= <<table cellborder="0">
+        <tr><td colspan="2">Partition 3</td></tr>
+        <hr/>
+         <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td>20</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td>22</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td>23</td></tr>
+        </table>>];
+        p3v1[shape="none"; label= <<table cellborder="0">
+        <tr><td colspan="2">Partition 1</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td>15</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td>19</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td>21</td></tr>
+        </table>>];
+  }
+} 
+-----
+
+== Партиционирование и local state
+[graphviz, "local-partitioning-5.png"]
+-----
+digraph D {
+  graph [ dpi = 150 ]; 
+  subgraph system {
+
+     subgraph cluster_s2{
+          style = "invis"
+          S1 [shape=plaintext label = "Source"];
+          S2 [shape=plaintext label = "Local store"];
+          S3 [shape=plaintext label = "Changelog"];
+          S1->S2->S3 [style="invis"]
+      }
+
+    subgraph cluster_p1 {
+      label = "Worker 1";
+
+          subgraph cluster_pp11{
+              label = "Partition 2"
+          
+              b [shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/red-apple.png"];
+              c[shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/kiwi.png"];
+              
+          }
+ 
+        subgraph cluster_pp1{
+              label = "Partition 1"
+              
+              
+              a [shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/banana.png"];
+              
+          }
+        
+        ls1[shape="cylinder" label = <<table border="0"  cellspacing="5">
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td><font point-size="24">21</font></td>
+        <vr/><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td><font point-size="24">13</font></td>
+        </tr></table>>]
+        a->ls1;
+        b->ls1;
+        c->ls1;
+        
+        ls1->p1v1;
+        ls1->p3v1;
+    }
+
+
+    subgraph cluster_p2 {
+      label = "Worker 2";
+         subgraph cluster_pp2{
+              label = "Partition 3"
+                
+              d[shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/pear.png"];
+          }
+      
+        ls2[shape="cylinder" label = <<table border="0"  cellspacing="5">
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td><font point-size="24">23</font></td></tr></table>>]
+        d->ls2;
+        ls2->p2v1;
+    }
+
+        p1v1[shape="none"; label= <<table cellborder="0">
+        <tr><td colspan="2">Partition 2</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td>13</td></tr>
+        </table>>];
+        p2v1[shape="none"; label= <<table cellborder="0">
+        <tr><td colspan="2">Partition 3</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td>23</td></tr>        
+        </table>>];
+        p3v1[shape="none"; label= <<table cellborder="0">
+        <tr><td colspan="2">Partition 1</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td>21</td></tr>
+        </table>>];
+  }
+} 
+-----
+
+== Партиционирование и local state
+[graphviz, "local-partitioning-6.png"]
+-----
+digraph D {
+  graph [ dpi = 150 ]; 
+  subgraph system {
+
+     subgraph cluster_s2{
+          style = "invis"
+          S1 [shape=plaintext label = "Source"];
+          S2 [shape=plaintext label = "Local store"];
+          S3 [shape=plaintext label = "Changelog"];
+          S1->S2->S3 [style="invis"]
+      }
+
+    subgraph cluster_p1 {
+      label = "Worker 1";
+        
+        subgraph cluster_pp2{
+              label = "Partition 3"
+                
+              d[shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/pear.png"];
+          }
+
+        d->ls1;
+        
+        ls1->p3v1;
+          
+          subgraph cluster_pp11{
+              label = "Partition 2"
+          
+              b [shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/red-apple.png"];
+              c[shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/kiwi.png"];
+              
+          }
+ 
+        subgraph cluster_pp1{
+              label = "Partition 1"
+              
+              
+              a [shape="none", label="",
+                 image="lecture01/src/main/asciidoc/images/banana.png"];
+              
+          }
+        
+        ls1[shape="cylinder" label = <<table border="0"  cellspacing="5">
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td><font point-size="24">21</font></td>
+        <vr/><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td><font point-size="24">13</font></td>
+        <vr/><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td><font point-size="24">23</font></td></tr></table>>]
+        a->ls1;
+        b->ls1;
+        c->ls1;
+        
+        ls1->p1v1;
+        ls1->p2v1;
+    }
+
+        p1v1[shape="none"; label= <<table cellborder="0">
+        <tr><td colspan="2">Partition 2</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/red-apple.png"/></td><td>13</td></tr></table>>];
+        p2v1[shape="none"; label= <<table cellborder="0">
+        <tr><td colspan="2">Partition 3</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/pear.png"/></td><td>23</td></tr></table>>];
+        p3v1[shape="none"; label= <<table cellborder="0">
+        <tr><td colspan="2">Partition 1</td></tr>
+        <hr/>
+        <tr><td><img src="lecture01/src/main/asciidoc/images/banana.png"/></td><td>21</td></tr></table>>];
+  }
+} 
+-----
+
+== Репартиционирование
+
+[graphviz, "through.png"]
+-----
+digraph G
+{
+    graph [ dpi = 150 ]; 
+    rankdir="LR";
+    node [shape=record, width=.1, height=.1];
+    node1 [label="{ | | | | }", fontsize = 18, xlabel= "repartition(. . .)"];
+    
+    node [label = " "; shape="circle"; fixedsize="true"; width="1.1"];
+    Source -> node1
+    node1 -> Sink
+}
+-----
+
+* Явное при помощи +
+`repartition(Repartitioned<K, V> repartitioned)`
+* Неявное при операциях, меняющих ключ + stateful-операциях
+
+== Дублирующееся неявное репартиционирование
+[source,java]
+----
+KStream source = builder.stream("topic1");
+KStream mapped = source.map(...);
+KTable counts = mapped.groupByKey().aggregate(...);
+KStream sink = mapped.leftJoin(counts, ...);
+----
+
+[graphviz, "doublethrough.png"]
+-----
+digraph G {
+graph [ dpi = 150 ]; 
+rankdir="LR";
+node [fontsize=16; shape="circle"; fixedsize="true"; width="0.8"; label=""];
+Start, Finish [style="invis"]
+Start -> A
+A[label="map"]
+A -> throughAgg  [style=dashed]
+throughAgg -> Agg  [style=dashed]
+A -> throughJoin [style=dashed]
+throughJoin -> Join [style=dashed]
+Agg[label="Agg"]
+Join[label="Join"]
+Agg -> Join
+Join -> Finish
+Store [shape="cylinder"; label="Store";]
+Agg -> Store [dir="both"]
+throughAgg [shape="record"; label="{ | | | | }"; height = "0.2"]
+throughJoin [shape="record"; label="{ | | | | }"; height = "0.2"]
+}
+-----
+
+== Избавляемся от дублирующегося репартиционирования
+
+[source,java]
+----
+KStream source = builder.stream("topic1");
+KStream shuffled = source.map(...).repartition(...);
+KTable counts = shuffled.groupByKey().aggregate(...);
+KStream sink = shuffled.leftJoin(counts, ...);
+----
+
+[graphviz, "implicitthrough.png"]
+-----
+digraph G {
+graph [ dpi = 150 ]; 
+rankdir="LR";
+node [fontsize=16; shape="circle"; fixedsize="true"; width="0.8"; label=""];
+Start, Finish [style="invis"]
+Start -> A
+A[label="map"]
+A -> throughAgg
+throughAgg[xlabel="repartition"]
+throughAgg -> Agg
+throughAgg -> Join
+Agg[label="Agg"]
+Join[label="Join"]
+Agg -> Join
+Join -> Finish
+Store [shape="cylinder"; label="Store";]
+Agg -> Store [dir="both"]
+throughAgg [shape="record"; label="{ | | | | }"; height = "0.2"]
+}
+-----
+
+== Ключ лучше лишний раз не трогать
+
+*Key only:* `selectKey`
+
+[cols=2*] 
+|===
+|*Key and Value*
+|*Value Only*
+
+|`map`
+|`mapValues`
+
+|`flatMap`
+|`flatMapValues`
+
+|`transform`
+|`transformValues`
+
+|`flatTransform`
+|`flatTransformValues`
+
+
+|===

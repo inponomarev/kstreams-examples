@@ -1,0 +1,3694 @@
+#. extracted from kstreams.adoc
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-15 12:36+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Translate Toolkit 3.5.3\n"
+
+#: kstreams.adoc:24
+msgid ""
+"= Kafka Streams API: Шаг за рамки Hello World\n"
+"Иван Пономарёв, КУРС/МФТИ\n"
+":revealjs_theme: black\n"
+":revealjs_customtheme: white_course.css\n"
+":revealjs_slideNumber:\n"
+":revealjs_history:\n"
+":revealjs_progress:\n"
+":encoding: UTF-8\n"
+":lang: ru\n"
+"include::_doc_general_attributes.adoc[]\n"
+":doctype: article\n"
+":toclevels: 3\n"
+":imagesdir: images\n"
+":source-highlighter: highlightjs\n"
+":highlightjsdir: highlight\n"
+":icons: font\n"
+":iconfont-remote!:\n"
+":iconfont-name: font-awesome-4.7.0/css/font-awesome\n"
+":revealjs_mouseWheel: true\n"
+":revealjs_center: false\n"
+":revealjs_transition: none\n"
+":revealjs_width: 1600\n"
+":revealjs_height: 900"
+msgstr ""
+
+#: kstreams.adoc:28
+msgid ""
+"//== Часть 1. Введение\n"
+":!figure-caption:"
+msgstr ""
+
+#: kstreams.adoc:30
+msgid "ponomarev@corchestra.ru"
+msgstr ""
+
+#: kstreams.adoc:32
+msgid "icon:twitter[size=lg] @inponomarev"
+msgstr ""
+
+#: kstreams.adoc:35
+msgid ""
+"[%notitle]\n"
+"== Кто я такой"
+msgstr ""
+
+#: kstreams.adoc:46
+msgid ""
+"[cols=\"30a,70a\"]\n"
+"|===\n"
+".^|image::me.jpg[]\n"
+".^|\n"
+"* Tech Lead at KURS\n"
+"* ERP systems & Java background\n"
+"* Speaker at JPoint, Devoops, Heisenbug, JUG.MSK, PermDevDay, DevopsForum, "
+"Стачка etc.\n"
+"* Heisenbug Program Committee member.\n"
+"* Текущий проект: Real-time Webscraping\n"
+"|==="
+msgstr ""
+
+#: kstreams.adoc:49
+msgid "== Всё, что я показываю, есть на гитхабе"
+msgstr ""
+
+#: kstreams.adoc:55
+msgid ""
+"[cols=\"30a,70a\"]\n"
+"|===\n"
+".^|image::octocat.jpg[]\n"
+".^|\n"
+"* Слайды: https://inponomarev.github.io/kstreams-examples[inponomarev.github."
+"io/kstreams-examples]"
+msgstr ""
+
+#: kstreams.adoc:58
+msgid ""
+"* Исходники: https://github.com/inponomarev/kstreams-examples[github.com/"
+"inponomarev/kstreams-examples]\n"
+"|==="
+msgstr ""
+
+#: kstreams.adoc:60
+msgctxt "kstreams.adoc:60"
+"kstreams.adoc:60"
+msgid "== Наш план"
+msgstr ""
+
+#: kstreams.adoc:65
+msgctxt "kstreams.adoc:65"
+"kstreams.adoc:65"
+msgid ""
+"[cols=\"20a,60a,20a\"]\n"
+"|===\n"
+".^|image::kafka.jpg[]\n"
+".^|"
+msgstr ""
+
+#: kstreams.adoc:67
+msgctxt "kstreams.adoc:67"
+"kstreams.adoc:67"
+msgid "Лекция 1."
+msgstr ""
+
+#: kstreams.adoc:71
+msgid ""
+". *Kafka (краткое напоминание) и Data Streaming*\n"
+". Конфигурация приложения. Простые (stateless) трансформации\n"
+". Трансформации с использованием локального состояния"
+msgstr ""
+
+#: kstreams.adoc:73
+msgctxt "kstreams.adoc:73"
+"kstreams.adoc:73"
+msgid "Лекция 2."
+msgstr ""
+
+#: kstreams.adoc:76
+msgctxt "kstreams.adoc:76"
+"kstreams.adoc:76"
+msgid ""
+". Дуализм «поток—таблица» и табличные join-ы\n"
+". Время и оконные операции"
+msgstr ""
+
+#: kstreams.adoc:79
+msgctxt "kstreams.adoc:79"
+"kstreams.adoc:79"
+msgid ""
+".^|image::kafka.jpg[]\n"
+"|==="
+msgstr ""
+
+#: kstreams.adoc:81
+msgid "== Kafka это"
+msgstr ""
+
+#: kstreams.adoc:93
+msgid ""
+"[cols=\"1a,2a,3a,1a\"]\n"
+"|===\n"
+"<.^|\n"
+"|image::kafka-logo.svg[]\n"
+"<.^|\n"
+"* распределённый\n"
+"* масштабируемый\n"
+"* отказоустойчивый лог\n"
+"* https://engineering.linkedin.com/kafka/benchmarking-apache-kafka-2-million-"
+"writes-second-three-cheap-machines[миллионы записей в секунду]\n"
+"<.^|\n"
+"|==="
+msgstr ""
+
+#: kstreams.adoc:95
+msgid "== В Кафке можно"
+msgstr ""
+
+#: kstreams.adoc:102
+msgid ""
+"[cols=\"1a,2a\"]\n"
+"|===\n"
+"| image::okay.png[]\n"
+"|* Записать нечто в именованный лог (topic)\n"
+"* Прочитать записи из топика в FIFO порядке (в пределах партиции)\n"
+"* Зафиксировать место, до которого дочитал"
+msgstr ""
+
+#: kstreams.adoc:104
+msgctxt "kstreams.adoc:104"
+msgid "|==="
+msgstr ""
+
+#: kstreams.adoc:106
+msgid "== В Кафке нельзя"
+msgstr ""
+
+#: kstreams.adoc:114
+msgid ""
+"[cols=\"1a,2a\"]\n"
+"|===\n"
+"| image::noway.png[]\n"
+"|* Стереть запись\n"
+"* Изменить запись\n"
+"* Найти в логе запись иначе, как по её порядковому номеру\n"
+"|==="
+msgstr ""
+
+#: kstreams.adoc:117
+msgctxt "kstreams.adoc:117"
+"kstreams.adoc:117"
+msgid "== Топики, партиции и сообщения"
+msgstr ""
+
+#: kstreams.adoc:122
+msgid ""
+"[graphviz,topics-partitions,png]\n"
+"----\n"
+"digraph D {\n"
+"  graph [ dpi = 180 ]; "
+msgstr ""
+
+#: kstreams.adoc:135
+msgid ""
+"   rankdir = LR;\n"
+"    subgraph cluster_t1 {\n"
+"      label = \"topic A\";\n"
+"      style = \"rounded\";\n"
+"      T1[shape=\"none\"; style=\"invis\"; label=<<table cellspacing=\"5\" "
+"cellborder=\"0\"  border=\"1\">\n"
+"        <tr><td>0</td><vr/><td style=\"invis\"><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td><td style="
+"\"invis\"><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/asciidoc/images/"
+"message-small.png\"/></td></tr>\n"
+"        <hr/>\n"
+"        <tr><td>1</td><vr/><td style=\"invis\"><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td><td style="
+"\"invis\"><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/asciidoc/images/"
+"message-small.png\"/></td></tr>\n"
+"        <hr/>\n"
+"        <tr><td>2</td><vr/><td style=\"invis\"><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td><td style="
+"\"invis\"><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/asciidoc/images/"
+"message-small.png\"/></td></tr>\n"
+"        </table>>]\n"
+"    }"
+msgstr ""
+
+#: kstreams.adoc:144
+msgid ""
+"    subgraph cluster_t2 {\n"
+"      label = \"topic B\";\n"
+"      style = \"rounded\";\n"
+"      T2[shape=\"none\"; style=\"invis\"; label=<<table cellspacing=\"5\" "
+"cellborder=\"0\"  border=\"1\">\n"
+"        <tr><td>0</td><vr/><td style=\"invis\"><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td><td style="
+"\"invis\"><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/asciidoc/images/"
+"message-small.png\"/></td></tr>\n"
+"        <hr/>\n"
+"        <tr><td>1</td><vr/><td style=\"invis\"><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td><td style="
+"\"invis\"><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/asciidoc/images/"
+"message-small.png\"/></td></tr>\n"
+"        </table>>]"
+msgstr ""
+
+#: kstreams.adoc:146
+msgctxt "kstreams.adoc:146"
+"kstreams.adoc:146"
+msgid "    }   "
+msgstr ""
+
+#: kstreams.adoc:161
+msgid ""
+"    subgraph cluster_t3 {\n"
+"      label = \"topic C\";\n"
+"      style = \"rounded\";\n"
+"      T3[shape=\"none\"; style=\"invis\"; label=<<table cellspacing=\"5\" "
+"cellborder=\"0\"  border=\"1\">\n"
+"        <tr><td>0</td><vr/><td style=\"invis\"><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td><td style="
+"\"invis\"><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/asciidoc/images/"
+"message-small.png\"/></td></tr>\n"
+"        <hr/>\n"
+"        <tr><td>1</td><vr/><td style=\"invis\"><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td><td style="
+"\"invis\"><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/asciidoc/images/"
+"message-small.png\"/></td></tr>\n"
+"        <hr/>\n"
+"        <tr><td>2</td><vr/><td style=\"invis\"><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td><td style="
+"\"invis\"><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/asciidoc/images/"
+"message-small.png\"/></td></tr>\n"
+"        <hr/>\n"
+"        <tr><td>3</td><vr/><td style=\"invis\"><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td><td style="
+"\"invis\"><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/asciidoc/images/"
+"message-small.png\"/></td></tr>\n"
+"        </table>>]\n"
+"    }   "
+msgstr ""
+
+#: kstreams.adoc:163
+msgctxt "kstreams.adoc:163"
+"kstreams.adoc:163"
+msgid "    T1:p0->T2:p0->T3:p0[style=\"invis\"]"
+msgstr ""
+
+#: kstreams.adoc:166
+msgctxt "kstreams.adoc:166"
+"kstreams.adoc:166"
+msgid ""
+"} \n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:169
+msgctxt "kstreams.adoc:169"
+msgid "== Топики, партиции и сообщения"
+msgstr ""
+
+#: kstreams.adoc:174
+msgid ""
+"[graphviz,topics-partitions1,png]\n"
+"----\n"
+"digraph D {\n"
+"  graph [ dpi = 180 ]; "
+msgstr ""
+
+#: kstreams.adoc:187
+msgid ""
+"   rankdir = LR;\n"
+"    subgraph cluster_t1 {\n"
+"      label = \"topic A\";\n"
+"      style = \"rounded\";\n"
+"      T1[shape=\"none\"; label=<<table cellspacing=\"5\" cellborder=\"0\"  "
+"border=\"1\">\n"
+"        <tr><td>0</td><vr/><td style=\"invis\"><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td><td style="
+"\"invis\"><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/asciidoc/images/"
+"message-small.png\"/></td></tr>\n"
+"        <hr/>\n"
+"        <tr><td>1</td><vr/><td style=\"invis\"><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td><td style="
+"\"invis\"><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/asciidoc/images/"
+"message-small.png\"/></td></tr>\n"
+"        <hr/>\n"
+"        <tr><td>2</td><vr/><td style=\"invis\"><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td><td style="
+"\"invis\"><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/asciidoc/images/"
+"message-small.png\"/></td></tr>\n"
+"        </table>>]\n"
+"    }"
+msgstr ""
+
+#: kstreams.adoc:196
+msgid ""
+"    subgraph cluster_t2 {\n"
+"      label = \"topic B\";\n"
+"      style = \"rounded\";\n"
+"      T2[shape=\"none\"; label=<<table cellspacing=\"5\" cellborder=\"0\"  "
+"border=\"1\">\n"
+"        <tr><td>0</td><vr/><td style=\"invis\"><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td><td style="
+"\"invis\"><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/asciidoc/images/"
+"message-small.png\"/></td></tr>\n"
+"        <hr/>\n"
+"        <tr><td>1</td><vr/><td style=\"invis\"><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td><td style="
+"\"invis\"><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/asciidoc/images/"
+"message-small.png\"/></td></tr>\n"
+"        </table>>]"
+msgstr ""
+
+#: kstreams.adoc:198
+msgctxt "kstreams.adoc:198"
+msgid "    }   "
+msgstr ""
+
+#: kstreams.adoc:213
+msgid ""
+"    subgraph cluster_t3 {\n"
+"      label = \"topic C\";\n"
+"      style = \"rounded\";\n"
+"      T3[shape=\"none\"; label=<<table cellspacing=\"5\" cellborder=\"0\"  "
+"border=\"1\">\n"
+"        <tr><td>0</td><vr/><td style=\"invis\"><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td><td style="
+"\"invis\"><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/asciidoc/images/"
+"message-small.png\"/></td></tr>\n"
+"        <hr/>\n"
+"        <tr><td>1</td><vr/><td style=\"invis\"><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td><td style="
+"\"invis\"><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/asciidoc/images/"
+"message-small.png\"/></td></tr>\n"
+"        <hr/>\n"
+"        <tr><td>2</td><vr/><td style=\"invis\"><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td><td style="
+"\"invis\"><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/asciidoc/images/"
+"message-small.png\"/></td></tr>\n"
+"        <hr/>\n"
+"        <tr><td>3</td><vr/><td style=\"invis\"><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td><td style="
+"\"invis\"><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/asciidoc/images/"
+"message-small.png\"/></td></tr>\n"
+"        </table>>]\n"
+"    }   "
+msgstr ""
+
+#: kstreams.adoc:215
+msgctxt "kstreams.adoc:215"
+msgid "    T1:p0->T2:p0->T3:p0[style=\"invis\"]"
+msgstr ""
+
+#: kstreams.adoc:218
+msgctxt "kstreams.adoc:218"
+msgid ""
+"} \n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:220
+msgctxt "kstreams.adoc:220"
+msgid "== Топики, партиции и сообщения"
+msgstr ""
+
+#: kstreams.adoc:225
+msgid ""
+"[graphviz,topics-partitions2,png]\n"
+"----\n"
+"digraph D {\n"
+"  graph [ dpi = 180 ]; "
+msgstr ""
+
+#: kstreams.adoc:238
+msgid ""
+"   rankdir = LR;\n"
+"    subgraph cluster_t1 {\n"
+"      label = \"topic A\";\n"
+"      style = \"rounded\";\n"
+"      T1[shape=\"none\"; label=<<table cellspacing=\"5\" cellborder=\"0\"  "
+"border=\"1\">\n"
+"        <tr><td>0</td><vr/><td><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/"
+"asciidoc/images/message-small.png\"/></td><td><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td></tr>\n"
+"        <hr/>\n"
+"        <tr><td>1</td><vr/><td><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/"
+"asciidoc/images/message-small.png\"/></td><td><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td></tr>\n"
+"        <hr/>\n"
+"        <tr><td>2</td><vr/><td><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/"
+"asciidoc/images/message-small.png\"/></td><td><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td></tr>\n"
+"        </table>>]\n"
+"    }"
+msgstr ""
+
+#: kstreams.adoc:247
+msgid ""
+"    subgraph cluster_t2 {\n"
+"      label = \"topic B\";\n"
+"      style = \"rounded\";\n"
+"      T2[shape=\"none\"; label=<<table cellspacing=\"5\" cellborder=\"0\"  "
+"border=\"1\">\n"
+"        <tr><td>0</td><vr/><td><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/"
+"asciidoc/images/message-small.png\"/></td><td><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td></tr>\n"
+"        <hr/>\n"
+"        <tr><td>1</td><vr/><td><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/"
+"asciidoc/images/message-small.png\"/></td><td><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td></tr>\n"
+"        </table>>]"
+msgstr ""
+
+#: kstreams.adoc:249
+msgctxt "kstreams.adoc:249"
+msgid "    }   "
+msgstr ""
+
+#: kstreams.adoc:264
+msgid ""
+"    subgraph cluster_t3 {\n"
+"      label = \"topic C\";\n"
+"      style = \"rounded\";\n"
+"      T3[shape=\"none\"; label=<<table cellspacing=\"5\" cellborder=\"0\"  "
+"border=\"1\">\n"
+"        <tr><td>0</td><vr/><td><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/"
+"asciidoc/images/message-small.png\"/></td><td><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td></tr>\n"
+"        <hr/>\n"
+"        <tr><td>1</td><vr/><td><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/"
+"asciidoc/images/message-small.png\"/></td><td><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td></tr>\n"
+"        <hr/>\n"
+"        <tr><td>2</td><vr/><td><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/"
+"asciidoc/images/message-small.png\"/></td><td><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td></tr>\n"
+"        <hr/>\n"
+"        <tr><td>3</td><vr/><td><IMG SCALE=\"BOTH\" SRC=\"lecture01/src/main/"
+"asciidoc/images/message-small.png\"/></td><td><IMG SCALE=\"BOTH\" SRC="
+"\"lecture01/src/main/asciidoc/images/message-small.png\"/></td></tr>\n"
+"        </table>>]\n"
+"    }   "
+msgstr ""
+
+#: kstreams.adoc:266
+msgctxt "kstreams.adoc:266"
+msgid "    T1:p0->T2:p0->T3:p0[style=\"invis\"]"
+msgstr ""
+
+#: kstreams.adoc:269
+msgctxt "kstreams.adoc:269"
+msgid ""
+"} \n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:271
+msgctxt "kstreams.adoc:271"
+msgid "== Анатомия сообщения"
+msgstr ""
+
+#: kstreams.adoc:289
+msgid ""
+"[graphviz,message-anatomy,png]\n"
+"----\n"
+"digraph G {\n"
+"  graph [ dpi = 200 ];\n"
+"  msg[\n"
+"    shape=\"none\";\n"
+"    label=<<table cellspacing=\"5\" cellborder=\"0\" style=\"rounded\" "
+"border=\"1\">\n"
+"                    <tr><td><IMG SCALE=\"TRUE\" SRC=\"lecture01/src/main/"
+"asciidoc/images/message.png\"/></td></tr>\n"
+"                    <hr/>\n"
+"                    <tr><td>Номер партиции</td></tr>\n"
+"                    <hr/>\n"
+"                    <tr><td>Ключ</td></tr>\n"
+"                    <hr/>\n"
+"                    <tr><td>Значение</td></tr>\n"
+"                    <hr/>\n"
+"                    <tr><td>Заголовки</td></tr>\n"
+"            </table>>;"
+msgstr ""
+
+#: kstreams.adoc:293
+msgctxt "kstreams.adoc:293"
+msgid ""
+"  ]\n"
+"}\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:295
+msgctxt "kstreams.adoc:295"
+msgid "== Анатомия сообщения"
+msgstr ""
+
+#: kstreams.adoc:313
+msgid ""
+"[graphviz,message-anatomy2,png]\n"
+"----\n"
+"digraph G {\n"
+"  graph [ dpi = 200 ];\n"
+"  msg[\n"
+"    shape=\"none\";\n"
+"    label=<<table cellspacing=\"5\" cellborder=\"0\" style=\"rounded\" "
+"border=\"1\">\n"
+"                    <tr><td><IMG SCALE=\"TRUE\" SRC=\"lecture01/src/main/"
+"asciidoc/images/message.png\"/></td></tr>\n"
+"                    <hr/>\n"
+"                    <tr><td bgcolor=\"gray\">Номер партиции</td></tr>\n"
+"                    <hr/>\n"
+"                    <tr><td bgcolor=\"gray\">Ключ</td></tr>\n"
+"                    <hr/>\n"
+"                    <tr><td>Значение</td></tr>\n"
+"                    <hr/>\n"
+"                    <tr><td>Заголовки</td></tr>\n"
+"            </table>>;"
+msgstr ""
+
+#: kstreams.adoc:317
+msgctxt "kstreams.adoc:317"
+msgid ""
+"  ]\n"
+"}\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:323
+msgid ""
+"[source,java]\n"
+"----\n"
+"// hash the keyBytes to choose a partition\n"
+"return Utils.toPositive(Utils.murmur2(keyBytes)) % numPartitions;\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:325
+msgctxt "kstreams.adoc:325"
+msgid "== Чтение из Кафки"
+msgstr ""
+
+#: kstreams.adoc:338
+msgid ""
+"[graphviz,ConsumerG0,png]\n"
+"----\n"
+"digraph G {\n"
+"  node [shape=\"rectangle\"]\n"
+"  graph [ dpi = 180 ];\n"
+"  rankdir=\"LR\";\n"
+"  subgraph cluster_s2{\n"
+"    o1[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/worried.png\"]\n"
+"    label=\"Consumer Group\"\n"
+"    style=\"rounded\"\n"
+"  }"
+msgstr ""
+
+#: kstreams.adoc:346
+msgid ""
+"  subgraph cluster_s1{\n"
+"    \"partition 1\"->o1\n"
+"    \"partition 2\"->o1\n"
+"    \"partition 3\"->o1\n"
+"  }\n"
+"}\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:348
+msgctxt "kstreams.adoc:348"
+msgid "== Чтение из Кафки"
+msgstr ""
+
+#: kstreams.adoc:356
+msgid ""
+"[graphviz,ConsumerG,png]\n"
+"----\n"
+"digraph G {\n"
+"  node [shape=\"rectangle\"]\n"
+"  graph [ dpi = 180 ];\n"
+"  rankdir=\"LR\";\n"
+"      subgraph cluster_s2{"
+msgstr ""
+
+#: kstreams.adoc:359
+msgid ""
+"        o1[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/neutral.png\"];"
+msgstr ""
+
+#: kstreams.adoc:362
+msgid ""
+"        o2[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/neutral.png\"];"
+msgstr ""
+
+#: kstreams.adoc:366
+msgid ""
+"        label=\"Consumer Group\";\n"
+"        style=\"rounded\"\n"
+"      }"
+msgstr ""
+
+#: kstreams.adoc:374
+msgid ""
+"  subgraph cluster_s1{\n"
+"    \"partition 1\"->o1\n"
+"    \"partition 2\"->o1\n"
+"    \"partition 3\"->o2    \n"
+"  }\n"
+"}\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:382
+msgid ""
+"== Чтение из Кафки\n"
+"[graphviz,ConsumerG2,png]\n"
+"----\n"
+"digraph G {\n"
+"  node [shape=\"rectangle\"]\n"
+"  graph [ dpi = 180 ];\n"
+"  rankdir=\"LR\";"
+msgstr ""
+
+#: kstreams.adoc:386
+msgctxt "kstreams.adoc:386"
+msgid "      subgraph cluster_s2{"
+msgstr ""
+
+#: kstreams.adoc:389
+msgctxt "kstreams.adoc:389"
+"kstreams.adoc:389"
+msgid ""
+"        o1[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/smiley.png\"]"
+msgstr ""
+
+#: kstreams.adoc:392
+msgctxt "kstreams.adoc:392"
+"kstreams.adoc:392"
+msgid ""
+"        o2[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/smiley.png\"]"
+msgstr ""
+
+#: kstreams.adoc:395
+msgctxt "kstreams.adoc:395"
+"kstreams.adoc:395"
+msgid ""
+"        o3[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/smiley.png\"]"
+msgstr ""
+
+#: kstreams.adoc:398
+msgid ""
+"        label=\"Consumer Group\"\n"
+"        style=\"rounded\""
+msgstr ""
+
+#: kstreams.adoc:400
+msgctxt "kstreams.adoc:400"
+msgid "      }"
+msgstr ""
+
+#: kstreams.adoc:407
+msgctxt "kstreams.adoc:407"
+"kstreams.adoc:407"
+msgid ""
+"  subgraph cluster_s1{\n"
+"    \"partition 1\"->o1\n"
+"    \"partition 2\"->o2\n"
+"    \"partition 3\"->o3 \n"
+"    label=\"source-topic\"\n"
+"  }"
+msgstr ""
+
+#: kstreams.adoc:410
+msgctxt "kstreams.adoc:410"
+"kstreams.adoc:410"
+msgid ""
+"}\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:418
+msgid ""
+"== Чтение из Кафки\n"
+"[graphviz,ConsumerG3,png]\n"
+"----\n"
+"digraph G {\n"
+"  node [shape=\"rectangle\"]\n"
+"  graph [ dpi = 180 ];\n"
+"  rankdir=\"LR\";"
+msgstr ""
+
+#: kstreams.adoc:422
+msgctxt "kstreams.adoc:422"
+msgid "      subgraph cluster_s2{"
+msgstr ""
+
+#: kstreams.adoc:425
+msgctxt "kstreams.adoc:425"
+msgid ""
+"        o1[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/smiley.png\"]"
+msgstr ""
+
+#: kstreams.adoc:428
+msgctxt "kstreams.adoc:428"
+msgid ""
+"        o2[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/smiley.png\"]"
+msgstr ""
+
+#: kstreams.adoc:431
+msgctxt "kstreams.adoc:431"
+msgid ""
+"        o3[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/smiley.png\"]"
+msgstr ""
+
+#: kstreams.adoc:434
+msgctxt "kstreams.adoc:434"
+msgid ""
+"        o4[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/rollingeyes.png\""
+"]"
+msgstr ""
+
+#: kstreams.adoc:438
+msgid ""
+"        o1->o4[style=\"invis\"];\n"
+"        label=\"Consumer Group\"\n"
+"        style=\"rounded\""
+msgstr ""
+
+#: kstreams.adoc:440
+msgctxt "kstreams.adoc:440"
+msgid "      }"
+msgstr ""
+
+#: kstreams.adoc:447
+msgctxt "kstreams.adoc:447"
+msgid ""
+"  subgraph cluster_s1{\n"
+"    \"partition 1\"->o1\n"
+"    \"partition 2\"->o2\n"
+"    \"partition 3\"->o3 \n"
+"    label=\"source-topic\"\n"
+"  }"
+msgstr ""
+
+#: kstreams.adoc:450
+msgctxt "kstreams.adoc:450"
+msgid ""
+"}\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:452
+msgctxt "kstreams.adoc:452"
+"kstreams.adoc:452"
+"kstreams.adoc:452"
+"kstreams.adoc:452"
+"kstreams.adoc:452"
+"kstreams.adoc:452"
+msgid "== Offset Commit"
+msgstr ""
+
+#: kstreams.adoc:458
+msgid ""
+"[graphviz,offcommit1,png]\n"
+"----\n"
+"digraph G {\n"
+"    graph [ dpi = 200 ];\n"
+"    rankdir=\"LR\""
+msgstr ""
+
+#: kstreams.adoc:487
+msgid ""
+"      subgraph cluster_s2{\n"
+"        Consumer[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/smiley.png\"];\n"
+"        Consumer2[shape=\"circle\",style=\"rounded\",label=\"C2\",style="
+"\"invis\"]\n"
+"        style=\"rounded\";\n"
+"        label=\"Group\"\n"
+"   }\n"
+"    Ledger\n"
+"    [\n"
+"        shape = none\n"
+"        label = <<table border=\"0\" cellspacing=\"0\">\n"
+"                    <tr>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    </tr>\n"
+"                </table>>\n"
+"    ]\n"
+"   Ledger->Consumer[dir=back] \n"
+"   Ledger->Consumer2[dir=back, style=invis]\n"
+"}\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:489
+msgctxt "kstreams.adoc:489"
+msgid "== Offset Commit"
+msgstr ""
+
+#: kstreams.adoc:523
+msgid ""
+"[graphviz,offcommit2,png]\n"
+"----\n"
+"digraph G {\n"
+"    graph [ dpi = 200 ];\n"
+"    rankdir=\"LR\"\n"
+"      subgraph cluster_s2{\n"
+"        Consumer[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/smiley.png\"];\n"
+"        Consumer2[shape=\"circle\",style=\"rounded\",label=\"C2\",style="
+"\"invis\"]\n"
+"        style=\"rounded\";\n"
+"        label=\"Group\"\n"
+"   }\n"
+"    Ledger\n"
+"    [\n"
+"        shape = none\n"
+"        label = <<table border=\"0\" cellspacing=\"0\">\n"
+"                    <tr>\n"
+"                    <td border=\"1\" bgcolor=\"#4db34d\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"#4db34d\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"#4db34d\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    </tr>\n"
+"                </table>>\n"
+"    ]\n"
+"   Ledger->Consumer[dir=back] \n"
+"   Ledger->Consumer2[dir=back, style=invis]\n"
+"}\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:525
+msgctxt "kstreams.adoc:525"
+msgid "== Offset Commit"
+msgstr ""
+
+#: kstreams.adoc:559
+msgid ""
+"[graphviz,offcommit3,png]\n"
+"----\n"
+"digraph G {\n"
+"    graph [ dpi = 200 ];\n"
+"    rankdir=\"LR\"\n"
+"      subgraph cluster_s2{\n"
+"        Consumer[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/smiley.png\"];\n"
+"        Consumer2[shape=\"circle\",style=\"rounded\",label=\"C2\",style="
+"\"invis\"]\n"
+"        style=\"rounded\";\n"
+"        label=\"Group\"\n"
+"   }\n"
+"    Ledger\n"
+"    [\n"
+"        shape = none\n"
+"        label = <<table border=\"0\" cellspacing=\"0\">\n"
+"                    <tr>\n"
+"                    <td border=\"1\" bgcolor=\"#4d4cb4\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"#4d4cb4\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"#4d4cb4\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"#4db34d\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"#4db34d\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    </tr>\n"
+"                </table>>\n"
+"    ]\n"
+"   Ledger->Consumer[dir=back]\n"
+"   Ledger->Consumer2[dir=back, style=invis]\n"
+"}\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:561
+msgctxt "kstreams.adoc:561"
+msgid "== Offset Commit"
+msgstr ""
+
+#: kstreams.adoc:595
+msgid ""
+"[graphviz,offcommit4,png]\n"
+"----\n"
+"digraph G {\n"
+"    graph [ dpi = 200 ];\n"
+"    rankdir=\"LR\"\n"
+"    subgraph cluster_s2{\n"
+"        Consumer[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/dizzy.png\"];\n"
+"        Consumer2[shape=\"circle\",style=\"rounded\",label=\"C2\",style="
+"\"invis\"]\n"
+"        style=\"rounded\";\n"
+"        label=\"Group\"\n"
+"   }\n"
+"    Ledger\n"
+"    [\n"
+"        shape = none\n"
+"        label = <<table border=\"0\" cellspacing=\"0\">\n"
+"                    <tr>\n"
+"                    <td border=\"1\" bgcolor=\"#4d4cb4\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"#4d4cb4\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"#4d4cb4\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"#4db34d\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"#4db34d\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    </tr>\n"
+"                </table>>\n"
+"    ]\n"
+"   Ledger->Consumer[dir=back] \n"
+"   Ledger->Consumer2[dir=back, style=invis]\n"
+"}\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:598
+msgctxt "kstreams.adoc:598"
+msgid "== Offset Commit"
+msgstr ""
+
+#: kstreams.adoc:612
+msgid ""
+"[graphviz,offcommit5,png]\n"
+"----\n"
+"digraph G {\n"
+"   graph [ dpi = 200 ];\n"
+"    rankdir=\"LR\"\n"
+"    subgraph cluster_s2{\n"
+"        Consumer[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/skull.png\"];\n"
+"        Consumer2[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/smiley.png\"];\n"
+"        style=\"rounded\";\n"
+"        label=\"Group\"\n"
+"   }"
+msgstr ""
+
+#: kstreams.adoc:635
+msgid ""
+"    Ledger\n"
+"    [\n"
+"        shape = none\n"
+"        label = <<table border=\"0\" cellspacing=\"0\">\n"
+"                    <tr>\n"
+"                    <td border=\"1\" bgcolor=\"#4d4cb4\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"#4d4cb4\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"#4d4cb4\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    </tr>\n"
+"                </table>>\n"
+"    ]\n"
+"    Ledger->Consumer[dir=back, style=\"invis\"]\n"
+"    Ledger->Consumer2[dir=back] \n"
+"}\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:637
+msgctxt "kstreams.adoc:637"
+msgid "== Offset Commit"
+msgstr ""
+
+#: kstreams.adoc:643
+msgid ""
+"[graphviz,offcommit6,png]\n"
+"----\n"
+"digraph G {\n"
+"    graph [ dpi = 200 ];\n"
+"    rankdir=\"LR\""
+msgstr ""
+
+#: kstreams.adoc:652
+msgctxt "kstreams.adoc:652"
+msgid ""
+"    subgraph cluster_s2{\n"
+"        Consumer[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/skull.png\"];\n"
+"        Consumer2[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/smiley.png\"];\n"
+"        style=\"rounded\";\n"
+"        label=\"Group\"\n"
+"   }"
+msgstr ""
+
+#: kstreams.adoc:674
+msgid ""
+"    Ledger\n"
+"    [\n"
+"        shape = none\n"
+"        label = <<table border=\"0\" cellspacing=\"0\">\n"
+"                    <tr>\n"
+"                    <td border=\"1\" bgcolor=\"#4d4cb4\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"#4d4cb4\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"#4d4cb4\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"#4db34d\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"#4db34d\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"#4db34d\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    </tr>\n"
+"                </table>>\n"
+"    ]\n"
+"    Ledger->Consumer[dir=back, style=\"invis\"]\n"
+"    Ledger->Consumer2[dir=back]  \n"
+"}\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:676
+msgctxt "kstreams.adoc:676"
+msgid "== Offset Commit"
+msgstr ""
+
+#: kstreams.adoc:682
+msgid ""
+"[graphviz,offcommit7,png]\n"
+"----\n"
+"digraph G {\n"
+"    graph [ dpi = 200 ];\n"
+"    rankdir=\"LR\""
+msgstr ""
+
+#: kstreams.adoc:691
+msgctxt "kstreams.adoc:691"
+msgid ""
+"    subgraph cluster_s2{\n"
+"        Consumer[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/skull.png\"];\n"
+"        Consumer2[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/smiley.png\"];\n"
+"        style=\"rounded\";\n"
+"        label=\"Group\"\n"
+"   }"
+msgstr ""
+
+#: kstreams.adoc:713
+msgid ""
+"    Ledger\n"
+"    [\n"
+"        shape = none\n"
+"        label = <<table border=\"0\" cellspacing=\"0\">\n"
+"                    <tr>\n"
+"                    <td border=\"1\" bgcolor=\"#4d4cb4\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"#4d4cb4\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"#4d4cb4\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"#4d4cb4\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"#4d4cb4\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"#4d4cb4\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"#4db34d\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"#4db34d\">&nbsp;</td>\n"
+"                    <td border=\"1\" bgcolor=\"white\">&nbsp;</td>\n"
+"                    </tr>\n"
+"                </table>>\n"
+"    ]\n"
+"    Ledger->Consumer[dir=back, style=\"invis\"]\n"
+"    Ledger->Consumer2[dir=back]  \n"
+"}\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:717
+msgid ""
+"== Compacted topics\n"
+".Источник: Kafka Documentation\n"
+"image::log_compaction.png[{image-60-width}]"
+msgstr ""
+
+#: kstreams.adoc:719
+msgid "== Как работает Retention"
+msgstr ""
+
+#: kstreams.adoc:721
+msgid "image::tapeloop.jpg[{image-60-width}]"
+msgstr ""
+
+#: kstreams.adoc:724
+msgid "== Потоковая обработка данных: архитектура"
+msgstr ""
+
+#: kstreams.adoc:731
+msgid ""
+"[graphviz,streaming-arch1,png]\n"
+"----\n"
+"digraph G {\n"
+"  graph [ dpi = 190 ];\n"
+"  rankdir=\"LR\";\n"
+"  A[label=\"Collection\\n"
+"tier\",shape=\"rectangle\",style=\"rounded\"];"
+msgstr ""
+
+#: kstreams.adoc:745
+msgid ""
+"  Ledger1 [shape=\"record\",label=\"{ | | | | }\"];\n"
+"  Caption1[label=\"Log\\n"
+"(Kafka)\",shape=\"plaintext\"];\n"
+"  {rank = same; Ledger1; Caption1;}\n"
+"  C[label=\"Analysis tier\",shape=\"rectangle\",style=\"rounded\"];\n"
+"  Ledger2 [shape=\"record\",label=\"{ | | | | }\"];\n"
+"  Caption2[label=\"Log\\n"
+"(Kafka)\",shape=\"plaintext\"];\n"
+"  {rank = same; Ledger2; Caption2;}\n"
+"  D[label=\"In-memory\\n"
+"data store\",shape=\"cylinder\"];\n"
+"  E[label=\"Data\\n"
+"access tier\",shape=\"rectangle\",style=\"rounded\"];\n"
+"  A->Ledger1->C->Ledger2->D->E;\n"
+"  {rank = same; C; D;} \n"
+"}\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:747
+msgid "== Где нужны потоковые системы?"
+msgstr ""
+
+#: kstreams.adoc:751
+msgid ""
+"* Мониторинг! Логи!\n"
+"* Отслеживание действий пользователей\n"
+"* Выявление аномалий (в т. ч. попыток мошенничества)"
+msgstr ""
+
+#: kstreams.adoc:754
+msgid ""
+"[%notitle]\n"
+"== Всюду, где ценность/влияние данных уменьшается с их «возрастом»"
+msgstr ""
+
+#: kstreams.adoc:761
+msgid ""
+"[cols=\"1a,2a\"]\n"
+"|===\n"
+"| image::okay.png[]\n"
+"|\n"
+"image::streams-ok.svg[{image-90-width}]\n"
+"|==="
+msgstr ""
+
+#: kstreams.adoc:764
+msgid ""
+"[%notitle]\n"
+"== Где использовать Kafka не очень удобно"
+msgstr ""
+
+#: kstreams.adoc:771
+msgid ""
+"[cols=\"1a,2a\"]\n"
+"|===\n"
+"| image::noway.png[]\n"
+"|\n"
+"image::streams-noway.svg[{image-90-width}]\n"
+"|==="
+msgstr ""
+
+#: kstreams.adoc:773
+msgid "== Существующие фреймворки потоковой обработки"
+msgstr ""
+
+#: kstreams.adoc:782
+msgid ""
+"[cols=\".^1a,.^1a,.^1a,.^1a,.^1a\"]\n"
+"|===\n"
+"|image::spark-logo.svg[]\n"
+"|image::samza-logo.svg[]\n"
+"|image::storm-logo.svg[]\n"
+"|image::flink-logo.svg[]\n"
+"|image::kafka-logo.svg[]\n"
+"|==="
+msgstr ""
+
+#: kstreams.adoc:784
+msgctxt "kstreams.adoc:784"
+msgid "== Наш план"
+msgstr ""
+
+#: kstreams.adoc:789
+msgctxt "kstreams.adoc:789"
+msgid ""
+"[cols=\"20a,60a,20a\"]\n"
+"|===\n"
+".^|image::kafka.jpg[]\n"
+".^|"
+msgstr ""
+
+#: kstreams.adoc:791
+msgctxt "kstreams.adoc:791"
+msgid "Лекция 1."
+msgstr ""
+
+#: kstreams.adoc:795
+msgid ""
+". [line-through]#Kafka (краткое напоминание) и Data Streaming#\n"
+". *Конфигурация приложения. Простые (stateless) трансформации*\n"
+". Трансформации с использованием локального состояния"
+msgstr ""
+
+#: kstreams.adoc:797
+msgctxt "kstreams.adoc:797"
+msgid "Лекция 2."
+msgstr ""
+
+#: kstreams.adoc:800
+msgctxt "kstreams.adoc:800"
+msgid ""
+". Дуализм «поток—таблица» и табличные join-ы\n"
+". Время и оконные операции"
+msgstr ""
+
+#: kstreams.adoc:803
+msgctxt "kstreams.adoc:803"
+msgid ""
+".^|image::kafka.jpg[]\n"
+"|==="
+msgstr ""
+
+#: kstreams.adoc:806
+msgctxt "kstreams.adoc:806"
+msgid "== Kafka Streams API: общая структура KStreams-приложения"
+msgstr ""
+
+#: kstreams.adoc:811
+msgctxt "kstreams.adoc:811"
+msgid ""
+"[source,java]\n"
+"----\n"
+"StreamsConfig config = ...;\n"
+"//Здесь устанавливаем всякие опции"
+msgstr ""
+
+#: kstreams.adoc:816
+msgid ""
+"Topology topology = new StreamsBuilder()\n"
+"//Здесь строим топологию\n"
+"....build();\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:819
+msgid ""
+"== Kafka Streams API: общая структура KStreams-приложения\n"
+"Топология -- конвейер обработчиков:"
+msgstr ""
+
+#: kstreams.adoc:823
+msgid ""
+"[graphviz,\"topology-sample.png\"]\n"
+"----\n"
+"digraph G {"
+msgstr ""
+
+#: kstreams.adoc:827
+msgid ""
+"graph [ dpi = 140 ];\n"
+"rankdir=\"LR\";\n"
+"node [shape=\"circle\" fontsize=14; fixedsize=\"true\"; width=\"1.3\" ];"
+msgstr ""
+
+#: kstreams.adoc:832
+msgid ""
+"a[label=\"source\"];\n"
+"b[label=\"source\"];\n"
+"c[label=\"branch /\\n"
+"split\"];"
+msgstr ""
+
+#: kstreams.adoc:844
+msgid ""
+"d[label=\"process\"];\n"
+"e[label=\"join /\\n"
+"merge\"];\n"
+"f[label=\"sink\"];\n"
+"g[label=\"sink\"];\n"
+"{rank = same; a; b;}\n"
+"a->c;\n"
+"b->e;\n"
+"c->e;\n"
+"c->d;\n"
+"d->f;\n"
+"e->g;"
+msgstr ""
+
+#: kstreams.adoc:847
+msgctxt "kstreams.adoc:847"
+msgid ""
+"}\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:849
+msgid "== Преобразуем поток в поток"
+msgstr ""
+
+#: kstreams.adoc:852
+msgctxt "kstreams.adoc:852"
+"kstreams.adoc:852"
+msgid ""
+"[cols=\"^40a,60a\"]\n"
+"|==="
+msgstr ""
+
+#: kstreams.adoc:855
+msgid ""
+"|\n"
+"`blockStream`"
+msgstr ""
+
+#: kstreams.adoc:857
+msgid "image::map.svg[]"
+msgstr ""
+
+#: kstreams.adoc:862
+msgid ""
+"`squashedStream`\n"
+"|[source,java]\n"
+"----\n"
+"List<Block> blocks = ...;"
+msgstr ""
+
+#: kstreams.adoc:864
+msgid "Stream<Block> blocksStream = blocks.stream();"
+msgstr ""
+
+#: kstreams.adoc:868
+msgid ""
+"Stream<SquashedBlock> squashedStream =\n"
+"  blocksStream.map(Block::squash);\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:871
+msgid ""
+"(Автор анимаций -- Тагир Валеев, движущиеся картинки см. "
+"https://stackoverflow.com/questions/35150231/java-streams-lazy-vs-fusion-vs-"
+"short-circuiting[здесь])\n"
+"|==="
+msgstr ""
+
+#: kstreams.adoc:874
+msgid "== Фильтруем"
+msgstr ""
+
+#: kstreams.adoc:877
+msgctxt "kstreams.adoc:877"
+msgid ""
+"[cols=\"^40a,60a\"]\n"
+"|==="
+msgstr ""
+
+#: kstreams.adoc:880
+msgid ""
+"|\n"
+"`squashedStream`"
+msgstr ""
+
+#: kstreams.adoc:882
+msgid "image::filter.svg[]"
+msgstr ""
+
+#: kstreams.adoc:891
+msgid ""
+"`filteredStream`\n"
+"|[source,java]\n"
+"----\n"
+"Stream<SquashedBlock> filteredStream =\n"
+"  squashedStream.filter(block ‑> \n"
+"         block.getColor() != YELLOW);\n"
+"----\n"
+"|==="
+msgstr ""
+
+#: kstreams.adoc:893
+msgid "== Отображаем в консоль (терминальная операция)"
+msgstr ""
+
+#: kstreams.adoc:896
+msgctxt "kstreams.adoc:896"
+msgid ""
+"[cols=\"^40a,60a\"]\n"
+"|==="
+msgstr ""
+
+#: kstreams.adoc:899
+msgid ""
+"|\n"
+"`filteredStream`"
+msgstr ""
+
+#: kstreams.adoc:901
+msgid "image::display.svg[]"
+msgstr ""
+
+#: kstreams.adoc:908
+msgid ""
+"|[source,java]\n"
+"----\n"
+"filteredStream\n"
+"  .forEach(System.out::println);\n"
+"----\n"
+"|==="
+msgstr ""
+
+#: kstreams.adoc:911
+msgid "== Всё вместе в одну строку"
+msgstr ""
+
+#: kstreams.adoc:924
+msgid ""
+"[cols=\"^40a,60a\"]\n"
+"|===\n"
+"|image::fuse.svg[]\n"
+"|[source,java]\n"
+"----\n"
+"blocks.stream()\n"
+"      .map(Block::squash)\n"
+"      .filter(block ‑> \n"
+"         block.getColor() != YELLOW)\n"
+"      .forEach(System.out::println);\n"
+"----\n"
+"|==="
+msgstr ""
+
+#: kstreams.adoc:926
+msgid "== Ничего не напоминает?"
+msgstr ""
+
+#: kstreams.adoc:928
+msgid ""
+"«Соединить два файла, привести их строки к lowercase, отсортировать, вывести "
+"три последних строки в алфавитном порядке»"
+msgstr ""
+
+#: kstreams.adoc:931
+msgid ""
+"[source,sh]\n"
+"cat file1 file2 | tr \"[A-Z]\" \"[a-z]\" | sort | tail -3"
+msgstr ""
+
+#: kstreams.adoc:934
+msgctxt "kstreams.adoc:934"
+msgid "== Kafka Streams API: общая структура KStreams-приложения"
+msgstr ""
+
+#: kstreams.adoc:939
+msgctxt "kstreams.adoc:939"
+msgid ""
+"[source,java]\n"
+"----\n"
+"StreamsConfig config = ...;\n"
+"//Здесь устанавливаем всякие опции"
+msgstr ""
+
+#: kstreams.adoc:943
+msgid ""
+"Topology topology = new StreamsBuilder()\n"
+"//Здесь строим топологию\n"
+"....build(); "
+msgstr ""
+
+#: kstreams.adoc:950
+msgid ""
+"//Это за нас делает SPRING-KAFKA\n"
+"KafkaStreams streams = new KafkaStreams(topology, config); \n"
+"streams.start(); \n"
+"...\n"
+"streams.close();"
+msgstr ""
+
+#: kstreams.adoc:952
+msgid "----"
+msgstr ""
+
+#: kstreams.adoc:956
+msgid "== В Спринге достаточно определить две вещи"
+msgstr ""
+
+#: kstreams.adoc:959
+msgid ""
+"* `@Bean KafkaStreamsConfiguration`\n"
+"* `@Bean Topology`"
+msgstr ""
+
+#: kstreams.adoc:961
+msgid "== Легенда"
+msgstr ""
+
+#: kstreams.adoc:982
+msgid ""
+"[cols=\"30a,70a\"]\n"
+"|===\n"
+".^|image::betting.jpg[]\n"
+".^|\n"
+"* Идут футбольные матчи (меняется счёт)\n"
+"* Делаются ставки: H, D, A.\n"
+"* Поток ставок, ключ: `Cyprus-Belgium:A`\n"
+"* Поток ставок, значение:\n"
+"[source,java]\n"
+"----\n"
+"class Bet {\n"
+"  String bettor;   //John Doe\n"
+"  String match;    //Cyprus-Belgium\n"
+"  Outcome outcome; //A (or H or D)\n"
+"  long amount;     //100\n"
+"  double odds;     //1.7\n"
+"  long timestamp;  //1554215083998\n"
+"}\n"
+"----\n"
+"|==="
+msgstr ""
+
+#: kstreams.adoc:985
+msgid "== @Bean KafkaConfiguration "
+msgstr ""
+
+#: kstreams.adoc:1006
+msgid ""
+"[source,java]\n"
+"----\n"
+"//ВАЖНО!\n"
+"@Bean(name = \n"
+"    KafkaStreamsDefaultConfiguration\n"
+"                .DEFAULT_STREAMS_CONFIG_BEAN_NAME)\n"
+"public KafkaStreamsConfiguration getStreamsConfig() {\n"
+"    Map<String, Object> props = new HashMap<>();\n"
+"    //ВАЖНО!\n"
+"    props.put(StreamsConfig.APPLICATION_ID_CONFIG,\n"
+"        \"stateless-demo-app\");\n"
+"    //ВАЖНО!\n"
+"    props.put(StreamsConfig.NUM_STREAM_THREADS_CONFIG, 4);\n"
+"    props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, \"localhost:9092\");\n"
+"    ...\n"
+"    KafkaStreamsConfiguration streamsConfig = \n"
+"            new KafkaStreamsConfiguration(props);\n"
+"    return streamsConfig;\n"
+"}\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:1008
+msgid "== @Bean NewTopic"
+msgstr ""
+
+#: kstreams.adoc:1020
+msgid ""
+"[source,java]\n"
+"----\n"
+"@Bean\n"
+"NewTopic getFilteredTopic() {\n"
+"    Map<String, String> props = new HashMap<>();\n"
+"    props.put(\n"
+"      TopicConfig.CLEANUP_POLICY_CONFIG,\n"
+"      TopicConfig.CLEANUP_POLICY_COMPACT);\n"
+"    return new NewTopic(\"mytopic\", 10, (short) 1).configs(props);\n"
+"}\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:1029
+msgid ""
+"== @Bean Topology\n"
+"[graphviz, \"yelling-topology.png\"]\n"
+"-----\n"
+"digraph G {\n"
+"graph [ dpi = 150 ]; \n"
+"rankdir=\"LR\";\n"
+"node [fontsize=16; shape=\"circle\"; fixedsize=\"true\"; width=\"1.1\"];"
+msgstr ""
+
+#: kstreams.adoc:1031
+msgid "Source -> MapVal -> Sink"
+msgstr ""
+
+#: kstreams.adoc:1034
+msgid ""
+"}\n"
+"-----"
+msgstr ""
+
+#: kstreams.adoc:1047
+msgid ""
+"[source,java]\n"
+"----\n"
+"@Bean\n"
+"public Topology createTopology(StreamsBuilder streamsBuilder) {\n"
+"    KStream<String, Bet> input = streamsBuilder.stream(...);\n"
+"    KStream<String, Long> gain\n"
+"            = input.mapValues(v -> Math.round(v.getAmount() * v.getOdds()));"
+"\n"
+"    gain.to(GAIN_TOPIC, Produced.with(Serdes.String(),\n"
+"                new JsonSerde<>(Long.class)));\n"
+"    return streamsBuilder.build();\n"
+"}\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:1050
+msgid "== Три строчки кода, и что тут такого?"
+msgstr ""
+
+#: kstreams.adoc:1052
+msgid ""
+"* Больше сообщений в секунду? -- больше машин с одинаковым  `application.id`!"
+msgstr ""
+
+#: kstreams.adoc:1059
+msgid ""
+"[graphviz,w1,png]\n"
+"----\n"
+"digraph G {\n"
+"  node [shape=\"rectangle\"]\n"
+"  graph [ dpi = 140 ];\n"
+"  rankdir=\"LR\";"
+msgstr ""
+
+#: kstreams.adoc:1066
+msgid ""
+"    subgraph cluster_s2{\n"
+"        o1[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/worried.png\"];\n"
+"        label=\"APP_ID_1\";\n"
+"        style=\"rounded\";\n"
+"   }"
+msgstr ""
+
+#: kstreams.adoc:1072
+msgid ""
+"  subgraph cluster_s1{\n"
+"    \"partition 1\"->o1\n"
+"    \"partition 2\"->o1\n"
+"    \"partition 3\"->o1  \n"
+"    label=\"source-topic\""
+msgstr ""
+
+#: kstreams.adoc:1074
+msgid "  }"
+msgstr ""
+
+#: kstreams.adoc:1079
+msgid ""
+"  sink[label=\"sink-topic\"]\n"
+"  o1->sink\n"
+"}\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:1081
+msgid "== Добавляем ноды"
+msgstr ""
+
+#: kstreams.adoc:1096
+msgid ""
+"[graphviz,w2,png]\n"
+"----\n"
+"digraph G {\n"
+"  node [shape=\"rectangle\"]\n"
+"  graph [ dpi = 140 ];\n"
+"  rankdir=\"LR\";\n"
+"      subgraph cluster_s2{\n"
+"        o1[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/neutral.png\"]\n"
+"        o2[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/neutral.png\"]\n"
+"        label=\"APP_ID_1\";\n"
+"        style=\"rounded\";\n"
+"      }"
+msgstr ""
+
+#: kstreams.adoc:1103
+msgid ""
+"  subgraph cluster_s1{\n"
+"    \"partition 1\"->o1\n"
+"    \"partition 2\"->o1\n"
+"    \"partition 3\"->o2 \n"
+"    label=\"source-topic\"\n"
+"  }"
+msgstr ""
+
+#: kstreams.adoc:1109
+msgid ""
+"  sink[label=\"sink-topic\"]\n"
+"  o1->sink\n"
+"  o2->sink\n"
+"}\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:1111
+msgid "== Ограничены только числом партиций"
+msgstr ""
+
+#: kstreams.adoc:1119
+msgid ""
+"[graphviz,w4,png]\n"
+"----\n"
+"digraph G {\n"
+"  node [shape=\"rectangle\"]\n"
+"  graph [ dpi = 140 ];\n"
+"  rankdir=\"LR\";\n"
+"      subgraph cluster_s2{"
+msgstr ""
+
+#: kstreams.adoc:1122
+msgctxt "kstreams.adoc:1122"
+msgid ""
+"        o1[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/smiley.png\"]"
+msgstr ""
+
+#: kstreams.adoc:1125
+msgctxt "kstreams.adoc:1125"
+msgid ""
+"        o2[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/smiley.png\"]"
+msgstr ""
+
+#: kstreams.adoc:1128
+msgctxt "kstreams.adoc:1128"
+msgid ""
+"        o3[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/smiley.png\"]"
+msgstr ""
+
+#: kstreams.adoc:1131
+msgctxt "kstreams.adoc:1131"
+msgid ""
+"        o4[shape=\"none\",label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/rollingeyes.png\""
+"]"
+msgstr ""
+
+#: kstreams.adoc:1135
+msgid ""
+"        label=\"APP_ID_1\";\n"
+"        style=\"rounded\";\n"
+"      }"
+msgstr ""
+
+#: kstreams.adoc:1142
+msgctxt "kstreams.adoc:1142"
+msgid ""
+"  subgraph cluster_s1{\n"
+"    \"partition 1\"->o1\n"
+"    \"partition 2\"->o2\n"
+"    \"partition 3\"->o3 \n"
+"    label=\"source-topic\"\n"
+"  }"
+msgstr ""
+
+#: kstreams.adoc:1149
+msgid ""
+"  sink[label=\"sink-topic\"]\n"
+"  o1->sink\n"
+"  o2->sink\n"
+"  o3->sink\n"
+"}\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:1151
+msgid "== TopologyTestDriver: создание"
+msgstr ""
+
+#: kstreams.adoc:1162
+msgid ""
+"[source,java]\n"
+"----\n"
+"KafkaStreamsConfiguration config = new KafkaConfiguration()\n"
+"                                        .getStreamsConfig();\n"
+"StreamsBuilder sb = new StreamsBuilder();\n"
+"Topology topology = new TopologyConfiguration().createTopology(sb);\n"
+"TopologyTestDriver topologyTestDriver = \n"
+"        new TopologyTestDriver(topology, \n"
+"                               config.asProperties());\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:1175
+msgid ""
+"== TestInput/OutputTopic: создание\n"
+"[source,java]\n"
+"----\n"
+"TestInputTopic<String, Bet> inputTopic =\n"
+"        topologyTestDriver.createInputTopic(BET_TOPIC,\n"
+"            Serdes.String().serializer(),\n"
+"            new JsonSerde<>(Bet.class).serializer());\n"
+"TestOutputTopic<String, Long> outputTopic =\n"
+"        topologyTestDriver.createOutputTopic(GAIN_TOPIC,\n"
+"            Serdes.String().deserializer(),\n"
+"            new JsonSerde<>(Long.class).deserializer());\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:1177
+msgctxt "kstreams.adoc:1177"
+msgid "== TopologyTestDriver: использование"
+msgstr ""
+
+#: kstreams.adoc:1186
+msgid ""
+"[source,java]\n"
+"----\n"
+"Bet bet = Bet.builder()\n"
+"            .bettor(\"John Doe\")\n"
+"            .match(\"Germany-Belgium\")\n"
+"            .outcome(Outcome.H)\n"
+"            .amount(100)\n"
+"            .odds(1.7).build();"
+msgstr ""
+
+#: kstreams.adoc:1189
+msgid ""
+"inputTopic.pipeInput(bet.key(), bet);\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:1191
+msgctxt "kstreams.adoc:1191"
+msgid "== TopologyTestDriver: использование"
+msgstr ""
+
+#: kstreams.adoc:1195
+msgid ""
+"[source,java]\n"
+"----\n"
+"TestRecord<String, Long> record = outputTopic.readRecord();"
+msgstr ""
+
+#: kstreams.adoc:1199
+msgid ""
+"assertEquals(bet.key(), record.key());\n"
+"assertEquals(170L, record.value().longValue());\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:1201
+msgid "== Если что-то пошло не так..."
+msgstr ""
+
+#: kstreams.adoc:1204
+msgid ""
+"* `default.deserialization.exception.handler` -- не смогли десериализовать\n"
+"* `default.production.exception.handler` -- брокер отверг сообщение ("
+"например, оно слишком велико)"
+msgstr ""
+
+#: kstreams.adoc:1206
+msgid "image::failure.jpg[{image-50-width}]"
+msgstr ""
+
+#: kstreams.adoc:1208
+msgid "== Если всё совсем развалилось"
+msgstr ""
+
+#: kstreams.adoc:1216
+msgid ""
+"[source,java]\n"
+"----\n"
+"streams.setUncaughtExceptionHandler(\n"
+"  (Thread thread, Throwable throwable) -> {\n"
+"    . . .\n"
+"   });\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:1218
+msgid "image::uncaughtexception.jpg[{image-100-width}]"
+msgstr ""
+
+#: kstreams.adoc:1221
+msgid ""
+"[.fragment]\n"
+"В Спринге всё сложнее (см. код)"
+msgstr ""
+
+#: kstreams.adoc:1223
+msgid "== Состояния приложения KafkaStreams"
+msgstr ""
+
+#: kstreams.adoc:1243
+msgid ""
+"[graphviz, \"kstreamsstates.png\"]\n"
+"-----\n"
+"digraph G {\n"
+"  graph [ dpi = 150 ]; \n"
+"  Created -> Running;\n"
+"  Running -> Rebalancing;\n"
+"  Rebalancing -> Running;\n"
+"  Rebalancing -> PendingShutdown;\n"
+"  PendingShutdown -> NotRunning;\n"
+"  Created -> PendingShutdown; \n"
+"  Running -> PendingShutdown; \n"
+"  Running -> Error;\n"
+"  Rebalancing -> Error;\n"
+"  Error -> PendingShutdown; \n"
+"  {rank = same; Created; Running;}\n"
+"  {rank = same; Rebalancing; Error;}\n"
+"  {rank = same; PendingShutdown; NotRunning;}\n"
+"}\n"
+"-----"
+msgstr ""
+
+#: kstreams.adoc:1245
+msgid "== Что ещё нужно знать про stateless-трансформации?"
+msgstr ""
+
+#: kstreams.adoc:1266
+msgid ""
+"== Простое ветвление стримов\n"
+"Java-стримы так не могут:\n"
+"[source,java]\n"
+"----\n"
+"KStream<..> foo = ...\n"
+"KStream<..> bar = foo.mapValues(…).map... to...\n"
+"Kstream<..> baz = foo.filter(…).map... forEach...\n"
+"----\n"
+"[graphviz, \"simplebranch.png\"]\n"
+"-----\n"
+"digraph G {\n"
+"graph [ dpi = 150 ]; \n"
+"rankdir=\"LR\";\n"
+"node [fontsize=16; shape=\"circle\"; fixedsize=\"true\"; width=\"0.5\"; "
+"label=\"\"];\n"
+"Start, BF, CF, DF [style=\"invis\"]\n"
+"Start -> A\n"
+"A -> B -> BF\n"
+"A -> C -> CF\n"
+"}\n"
+"-----"
+msgstr ""
+
+#: kstreams.adoc:1268
+msgid "== Ветвление стримов по условию"
+msgstr ""
+
+#: kstreams.adoc:1291
+msgid ""
+"С версии 2.8:\n"
+"[source,java]\n"
+"----\n"
+"gain.split()\n"
+"    .branch((key, value) -> key.contains(\"A\"), \n"
+"        Branched.withConsumer(ks -> ks.to(\"A\")))\n"
+"    .branch((key, value) -> key.contains(\"B\"), \n"
+"        Branched.withConsumer(ks -> ks.to(\"B\")));\n"
+"----\n"
+"[graphviz, \"switchbranch.png\"]\n"
+"-----\n"
+"digraph G {\n"
+"graph [ dpi = 150 ]; \n"
+"rankdir=\"LR\";\n"
+"node [fontsize=16; shape=\"circle\"; fixedsize=\"true\"; width=\"0.5\"; "
+"label=\"\"];\n"
+"Start, BF, CF, DF [style=\"invis\"]\n"
+"Branch [shape=\"diamond\", label=\"?\"]\n"
+"Start -> A -> Branch\n"
+"Branch -> B -> BF\n"
+"Branch -> C -> CF\n"
+"}\n"
+"-----"
+msgstr ""
+
+#: kstreams.adoc:1312
+msgid ""
+"== Простое слияние\n"
+"[source,java]\n"
+"----\n"
+"KStream<String, Integer> foo = ... \n"
+"KStream<String, Integer> bar = ...\n"
+"KStream<String, Integer> merge = foo.merge(bar);\n"
+"----\n"
+"[graphviz, \"merge.png\"]\n"
+"-----\n"
+"digraph G {\n"
+"graph [ dpi = 150 ]; \n"
+"rankdir=\"LR\";\n"
+"node [fontsize=16; shape=\"circle\"; fixedsize=\"true\"; width=\"0.5\"; "
+"label=\"\"];\n"
+"Finish, BF, CF, DF [style=\"invis\"]\n"
+"BF -> A\n"
+"CF -> B \n"
+"A -> C -> Finish\n"
+"B -> C \n"
+"}\n"
+"-----"
+msgstr ""
+
+#: kstreams.adoc:1314
+msgctxt "kstreams.adoc:1314"
+msgid "== Наш план"
+msgstr ""
+
+#: kstreams.adoc:1319
+msgctxt "kstreams.adoc:1319"
+msgid ""
+"[cols=\"20a,60a,20a\"]\n"
+"|===\n"
+".^|image::kafka.jpg[]\n"
+".^|"
+msgstr ""
+
+#: kstreams.adoc:1321
+msgctxt "kstreams.adoc:1321"
+msgid "Лекция 1."
+msgstr ""
+
+#: kstreams.adoc:1325
+msgid ""
+". [line-through]#Kafka (краткое напоминание) и Data Streaming#\n"
+". [line-through]#Конфигурация приложения. Простые (stateless) трансформации#"
+"\n"
+". *Трансформации с использованием локального состояния*"
+msgstr ""
+
+#: kstreams.adoc:1327
+msgctxt "kstreams.adoc:1327"
+msgid "Лекция 2."
+msgstr ""
+
+#: kstreams.adoc:1330
+msgctxt "kstreams.adoc:1330"
+msgid ""
+". Дуализм «поток—таблица» и табличные join-ы\n"
+". Время и оконные операции"
+msgstr ""
+
+#: kstreams.adoc:1333
+msgctxt "kstreams.adoc:1333"
+msgid ""
+".^|image::kafka.jpg[]\n"
+"|==="
+msgstr ""
+
+#: kstreams.adoc:1336
+msgid "== Локальное состояние"
+msgstr ""
+
+#: kstreams.adoc:1338
+msgid "Facebook's RocksDB -- что это и зачем?"
+msgstr ""
+
+#: kstreams.adoc:1349
+msgid ""
+"[.custom-style]\n"
+"[cols=\"25a,75a\"]\n"
+"|===\n"
+".^|image::rocksdb.png[]\n"
+".^|\n"
+"* Embedded key/value storage\n"
+"* LSM Tree (Log-Structured Merge-Tree)\n"
+"* High-performant (data locality)\n"
+"* Persistent, optimized for SSD\n"
+"|==="
+msgstr ""
+
+#: kstreams.adoc:1351
+msgid "== RocksDB похож на `TreeMap<K,V>`"
+msgstr ""
+
+#: kstreams.adoc:1356
+msgid ""
+"* Сохранение K,V в бинарном формате\n"
+"* Лексикографическая сортировка\n"
+"* Iterator (snapshot view)\n"
+"* Удаление диапазона (deleteRange)"
+msgstr ""
+
+#: kstreams.adoc:1358
+msgid "== Пишем “Bet Totalling App”"
+msgstr ""
+
+#: kstreams.adoc:1360
+msgid "Какова сумма выплат по сделанным ставкам, если сыграет исход?"
+msgstr ""
+
+#: kstreams.adoc:1373
+msgid ""
+"[graphviz, \"counting-topology.png\"]\n"
+"-----\n"
+"digraph G {\n"
+"graph [ dpi = 150 ]; \n"
+"rankdir=\"LR\";\n"
+"node [fontsize=18; shape=\"circle\"; fixedsize=\"true\"; width=\"1.1\"];\n"
+"Store [shape=\"cylinder\"; label=\"Local Store\"; fixedsize=\"true\"; width="
+"\"1.5\"]\n"
+"Source -> MapVal -> Sum -> Sink\n"
+"Sum -> Store [dir=both; label=\" \\n"
+" \"]\n"
+"{rank = same; Store; Sum;}\n"
+"}\n"
+"-----"
+msgstr ""
+
+#: kstreams.adoc:1375
+msgid "== @Bean Topology"
+msgstr ""
+
+#: kstreams.adoc:1381
+msgid ""
+"[source,java]\n"
+"----\n"
+"KStream<String, Bet> input = streamsBuilder.\n"
+"    stream(BET_TOPIC, Consumed.with(Serdes.String(),\n"
+"                      new JsonSerde<>(Bet.class)));"
+msgstr ""
+
+#: kstreams.adoc:1386
+msgid ""
+"KStream<String, Long> counted =\n"
+"    new TotallingTransformer()\n"
+"        .transformStream(streamsBuilder, input);\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:1401
+msgid ""
+"== Суммирование ставок\n"
+"[source,java]\n"
+"----\n"
+"@Override\n"
+"public KeyValue<String, Long> transform(String key, Bet value,\n"
+"                    KeyValueStore<String, Long> stateStore) {\n"
+"    long current = Optional\n"
+"        .ofNullable(stateStore.get(key))\n"
+"        .orElse(0L);\n"
+"    current += value.getAmount();\n"
+"    stateStore.put(key, current);\n"
+"    return KeyValue.pair(key, current);\n"
+"}\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:1409
+msgid ""
+"== StateStore доступен в тестах\n"
+"[source,java]\n"
+"----\n"
+"@Test\n"
+"void testTopology() {\n"
+"    topologyTestDriver.pipeInput(...);\n"
+"    topologyTestDriver.pipeInput(...);"
+msgstr ""
+
+#: kstreams.adoc:1413
+msgid ""
+"    KeyValueStore<String, Long> store =\n"
+"        topologyTestDriver\n"
+"        .getKeyValueStore(TotallingTransformer.STORE_NAME);"
+msgstr ""
+
+#: kstreams.adoc:1418
+msgid ""
+"    assertEquals(..., store.get(...));\n"
+"    assertEquals(..., store.get(...));\n"
+"}\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:1421
+msgid "== Демо: Ребалансировка / репликация"
+msgstr ""
+
+#: kstreams.adoc:1423
+msgid ""
+"* Ребалансировка / репликация партиций state при запуске / выключении "
+"обработчиков."
+msgstr ""
+
+#: kstreams.adoc:1425
+msgid "== Сохранение локального состояния в{nbsp}топик"
+msgstr ""
+
+#: kstreams.adoc:1429
+msgid ""
+"[source,code]\n"
+"----\n"
+"$kafka-topics --zookeeper localhost --describe"
+msgstr ""
+
+#: kstreams.adoc:1435
+msgid ""
+"Topic:bet-totalling-demo-app-totalling-store-changelog\n"
+"PartitionCount:10       \n"
+"ReplicationFactor:1 \n"
+"Configs:cleanup.policy=compact\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:1451
+msgid ""
+"[.fragment]\n"
+"[graphviz, \"counting-topology-changelog.png\"]\n"
+"-----\n"
+"digraph G {\n"
+"graph [ dpi = 150 ]; \n"
+"rankdir=\"LR\";\n"
+"node [fontsize=18; shape=\"circle\"; fixedsize=\"true\"; width=\"1.1\"];\n"
+"Store [shape=\"cylinder\"; label=\"Local Store\"; fixedsize=\"true\"; width="
+"\"1.5\"]\n"
+"Source -> MapVal -> Sum -> Sink\n"
+"Sum -> Store [dir=both; label=\" \\n"
+" \"]\n"
+"{rank = same; Store; Sum;}\n"
+"Store -> Changelog[style=\"dashed\"]\n"
+"Changelog[shape=\"box\"; style=\"dashed\"; width=\"1.5\"]\n"
+"}\n"
+"-----"
+msgstr ""
+
+#: kstreams.adoc:1458
+msgid ""
+"== Партиционирование и local state\n"
+"[graphviz, \"local-partitioning-oneworker.png\"]\n"
+"-----\n"
+"digraph D {\n"
+"  graph [ dpi = 150 ]; \n"
+"  subgraph system {"
+msgstr ""
+
+#: kstreams.adoc:1465
+msgid ""
+"     subgraph cluster_s2{\n"
+"          style = \"invis\"\n"
+"          S1 [shape=plaintext label = \"Source\"];\n"
+"          S2 [shape=plaintext label = \"Local store\"];\n"
+"          S1->S2 [style=\"invis\"]\n"
+"      }"
+msgstr ""
+
+#: kstreams.adoc:1468
+msgctxt "kstreams.adoc:1468"
+"kstreams.adoc:1468"
+"kstreams.adoc:1468"
+"kstreams.adoc:1468"
+"kstreams.adoc:1468"
+"kstreams.adoc:1468"
+"kstreams.adoc:1468"
+msgid ""
+"    subgraph cluster_p1 {\n"
+"      label = \"Worker 1\";"
+msgstr ""
+
+#: kstreams.adoc:1471
+msgctxt "kstreams.adoc:1471"
+"kstreams.adoc:1471"
+"kstreams.adoc:1471"
+msgid ""
+"        subgraph cluster_pp2{\n"
+"              label = \"Partition 3\""
+msgstr ""
+
+#: kstreams.adoc:1475
+msgctxt "kstreams.adoc:1475"
+"kstreams.adoc:1475"
+"kstreams.adoc:1475"
+"kstreams.adoc:1475"
+"kstreams.adoc:1475"
+"kstreams.adoc:1475"
+"kstreams.adoc:1475"
+msgid ""
+"              d[shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/pear.png\"];\n"
+"          }"
+msgstr ""
+
+#: kstreams.adoc:1477
+msgctxt "kstreams.adoc:1477"
+"kstreams.adoc:1477"
+"kstreams.adoc:1477"
+msgid "        d->ls1;"
+msgstr ""
+
+#: kstreams.adoc:1480
+msgctxt "kstreams.adoc:1480"
+"kstreams.adoc:1480"
+"kstreams.adoc:1480"
+"kstreams.adoc:1480"
+"kstreams.adoc:1480"
+"kstreams.adoc:1480"
+"kstreams.adoc:1480"
+msgid ""
+"          subgraph cluster_pp11{\n"
+"              label = \"Partition 2\""
+msgstr ""
+
+#: kstreams.adoc:1485
+msgctxt "kstreams.adoc:1485"
+"kstreams.adoc:1485"
+"kstreams.adoc:1485"
+"kstreams.adoc:1485"
+"kstreams.adoc:1485"
+"kstreams.adoc:1485"
+"kstreams.adoc:1485"
+msgid ""
+"              b [shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/red-apple.png\"];"
+"\n"
+"              c[shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/kiwi.png\"];"
+msgstr ""
+
+#: kstreams.adoc:1487
+msgctxt "kstreams.adoc:1487"
+"kstreams.adoc:1487"
+"kstreams.adoc:1487"
+"kstreams.adoc:1487"
+"kstreams.adoc:1487"
+"kstreams.adoc:1487"
+"kstreams.adoc:1487"
+"kstreams.adoc:1487"
+"kstreams.adoc:1487"
+"kstreams.adoc:1487"
+"kstreams.adoc:1487"
+"kstreams.adoc:1487"
+"kstreams.adoc:1487"
+"kstreams.adoc:1487"
+"kstreams.adoc:1487"
+msgid "          }"
+msgstr ""
+
+#: kstreams.adoc:1490
+msgctxt "kstreams.adoc:1490"
+"kstreams.adoc:1490"
+"kstreams.adoc:1490"
+"kstreams.adoc:1490"
+"kstreams.adoc:1490"
+"kstreams.adoc:1490"
+"kstreams.adoc:1490"
+msgid ""
+"        subgraph cluster_pp1{\n"
+"              label = \"Partition 1\""
+msgstr ""
+
+#: kstreams.adoc:1494
+msgctxt "kstreams.adoc:1494"
+"kstreams.adoc:1494"
+"kstreams.adoc:1494"
+"kstreams.adoc:1494"
+"kstreams.adoc:1494"
+"kstreams.adoc:1494"
+"kstreams.adoc:1494"
+msgid ""
+"              a [shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/banana.png\"];"
+msgstr ""
+
+#: kstreams.adoc:1496
+msgctxt "kstreams.adoc:1496"
+msgid "          }"
+msgstr ""
+
+#: kstreams.adoc:1505
+msgid ""
+"        ls1[shape=\"cylinder\" label = <<table border=\"0\" cellspacing=\"5\""
+">\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/banana.png\""
+"/></td><td><font point-size=\"24\">15</font></td>\n"
+"        <vr/><td><img src=\"lecture01/src/main/asciidoc/images/red-apple."
+"png\"/></td><td><font point-size=\"24\">10</font></td>\n"
+"        <vr/><td><img src=\"lecture01/src/main/asciidoc/images/pear.png\"/></"
+"td><td><font point-size=\"24\">20</font></td></tr></table>>]\n"
+"        a->ls1;\n"
+"        b->ls1;\n"
+"        c->ls1;"
+msgstr ""
+
+#: kstreams.adoc:1507
+msgid "    }"
+msgstr ""
+
+#: kstreams.adoc:1511
+msgid ""
+"  }\n"
+"} \n"
+"-----"
+msgstr ""
+
+#: kstreams.adoc:1518
+msgid ""
+"== Партиционирование и local state\n"
+"[graphviz, \"local-partitioning-1.png\"]\n"
+"-----\n"
+"digraph D {\n"
+"  graph [ dpi = 150 ]; \n"
+"  subgraph system {"
+msgstr ""
+
+#: kstreams.adoc:1526
+msgctxt "kstreams.adoc:1526"
+"kstreams.adoc:1526"
+"kstreams.adoc:1526"
+"kstreams.adoc:1526"
+"kstreams.adoc:1526"
+"kstreams.adoc:1526"
+msgid ""
+"     subgraph cluster_s2{\n"
+"          style = \"invis\"\n"
+"          S1 [shape=plaintext label = \"Source\"];\n"
+"          S2 [shape=plaintext label = \"Local store\"];\n"
+"          S3 [shape=plaintext label = \"Changelog\"];\n"
+"          S1->S2->S3 [style=\"invis\"]\n"
+"      }"
+msgstr ""
+
+#: kstreams.adoc:1529
+msgctxt "kstreams.adoc:1529"
+msgid ""
+"    subgraph cluster_p1 {\n"
+"      label = \"Worker 1\";"
+msgstr ""
+
+#: kstreams.adoc:1532
+msgctxt "kstreams.adoc:1532"
+msgid ""
+"        subgraph cluster_pp2{\n"
+"              label = \"Partition 3\""
+msgstr ""
+
+#: kstreams.adoc:1536
+msgctxt "kstreams.adoc:1536"
+msgid ""
+"              d[shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/pear.png\"];\n"
+"          }"
+msgstr ""
+
+#: kstreams.adoc:1538
+msgctxt "kstreams.adoc:1538"
+msgid "        d->ls1;"
+msgstr ""
+
+#: kstreams.adoc:1540
+msgctxt "kstreams.adoc:1540"
+"kstreams.adoc:1540"
+msgid "        ls1->p3v1;"
+msgstr ""
+
+#: kstreams.adoc:1543
+msgctxt "kstreams.adoc:1543"
+msgid ""
+"          subgraph cluster_pp11{\n"
+"              label = \"Partition 2\""
+msgstr ""
+
+#: kstreams.adoc:1548
+msgctxt "kstreams.adoc:1548"
+msgid ""
+"              b [shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/red-apple.png\"];"
+"\n"
+"              c[shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/kiwi.png\"];"
+msgstr ""
+
+#: kstreams.adoc:1550
+msgctxt "kstreams.adoc:1550"
+msgid "          }"
+msgstr ""
+
+#: kstreams.adoc:1553
+msgctxt "kstreams.adoc:1553"
+msgid ""
+"        subgraph cluster_pp1{\n"
+"              label = \"Partition 1\""
+msgstr ""
+
+#: kstreams.adoc:1557
+msgctxt "kstreams.adoc:1557"
+msgid ""
+"              a [shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/banana.png\"];"
+msgstr ""
+
+#: kstreams.adoc:1559
+msgctxt "kstreams.adoc:1559"
+msgid "          }"
+msgstr ""
+
+#: kstreams.adoc:1567
+msgid ""
+"        ls1[shape=\"cylinder\" label = <<table border=\"0\"  cellspacing=\"5"
+"\">\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/banana.png\""
+"/></td><td><font point-size=\"24\">15</font></td>\n"
+"        <vr/><td><img src=\"lecture01/src/main/asciidoc/images/red-apple."
+"png\"/></td><td><font point-size=\"24\">10</font></td>\n"
+"        <vr/><td><img src=\"lecture01/src/main/asciidoc/images/pear.png\"/></"
+"td><td><font point-size=\"24\">20</font></td></tr></table>>]\n"
+"        a->ls1;\n"
+"        b->ls1;\n"
+"        c->ls1;"
+msgstr ""
+
+#: kstreams.adoc:1571
+msgctxt "kstreams.adoc:1571"
+"kstreams.adoc:1571"
+msgid ""
+"        ls1->p1v1;\n"
+"        ls1->p2v1;\n"
+"    }"
+msgstr ""
+
+#: kstreams.adoc:1587
+msgid ""
+"        p1v1[shape=\"none\"; label= <<table cellborder=\"0\">\n"
+"        <tr><td colspan=\"2\">Partition 2</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/red-apple.png\""
+"/></td><td>10</td></tr></table>>];\n"
+"        p2v1[shape=\"none\"; label= <<table cellborder=\"0\">\n"
+"        <tr><td colspan=\"2\">Partition 3</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/pear.png\""
+"/></td><td>20</td></tr></table>>];\n"
+"        p3v1[shape=\"none\"; label= <<table cellborder=\"0\">\n"
+"        <tr><td colspan=\"2\">Partition 1</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/banana.png\""
+"/></td><td>15</td></tr></table>>];\n"
+"  }\n"
+"} \n"
+"-----"
+msgstr ""
+
+#: kstreams.adoc:1594
+msgid ""
+"== Партиционирование и local state\n"
+"[graphviz, \"local-partitioning-2.png\"]\n"
+"-----\n"
+"digraph D {\n"
+"  graph [ dpi = 150 ]; \n"
+"  subgraph system {"
+msgstr ""
+
+#: kstreams.adoc:1602
+msgctxt "kstreams.adoc:1602"
+msgid ""
+"     subgraph cluster_s2{\n"
+"          style = \"invis\"\n"
+"          S1 [shape=plaintext label = \"Source\"];\n"
+"          S2 [shape=plaintext label = \"Local store\"];\n"
+"          S3 [shape=plaintext label = \"Changelog\"];\n"
+"          S1->S2->S3 [style=\"invis\"]\n"
+"      }"
+msgstr ""
+
+#: kstreams.adoc:1605
+msgctxt "kstreams.adoc:1605"
+msgid ""
+"    subgraph cluster_p1 {\n"
+"      label = \"Worker 1\";"
+msgstr ""
+
+#: kstreams.adoc:1608
+msgctxt "kstreams.adoc:1608"
+msgid ""
+"        subgraph cluster_pp2{\n"
+"              label = \"Partition 3\""
+msgstr ""
+
+#: kstreams.adoc:1612
+msgctxt "kstreams.adoc:1612"
+msgid ""
+"              d[shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/pear.png\"];\n"
+"          }"
+msgstr ""
+
+#: kstreams.adoc:1614
+msgctxt "kstreams.adoc:1614"
+msgid "        d->ls1;"
+msgstr ""
+
+#: kstreams.adoc:1616
+msgctxt "kstreams.adoc:1616"
+msgid "        ls1->p3v1;"
+msgstr ""
+
+#: kstreams.adoc:1619
+msgctxt "kstreams.adoc:1619"
+msgid ""
+"          subgraph cluster_pp11{\n"
+"              label = \"Partition 2\""
+msgstr ""
+
+#: kstreams.adoc:1624
+msgctxt "kstreams.adoc:1624"
+msgid ""
+"              b [shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/red-apple.png\"];"
+"\n"
+"              c[shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/kiwi.png\"];"
+msgstr ""
+
+#: kstreams.adoc:1626
+msgctxt "kstreams.adoc:1626"
+msgid "          }"
+msgstr ""
+
+#: kstreams.adoc:1629
+msgctxt "kstreams.adoc:1629"
+msgid ""
+"        subgraph cluster_pp1{\n"
+"              label = \"Partition 1\""
+msgstr ""
+
+#: kstreams.adoc:1633
+msgctxt "kstreams.adoc:1633"
+msgid ""
+"              a [shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/banana.png\"];"
+msgstr ""
+
+#: kstreams.adoc:1635
+msgctxt "kstreams.adoc:1635"
+msgid "          }"
+msgstr ""
+
+#: kstreams.adoc:1643
+msgid ""
+"        ls1[shape=\"cylinder\" label = <<table border=\"0\"  cellspacing=\"5"
+"\">\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/banana.png\""
+"/></td><td><font point-size=\"24\">19</font></td>\n"
+"        <vr/><td><img src=\"lecture01/src/main/asciidoc/images/red-apple."
+"png\"/></td><td><font point-size=\"24\">12</font></td>\n"
+"        <vr/><td><img src=\"lecture01/src/main/asciidoc/images/pear.png\"/></"
+"td><td><font point-size=\"24\">22</font></td></tr></table>>]\n"
+"        a->ls1;\n"
+"        b->ls1;\n"
+"        c->ls1;"
+msgstr ""
+
+#: kstreams.adoc:1647
+msgctxt "kstreams.adoc:1647"
+msgid ""
+"        ls1->p1v1;\n"
+"        ls1->p2v1;\n"
+"    }"
+msgstr ""
+
+#: kstreams.adoc:1672
+msgctxt "kstreams.adoc:1672"
+msgid ""
+"        p1v1[shape=\"none\"; label= <<table cellborder=\"0\">\n"
+"        <tr><td colspan=\"2\">Partition 2</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/red-apple.png\""
+"/></td><td>10</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/red-apple.png\""
+"/></td><td>12</td></tr>\n"
+"        </table>>];\n"
+"        p2v1[shape=\"none\"; label= <<table cellborder=\"0\">\n"
+"        <tr><td colspan=\"2\">Partition 3</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/pear.png\""
+"/></td><td>20</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/pear.png\""
+"/></td><td>22</td></tr>\n"
+"        </table>>];\n"
+"        p3v1[shape=\"none\"; label= <<table cellborder=\"0\">\n"
+"        <tr><td colspan=\"2\">Partition 1</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/banana.png\""
+"/></td><td>15</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/banana.png\""
+"/></td><td>19</td></tr>\n"
+"        </table>>];\n"
+"  }\n"
+"} \n"
+"-----"
+msgstr ""
+
+#: kstreams.adoc:1679
+msgid ""
+"== Партиционирование и local state\n"
+"[graphviz, \"local-partitioning-25.png\"]\n"
+"-----\n"
+"digraph D {\n"
+"  graph [ dpi = 150 ]; \n"
+"  subgraph system {"
+msgstr ""
+
+#: kstreams.adoc:1687
+msgctxt "kstreams.adoc:1687"
+msgid ""
+"     subgraph cluster_s2{\n"
+"          style = \"invis\"\n"
+"          S1 [shape=plaintext label = \"Source\"];\n"
+"          S2 [shape=plaintext label = \"Local store\"];\n"
+"          S3 [shape=plaintext label = \"Changelog\"];\n"
+"          S1->S2->S3 [style=\"invis\"]\n"
+"      }"
+msgstr ""
+
+#: kstreams.adoc:1690
+msgctxt "kstreams.adoc:1690"
+msgid ""
+"    subgraph cluster_p1 {\n"
+"      label = \"Worker 1\";"
+msgstr ""
+
+#: kstreams.adoc:1693
+msgctxt "kstreams.adoc:1693"
+msgid ""
+"          subgraph cluster_pp11{\n"
+"              label = \"Partition 2\""
+msgstr ""
+
+#: kstreams.adoc:1698
+msgctxt "kstreams.adoc:1698"
+msgid ""
+"              b [shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/red-apple.png\"];"
+"\n"
+"              c[shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/kiwi.png\"];"
+msgstr ""
+
+#: kstreams.adoc:1700
+msgctxt "kstreams.adoc:1700"
+msgid "          }"
+msgstr ""
+
+#: kstreams.adoc:1703
+msgctxt "kstreams.adoc:1703"
+msgid ""
+"        subgraph cluster_pp1{\n"
+"              label = \"Partition 1\""
+msgstr ""
+
+#: kstreams.adoc:1707
+msgctxt "kstreams.adoc:1707"
+msgid ""
+"              a [shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/banana.png\"];"
+msgstr ""
+
+#: kstreams.adoc:1709
+msgctxt "kstreams.adoc:1709"
+msgid "          }"
+msgstr ""
+
+#: kstreams.adoc:1717
+msgctxt "kstreams.adoc:1717"
+msgid ""
+"        ls1[shape=\"cylinder\" label = <<table border=\"0\"  cellspacing=\"5"
+"\">\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/banana.png\""
+"/></td><td><font point-size=\"24\">19</font></td>\n"
+"        <vr/><td><img src=\"lecture01/src/main/asciidoc/images/red-apple."
+"png\"/></td><td><font point-size=\"24\">12</font></td>\n"
+"        </tr></table>>]\n"
+"        a->ls1;\n"
+"        b->ls1;\n"
+"        c->ls1;"
+msgstr ""
+
+#: kstreams.adoc:1721
+msgctxt "kstreams.adoc:1721"
+"kstreams.adoc:1721"
+"kstreams.adoc:1721"
+msgid ""
+"        ls1->p1v1;\n"
+"        ls1->p3v1;\n"
+"    }"
+msgstr ""
+
+#: kstreams.adoc:1727
+msgctxt "kstreams.adoc:1727"
+"kstreams.adoc:1727"
+"kstreams.adoc:1727"
+msgid ""
+"    subgraph cluster_p2 {\n"
+"      label = \"Worker 2\";\n"
+"         subgraph cluster_pp2{\n"
+"              label = \"Partition 3\""
+msgstr ""
+
+#: kstreams.adoc:1731
+msgctxt "kstreams.adoc:1731"
+msgid ""
+"              d[shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/pear.png\"];\n"
+"          }"
+msgstr ""
+
+#: kstreams.adoc:1737
+msgid ""
+"        ls2[shape=\"cylinder\" label = <<table border=\"0\"  cellspacing=\"5"
+"\">\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/pear.png\"/></"
+"td><td><img src=\"lecture01/src/main/asciidoc/images/question-mark.png\""
+"/></td></tr></table>>]\n"
+"        d->ls2;\n"
+"        ls2->p2v1[style=\"invis\"];\n"
+"    }"
+msgstr ""
+
+#: kstreams.adoc:1762
+msgid ""
+"        p1v1[shape=\"none\"; label= <<table cellborder=\"0\">\n"
+"        <tr><td colspan=\"2\">Partition 2</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/red-apple.png\""
+"/></td><td>10</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/red-apple.png\""
+"/></td><td>12</td></tr>\n"
+"        </table>>];\n"
+"        p2v1[shape=\"none\"; style=\"invis\"; label= <<table cellborder=\"0\""
+">\n"
+"        <tr><td colspan=\"2\">Partition 3</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/pear.png\""
+"/></td><td>20</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/pear.png\""
+"/></td><td>22</td></tr>\n"
+"        </table>>];\n"
+"        p3v1[shape=\"none\"; label= <<table cellborder=\"0\">\n"
+"        <tr><td colspan=\"2\">Partition 1</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/banana.png\""
+"/></td><td>15</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/banana.png\""
+"/></td><td>19</td></tr>\n"
+"        </table>>];\n"
+"  }\n"
+"} \n"
+"-----"
+msgstr ""
+
+#: kstreams.adoc:1769
+msgid ""
+"== Партиционирование и local state\n"
+"[graphviz, \"local-partitioning-3.png\"]\n"
+"-----\n"
+"digraph D {\n"
+"  graph [ dpi = 150 ]; \n"
+"  subgraph system {"
+msgstr ""
+
+#: kstreams.adoc:1777
+msgctxt "kstreams.adoc:1777"
+msgid ""
+"     subgraph cluster_s2{\n"
+"          style = \"invis\"\n"
+"          S1 [shape=plaintext label = \"Source\"];\n"
+"          S2 [shape=plaintext label = \"Local store\"];\n"
+"          S3 [shape=plaintext label = \"Changelog\"];\n"
+"          S1->S2->S3 [style=\"invis\"]\n"
+"      }"
+msgstr ""
+
+#: kstreams.adoc:1780
+msgctxt "kstreams.adoc:1780"
+msgid ""
+"    subgraph cluster_p1 {\n"
+"      label = \"Worker 1\";"
+msgstr ""
+
+#: kstreams.adoc:1783
+msgctxt "kstreams.adoc:1783"
+msgid ""
+"          subgraph cluster_pp11{\n"
+"              label = \"Partition 2\""
+msgstr ""
+
+#: kstreams.adoc:1788
+msgctxt "kstreams.adoc:1788"
+msgid ""
+"              b [shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/red-apple.png\"];"
+"\n"
+"              c[shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/kiwi.png\"];"
+msgstr ""
+
+#: kstreams.adoc:1790
+msgctxt "kstreams.adoc:1790"
+msgid "          }"
+msgstr ""
+
+#: kstreams.adoc:1793
+msgctxt "kstreams.adoc:1793"
+msgid ""
+"        subgraph cluster_pp1{\n"
+"              label = \"Partition 1\""
+msgstr ""
+
+#: kstreams.adoc:1797
+msgctxt "kstreams.adoc:1797"
+msgid ""
+"              a [shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/banana.png\"];"
+msgstr ""
+
+#: kstreams.adoc:1799
+msgctxt "kstreams.adoc:1799"
+msgid "          }"
+msgstr ""
+
+#: kstreams.adoc:1807
+msgctxt "kstreams.adoc:1807"
+msgid ""
+"        ls1[shape=\"cylinder\" label = <<table border=\"0\"  cellspacing=\"5"
+"\">\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/banana.png\""
+"/></td><td><font point-size=\"24\">19</font></td>\n"
+"        <vr/><td><img src=\"lecture01/src/main/asciidoc/images/red-apple."
+"png\"/></td><td><font point-size=\"24\">12</font></td>\n"
+"        </tr></table>>]\n"
+"        a->ls1;\n"
+"        b->ls1;\n"
+"        c->ls1;"
+msgstr ""
+
+#: kstreams.adoc:1811
+msgctxt "kstreams.adoc:1811"
+msgid ""
+"        ls1->p1v1;\n"
+"        ls1->p3v1;\n"
+"    }"
+msgstr ""
+
+#: kstreams.adoc:1817
+msgctxt "kstreams.adoc:1817"
+msgid ""
+"    subgraph cluster_p2 {\n"
+"      label = \"Worker 2\";\n"
+"         subgraph cluster_pp2{\n"
+"              label = \"Partition 3\""
+msgstr ""
+
+#: kstreams.adoc:1821
+msgctxt "kstreams.adoc:1821"
+msgid ""
+"              d[shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/pear.png\"];\n"
+"          }"
+msgstr ""
+
+#: kstreams.adoc:1827
+msgid ""
+"        ls2[shape=\"cylinder\" label = <<table border=\"0\"  cellspacing=\"5"
+"\">\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/pear.png\"/></"
+"td><td><font point-size=\"24\">22</font></td></tr></table>>]\n"
+"        d->ls2;\n"
+"        ls2->p2v1[dir=\"back\"];\n"
+"    }"
+msgstr ""
+
+#: kstreams.adoc:1852
+msgctxt "kstreams.adoc:1852"
+msgid ""
+"        p1v1[shape=\"none\"; label= <<table cellborder=\"0\">\n"
+"        <tr><td colspan=\"2\">Partition 2</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/red-apple.png\""
+"/></td><td>10</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/red-apple.png\""
+"/></td><td>12</td></tr>\n"
+"        </table>>];\n"
+"        p2v1[shape=\"none\"; label= <<table cellborder=\"0\">\n"
+"        <tr><td colspan=\"2\">Partition 3</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/pear.png\""
+"/></td><td>20</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/pear.png\""
+"/></td><td>22</td></tr>\n"
+"        </table>>];\n"
+"        p3v1[shape=\"none\"; label= <<table cellborder=\"0\">\n"
+"        <tr><td colspan=\"2\">Partition 1</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/banana.png\""
+"/></td><td>15</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/banana.png\""
+"/></td><td>19</td></tr>\n"
+"        </table>>];\n"
+"  }\n"
+"} \n"
+"-----"
+msgstr ""
+
+#: kstreams.adoc:1859
+msgid ""
+"== Партиционирование и local state\n"
+"[graphviz, \"local-partitioning-4.png\"]\n"
+"-----\n"
+"digraph D {\n"
+"  graph [ dpi = 150 ]; \n"
+"  subgraph system {"
+msgstr ""
+
+#: kstreams.adoc:1867
+msgctxt "kstreams.adoc:1867"
+msgid ""
+"     subgraph cluster_s2{\n"
+"          style = \"invis\"\n"
+"          S1 [shape=plaintext label = \"Source\"];\n"
+"          S2 [shape=plaintext label = \"Local store\"];\n"
+"          S3 [shape=plaintext label = \"Changelog\"];\n"
+"          S1->S2->S3 [style=\"invis\"]\n"
+"      }"
+msgstr ""
+
+#: kstreams.adoc:1870
+msgctxt "kstreams.adoc:1870"
+msgid ""
+"    subgraph cluster_p1 {\n"
+"      label = \"Worker 1\";"
+msgstr ""
+
+#: kstreams.adoc:1873
+msgctxt "kstreams.adoc:1873"
+msgid ""
+"          subgraph cluster_pp11{\n"
+"              label = \"Partition 2\""
+msgstr ""
+
+#: kstreams.adoc:1878
+msgctxt "kstreams.adoc:1878"
+msgid ""
+"              b [shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/red-apple.png\"];"
+"\n"
+"              c[shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/kiwi.png\"];"
+msgstr ""
+
+#: kstreams.adoc:1880
+msgctxt "kstreams.adoc:1880"
+msgid "          }"
+msgstr ""
+
+#: kstreams.adoc:1883
+msgctxt "kstreams.adoc:1883"
+msgid ""
+"        subgraph cluster_pp1{\n"
+"              label = \"Partition 1\""
+msgstr ""
+
+#: kstreams.adoc:1887
+msgctxt "kstreams.adoc:1887"
+msgid ""
+"              a [shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/banana.png\"];"
+msgstr ""
+
+#: kstreams.adoc:1889
+msgctxt "kstreams.adoc:1889"
+msgid "          }"
+msgstr ""
+
+#: kstreams.adoc:1897
+msgctxt "kstreams.adoc:1897"
+msgid ""
+"        ls1[shape=\"cylinder\" label = <<table border=\"0\"  cellspacing=\"5"
+"\">\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/banana.png\""
+"/></td><td><font point-size=\"24\">21</font></td>\n"
+"        <vr/><td><img src=\"lecture01/src/main/asciidoc/images/red-apple."
+"png\"/></td><td><font point-size=\"24\">13</font></td>\n"
+"        </tr></table>>]\n"
+"        a->ls1;\n"
+"        b->ls1;\n"
+"        c->ls1;"
+msgstr ""
+
+#: kstreams.adoc:1901
+msgctxt "kstreams.adoc:1901"
+msgid ""
+"        ls1->p1v1;\n"
+"        ls1->p3v1;\n"
+"    }"
+msgstr ""
+
+#: kstreams.adoc:1907
+msgctxt "kstreams.adoc:1907"
+msgid ""
+"    subgraph cluster_p2 {\n"
+"      label = \"Worker 2\";\n"
+"         subgraph cluster_pp2{\n"
+"              label = \"Partition 3\""
+msgstr ""
+
+#: kstreams.adoc:1911
+msgctxt "kstreams.adoc:1911"
+msgid ""
+"              d[shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/pear.png\"];\n"
+"          }"
+msgstr ""
+
+#: kstreams.adoc:1917
+msgctxt "kstreams.adoc:1917"
+msgid ""
+"        ls2[shape=\"cylinder\" label = <<table border=\"0\"  cellspacing=\"5"
+"\">\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/pear.png\"/></"
+"td><td><font point-size=\"24\">23</font></td></tr></table>>]\n"
+"        d->ls2;\n"
+"        ls2->p2v1;\n"
+"    }"
+msgstr ""
+
+#: kstreams.adoc:1948
+msgid ""
+"        p1v1[shape=\"none\"; label= <<table cellborder=\"0\">\n"
+"        <tr><td colspan=\"2\">Partition 2</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/red-apple.png\""
+"/></td><td>10</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/red-apple.png\""
+"/></td><td>12</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/red-apple.png\""
+"/></td><td>13</td></tr>\n"
+"        </table>>];\n"
+"        p2v1[shape=\"none\"; label= <<table cellborder=\"0\">\n"
+"        <tr><td colspan=\"2\">Partition 3</td></tr>\n"
+"        <hr/>\n"
+"         <tr><td><img src=\"lecture01/src/main/asciidoc/images/pear.png\""
+"/></td><td>20</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/pear.png\""
+"/></td><td>22</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/pear.png\""
+"/></td><td>23</td></tr>\n"
+"        </table>>];\n"
+"        p3v1[shape=\"none\"; label= <<table cellborder=\"0\">\n"
+"        <tr><td colspan=\"2\">Partition 1</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/banana.png\""
+"/></td><td>15</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/banana.png\""
+"/></td><td>19</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/banana.png\""
+"/></td><td>21</td></tr>\n"
+"        </table>>];\n"
+"  }\n"
+"} \n"
+"-----"
+msgstr ""
+
+#: kstreams.adoc:1955
+msgid ""
+"== Партиционирование и local state\n"
+"[graphviz, \"local-partitioning-5.png\"]\n"
+"-----\n"
+"digraph D {\n"
+"  graph [ dpi = 150 ]; \n"
+"  subgraph system {"
+msgstr ""
+
+#: kstreams.adoc:1963
+msgctxt "kstreams.adoc:1963"
+msgid ""
+"     subgraph cluster_s2{\n"
+"          style = \"invis\"\n"
+"          S1 [shape=plaintext label = \"Source\"];\n"
+"          S2 [shape=plaintext label = \"Local store\"];\n"
+"          S3 [shape=plaintext label = \"Changelog\"];\n"
+"          S1->S2->S3 [style=\"invis\"]\n"
+"      }"
+msgstr ""
+
+#: kstreams.adoc:1966
+msgctxt "kstreams.adoc:1966"
+msgid ""
+"    subgraph cluster_p1 {\n"
+"      label = \"Worker 1\";"
+msgstr ""
+
+#: kstreams.adoc:1969
+msgctxt "kstreams.adoc:1969"
+msgid ""
+"          subgraph cluster_pp11{\n"
+"              label = \"Partition 2\""
+msgstr ""
+
+#: kstreams.adoc:1974
+msgctxt "kstreams.adoc:1974"
+msgid ""
+"              b [shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/red-apple.png\"];"
+"\n"
+"              c[shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/kiwi.png\"];"
+msgstr ""
+
+#: kstreams.adoc:1976
+msgctxt "kstreams.adoc:1976"
+msgid "          }"
+msgstr ""
+
+#: kstreams.adoc:1979
+msgctxt "kstreams.adoc:1979"
+msgid ""
+"        subgraph cluster_pp1{\n"
+"              label = \"Partition 1\""
+msgstr ""
+
+#: kstreams.adoc:1983
+msgctxt "kstreams.adoc:1983"
+msgid ""
+"              a [shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/banana.png\"];"
+msgstr ""
+
+#: kstreams.adoc:1985
+msgctxt "kstreams.adoc:1985"
+msgid "          }"
+msgstr ""
+
+#: kstreams.adoc:1993
+msgctxt "kstreams.adoc:1993"
+msgid ""
+"        ls1[shape=\"cylinder\" label = <<table border=\"0\"  cellspacing=\"5"
+"\">\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/banana.png\""
+"/></td><td><font point-size=\"24\">21</font></td>\n"
+"        <vr/><td><img src=\"lecture01/src/main/asciidoc/images/red-apple."
+"png\"/></td><td><font point-size=\"24\">13</font></td>\n"
+"        </tr></table>>]\n"
+"        a->ls1;\n"
+"        b->ls1;\n"
+"        c->ls1;"
+msgstr ""
+
+#: kstreams.adoc:1997
+msgctxt "kstreams.adoc:1997"
+msgid ""
+"        ls1->p1v1;\n"
+"        ls1->p3v1;\n"
+"    }"
+msgstr ""
+
+#: kstreams.adoc:2003
+msgctxt "kstreams.adoc:2003"
+msgid ""
+"    subgraph cluster_p2 {\n"
+"      label = \"Worker 2\";\n"
+"         subgraph cluster_pp2{\n"
+"              label = \"Partition 3\""
+msgstr ""
+
+#: kstreams.adoc:2007
+msgctxt "kstreams.adoc:2007"
+msgid ""
+"              d[shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/pear.png\"];\n"
+"          }"
+msgstr ""
+
+#: kstreams.adoc:2013
+msgctxt "kstreams.adoc:2013"
+msgid ""
+"        ls2[shape=\"cylinder\" label = <<table border=\"0\"  cellspacing=\"5"
+"\">\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/pear.png\"/></"
+"td><td><font point-size=\"24\">23</font></td></tr></table>>]\n"
+"        d->ls2;\n"
+"        ls2->p2v1;\n"
+"    }"
+msgstr ""
+
+#: kstreams.adoc:2032
+msgid ""
+"        p1v1[shape=\"none\"; label= <<table cellborder=\"0\">\n"
+"        <tr><td colspan=\"2\">Partition 2</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/red-apple.png\""
+"/></td><td>13</td></tr>\n"
+"        </table>>];\n"
+"        p2v1[shape=\"none\"; label= <<table cellborder=\"0\">\n"
+"        <tr><td colspan=\"2\">Partition 3</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/pear.png\""
+"/></td><td>23</td></tr>        \n"
+"        </table>>];\n"
+"        p3v1[shape=\"none\"; label= <<table cellborder=\"0\">\n"
+"        <tr><td colspan=\"2\">Partition 1</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/banana.png\""
+"/></td><td>21</td></tr>\n"
+"        </table>>];\n"
+"  }\n"
+"} \n"
+"-----"
+msgstr ""
+
+#: kstreams.adoc:2039
+msgid ""
+"== Партиционирование и local state\n"
+"[graphviz, \"local-partitioning-6.png\"]\n"
+"-----\n"
+"digraph D {\n"
+"  graph [ dpi = 150 ]; \n"
+"  subgraph system {"
+msgstr ""
+
+#: kstreams.adoc:2047
+msgctxt "kstreams.adoc:2047"
+msgid ""
+"     subgraph cluster_s2{\n"
+"          style = \"invis\"\n"
+"          S1 [shape=plaintext label = \"Source\"];\n"
+"          S2 [shape=plaintext label = \"Local store\"];\n"
+"          S3 [shape=plaintext label = \"Changelog\"];\n"
+"          S1->S2->S3 [style=\"invis\"]\n"
+"      }"
+msgstr ""
+
+#: kstreams.adoc:2050
+msgctxt "kstreams.adoc:2050"
+msgid ""
+"    subgraph cluster_p1 {\n"
+"      label = \"Worker 1\";"
+msgstr ""
+
+#: kstreams.adoc:2053
+msgctxt "kstreams.adoc:2053"
+msgid ""
+"        subgraph cluster_pp2{\n"
+"              label = \"Partition 3\""
+msgstr ""
+
+#: kstreams.adoc:2057
+msgctxt "kstreams.adoc:2057"
+msgid ""
+"              d[shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/pear.png\"];\n"
+"          }"
+msgstr ""
+
+#: kstreams.adoc:2059
+msgctxt "kstreams.adoc:2059"
+msgid "        d->ls1;"
+msgstr ""
+
+#: kstreams.adoc:2061
+msgctxt "kstreams.adoc:2061"
+msgid "        ls1->p3v1;"
+msgstr ""
+
+#: kstreams.adoc:2064
+msgctxt "kstreams.adoc:2064"
+msgid ""
+"          subgraph cluster_pp11{\n"
+"              label = \"Partition 2\""
+msgstr ""
+
+#: kstreams.adoc:2069
+msgctxt "kstreams.adoc:2069"
+msgid ""
+"              b [shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/red-apple.png\"];"
+"\n"
+"              c[shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/kiwi.png\"];"
+msgstr ""
+
+#: kstreams.adoc:2071
+msgctxt "kstreams.adoc:2071"
+msgid "          }"
+msgstr ""
+
+#: kstreams.adoc:2074
+msgctxt "kstreams.adoc:2074"
+msgid ""
+"        subgraph cluster_pp1{\n"
+"              label = \"Partition 1\""
+msgstr ""
+
+#: kstreams.adoc:2078
+msgctxt "kstreams.adoc:2078"
+msgid ""
+"              a [shape=\"none\", label=\"\",\n"
+"                 image=\"lecture01/src/main/asciidoc/images/banana.png\"];"
+msgstr ""
+
+#: kstreams.adoc:2080
+msgctxt "kstreams.adoc:2080"
+msgid "          }"
+msgstr ""
+
+#: kstreams.adoc:2088
+msgid ""
+"        ls1[shape=\"cylinder\" label = <<table border=\"0\"  cellspacing=\"5"
+"\">\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/banana.png\""
+"/></td><td><font point-size=\"24\">21</font></td>\n"
+"        <vr/><td><img src=\"lecture01/src/main/asciidoc/images/red-apple."
+"png\"/></td><td><font point-size=\"24\">13</font></td>\n"
+"        <vr/><td><img src=\"lecture01/src/main/asciidoc/images/pear.png\"/></"
+"td><td><font point-size=\"24\">23</font></td></tr></table>>]\n"
+"        a->ls1;\n"
+"        b->ls1;\n"
+"        c->ls1;"
+msgstr ""
+
+#: kstreams.adoc:2092
+msgctxt "kstreams.adoc:2092"
+msgid ""
+"        ls1->p1v1;\n"
+"        ls1->p2v1;\n"
+"    }"
+msgstr ""
+
+#: kstreams.adoc:2108
+msgid ""
+"        p1v1[shape=\"none\"; label= <<table cellborder=\"0\">\n"
+"        <tr><td colspan=\"2\">Partition 2</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/red-apple.png\""
+"/></td><td>13</td></tr></table>>];\n"
+"        p2v1[shape=\"none\"; label= <<table cellborder=\"0\">\n"
+"        <tr><td colspan=\"2\">Partition 3</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/pear.png\""
+"/></td><td>23</td></tr></table>>];\n"
+"        p3v1[shape=\"none\"; label= <<table cellborder=\"0\">\n"
+"        <tr><td colspan=\"2\">Partition 1</td></tr>\n"
+"        <hr/>\n"
+"        <tr><td><img src=\"lecture01/src/main/asciidoc/images/banana.png\""
+"/></td><td>21</td></tr></table>>];\n"
+"  }\n"
+"} \n"
+"-----"
+msgstr ""
+
+#: kstreams.adoc:2110
+msgid "== Репартиционирование"
+msgstr ""
+
+#: kstreams.adoc:2119
+msgid ""
+"[graphviz, \"through.png\"]\n"
+"-----\n"
+"digraph G\n"
+"{\n"
+"    graph [ dpi = 150 ]; \n"
+"    rankdir=\"LR\";\n"
+"    node [shape=record, width=.1, height=.1];\n"
+"    node1 [label=\"{ | | | | }\", fontsize = 18, xlabel= \"repartition(. . .)"
+"\"];"
+msgstr ""
+
+#: kstreams.adoc:2125
+msgid ""
+"    node [label = \" \"; shape=\"circle\"; fixedsize=\"true\"; width=\"1.1\""
+"];\n"
+"    Source -> node1\n"
+"    node1 -> Sink\n"
+"}\n"
+"-----"
+msgstr ""
+
+#: kstreams.adoc:2129
+msgid ""
+"* Явное при помощи +\n"
+"`repartition(Repartitioned<K, V> repartitioned)`\n"
+"* Неявное при операциях, меняющих ключ + stateful-операциях"
+msgstr ""
+
+#: kstreams.adoc:2138
+msgid ""
+"== Дублирующееся неявное репартиционирование\n"
+"[source,java]\n"
+"----\n"
+"KStream source = builder.stream(\"topic1\");\n"
+"KStream mapped = source.map(...);\n"
+"KTable counts = mapped.groupByKey().aggregate(...);\n"
+"KStream sink = mapped.leftJoin(counts, ...);\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:2162
+msgid ""
+"[graphviz, \"doublethrough.png\"]\n"
+"-----\n"
+"digraph G {\n"
+"graph [ dpi = 150 ]; \n"
+"rankdir=\"LR\";\n"
+"node [fontsize=16; shape=\"circle\"; fixedsize=\"true\"; width=\"0.8\"; "
+"label=\"\"];\n"
+"Start, Finish [style=\"invis\"]\n"
+"Start -> A\n"
+"A[label=\"map\"]\n"
+"A -> throughAgg  [style=dashed]\n"
+"throughAgg -> Agg  [style=dashed]\n"
+"A -> throughJoin [style=dashed]\n"
+"throughJoin -> Join [style=dashed]\n"
+"Agg[label=\"Agg\"]\n"
+"Join[label=\"Join\"]\n"
+"Agg -> Join\n"
+"Join -> Finish\n"
+"Store [shape=\"cylinder\"; label=\"Store\";]\n"
+"Agg -> Store [dir=\"both\"]\n"
+"throughAgg [shape=\"record\"; label=\"{ | | | | }\"; height = \"0.2\"]\n"
+"throughJoin [shape=\"record\"; label=\"{ | | | | }\"; height = \"0.2\"]\n"
+"}\n"
+"-----"
+msgstr ""
+
+#: kstreams.adoc:2164
+msgid "== Избавляемся от дублирующегося репартиционирования"
+msgstr ""
+
+#: kstreams.adoc:2172
+msgid ""
+"[source,java]\n"
+"----\n"
+"KStream source = builder.stream(\"topic1\");\n"
+"KStream shuffled = source.map(...).repartition(...);\n"
+"KTable counts = shuffled.groupByKey().aggregate(...);\n"
+"KStream sink = shuffled.leftJoin(counts, ...);\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:2195
+msgid ""
+"[graphviz, \"implicitthrough.png\"]\n"
+"-----\n"
+"digraph G {\n"
+"graph [ dpi = 150 ]; \n"
+"rankdir=\"LR\";\n"
+"node [fontsize=16; shape=\"circle\"; fixedsize=\"true\"; width=\"0.8\"; "
+"label=\"\"];\n"
+"Start, Finish [style=\"invis\"]\n"
+"Start -> A\n"
+"A[label=\"map\"]\n"
+"A -> throughAgg\n"
+"throughAgg[xlabel=\"repartition\"]\n"
+"throughAgg -> Agg\n"
+"throughAgg -> Join\n"
+"Agg[label=\"Agg\"]\n"
+"Join[label=\"Join\"]\n"
+"Agg -> Join\n"
+"Join -> Finish\n"
+"Store [shape=\"cylinder\"; label=\"Store\";]\n"
+"Agg -> Store [dir=\"both\"]\n"
+"throughAgg [shape=\"record\"; label=\"{ | | | | }\"; height = \"0.2\"]\n"
+"}\n"
+"-----"
+msgstr ""
+
+#: kstreams.adoc:2197
+msgid "== Ключ лучше лишний раз не трогать"
+msgstr ""
+
+#: kstreams.adoc:2199
+msgid "*Key only:* `selectKey`"
+msgstr ""
+
+#: kstreams.adoc:2204
+msgid ""
+"[cols=2*] \n"
+"|===\n"
+"|*Key and Value*\n"
+"|*Value Only*"
+msgstr ""
+
+#: kstreams.adoc:2207
+msgid ""
+"|`map`\n"
+"|`mapValues`"
+msgstr ""
+
+#: kstreams.adoc:2210
+msgid ""
+"|`flatMap`\n"
+"|`flatMapValues`"
+msgstr ""
+
+#: kstreams.adoc:2213
+msgid ""
+"|`transform`\n"
+"|`transformValues`"
+msgstr ""
+
+#: kstreams.adoc:2216
+msgid ""
+"|`flatTransform`\n"
+"|`flatTransformValues`"
+msgstr ""
+
+#: kstreams.adoc:2218
+msgctxt "kstreams.adoc:2218"
+msgid "|==="
+msgstr ""
