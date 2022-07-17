@@ -26,4 +26,7 @@ lecture02/src/main/asciidoc/*.png
 /*.bat
 
 #i18n gettext
+*.mo
 *.po~
+*.log
+kstreams-en.adoc
