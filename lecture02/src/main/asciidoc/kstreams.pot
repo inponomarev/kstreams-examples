@@ -4,14 +4,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-15 12:36+0300\n"
+"POT-Creation-Date: 2022-07-17 02:36+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Translate Toolkit 3.5.3\n"
+"X-Generator: Translate Toolkit 2.2.5\n"
 
 #: kstreams.adoc:25
 msgid ""
@@ -72,13 +72,11 @@ msgstr ""
 
 #: kstreams.adoc:41
 msgctxt "kstreams.adoc:41"
-"kstreams.adoc:41"
 msgid "Лекция 1."
 msgstr ""
 
 #: kstreams.adoc:45
 msgctxt "kstreams.adoc:45"
-"kstreams.adoc:45"
 msgid ""
 ". [line-through]#Kafka (краткое напоминание) и Data Streaming#\n"
 ". [line-through]#Конфигурация приложения. Простые (stateless) трансформации#"
@@ -88,7 +86,6 @@ msgstr ""
 
 #: kstreams.adoc:47
 msgctxt "kstreams.adoc:47"
-"kstreams.adoc:47"
 msgid "Лекция 2."
 msgstr ""
 
@@ -100,7 +97,6 @@ msgstr ""
 
 #: kstreams.adoc:53
 msgctxt "kstreams.adoc:53"
-"kstreams.adoc:53"
 msgid ""
 ".^|image::kafka.jpg[]\n"
 "|==="
@@ -108,7 +104,6 @@ msgstr ""
 
 #: kstreams.adoc:56
 msgctxt "kstreams.adoc:56"
-"kstreams.adoc:56"
 msgid "== Таблицы vs стримы"
 msgstr ""
 
@@ -167,7 +162,6 @@ msgstr ""
 
 #: kstreams.adoc:90
 msgctxt "kstreams.adoc:90"
-"kstreams.adoc:90"
 msgid ""
 "[stem] \n"
 "++++\n"
@@ -402,17 +396,11 @@ msgstr ""
 
 #: kstreams.adoc:234
 msgctxt "kstreams.adoc:234"
-"kstreams.adoc:234"
-"kstreams.adoc:234"
-"kstreams.adoc:234"
-"kstreams.adoc:234"
 msgid "          }"
 msgstr ""
 
 #: kstreams.adoc:237
 msgctxt "kstreams.adoc:237"
-"kstreams.adoc:237"
-"kstreams.adoc:237"
 msgid ""
 "        subgraph cluster_pp1{\n"
 "              label = \"Partition 1\""
@@ -442,7 +430,6 @@ msgstr ""
 
 #: kstreams.adoc:253
 msgctxt "kstreams.adoc:253"
-"kstreams.adoc:253"
 msgid "              d[label = \"D\"];"
 msgstr ""
 
@@ -812,14 +799,13 @@ msgstr ""
 #: kstreams.adoc:502
 msgid ""
 "== Операции между стримами и таблицами: сводка\n"
-".Источник: https://kafka.apache.org/20/documentation/streams/developer-guide/"
-"dsl-api.html#stateful-transformations[Kafka Streams DSL Documentation]\n"
+".Источник: https://kafka.apache.org/20/documentation/streams/developer-guide"
+"/dsl-api.html#stateful-transformations[Kafka Streams DSL Documentation]\n"
 "image::streams-stateful_operations.png[{image-50-width}]"
 msgstr ""
 
 #: kstreams.adoc:504
 msgctxt "kstreams.adoc:504"
-"kstreams.adoc:504"
 msgid "== Виды Join-ов: Table-Table"
 msgstr ""
 
@@ -1237,8 +1223,8 @@ msgstr ""
 
 #: kstreams.adoc:767
 msgid ""
-"- https://docs.confluent.io/current/streams/developer-guide/index.html[docs."
-"confluent.io: Streams Developer Guide]\n"
+"- https://docs.confluent.io/current/streams/developer-"
+"guide/index.html[docs.confluent.io: Streams Developer Guide]\n"
 "- https://www.confluent.io/blog/stream-processing-part-1-tutorial-developing-"
 "streaming-applications[Getting Your Feet Wet with Stream Processing ("
 "Confluent tutorials)]\n"
@@ -1277,8 +1263,8 @@ msgstr ""
 
 #: kstreams.adoc:786
 msgid ""
-"icon:github[size=lg] https://github.com/inponomarev/kstreams-examples["
-"inponomarev/kstreams-examples]"
+"icon:github[size=lg] https://github.com/inponomarev/kstreams-"
+"examples[inponomarev/kstreams-examples]"
 msgstr ""
 
 #: kstreams.adoc:788

@@ -18,6 +18,10 @@ jobs:
           java-version: 11.0.x
       - name: Set up dot
         run: sudo apt-get install -y graphviz
+      - name: Allow script execution
+        run: sudo chmod +x generate-en.sh
+      - name: Generate English adocs
+        run: ./generate-en.sh 
       - uses: actions/cache@v1
         with:
           path: ~/.m2/repository

@@ -1,5 +1,5 @@
-= Kafka Streams API: Шаг за рамки Hello World
-Иван Пономарёв, КУРС/МФТИ
+= Kafka Streams API: A Step Beyond Hello World
+Ivan Ponomarev, Synthesized/MIPT
 :revealjs_theme: black
 :revealjs_customtheme: white_course.css
 :revealjs_slideNumber:
@@ -31,89 +31,89 @@ ponomarev@corchestra.ru
 icon:twitter[size=lg] @inponomarev
 
 [%notitle]
-== Кто я такой
+== Who am I
 
 [cols="30a,70a"]
 |===
 .^|image::me.jpg[]
 .^|
-* Tech Lead at KURS
+* Staff Engineer at Synthesized
 * ERP systems & Java background
-* Speaker at JPoint, Devoops, Heisenbug, JUG.MSK, PermDevDay, DevopsForum, Стачка etc.
+* Speaker at JPoint, Devoops, Heisenbug, JUG. MSK, PermDevDay, DevopsForum, Stachka etc.
 * Heisenbug Program Committee member.
-* Текущий проект: Real-time Webscraping
+* Current project: Real-time Webscraping
 |===
 
 
-== Всё, что я показываю, есть на гитхабе
+== Everything I show is on GitHub
 
 [cols="30a,70a"]
 |===
 .^|image::octocat.jpg[]
 .^|
-* Слайды: https://inponomarev.github.io/kstreams-examples[inponomarev.github.io/kstreams-examples]
+* Slides: https://inponomarev.github.io/kstreams-examples[inponomarev.github.io/kstreams-examples]
 
-* Исходники: https://github.com/inponomarev/kstreams-examples[github.com/inponomarev/kstreams-examples]
+* Sources: https://github.com/inponomarev/kstreams-examples[github.com/inponomarev/kstreams-examples]
 |===
 
-== Наш план
+== Our plan
 
 [cols="20a,60a,20a"]
 |===
 .^|image::kafka.jpg[]
 .^|
 
-Лекция 1.
+Lecture 1.
 
-. *Kafka (краткое напоминание) и Data Streaming*
-. Конфигурация приложения. Простые (stateless) трансформации
-. Трансформации с использованием локального состояния
+. *Kafka (brief reminder) and Data Streaming*
+. Application configuration. Stateless transformations
+. Transformations with local state
 
-Лекция 2.
+Lecture 2.
 
-. Дуализм «поток—таблица» и табличные join-ы
-. Время и оконные операции
+. Stream-table dualism and Table joins
+. Time and window operations
 
 .^|image::kafka.jpg[]
 |===
 
-== Kafka это
+== Kafka is
 
 [cols="1a,2a,3a,1a"]
 |===
 <.^|
 |image::kafka-logo.svg[]
 <.^|
-* распределённый
-* масштабируемый
-* отказоустойчивый лог
-* https://engineering.linkedin.com/kafka/benchmarking-apache-kafka-2-million-writes-second-three-cheap-machines[миллионы записей в секунду]
+* distributed
+* scalable
+* fault-tolerant log
+* https://engineering.linkedin.com/kafka/benchmarking-apache-kafka-2-million-writes-second-three-cheap-machines[millions of records per second]
 <.^|
 |===
 
-== В Кафке можно
+== In Kafka you can
 
 [cols="1a,2a"]
 |===
 | image::okay.png[]
-|* Записать нечто в именованный лог (topic)
-* Прочитать записи из топика в FIFO порядке (в пределах партиции)
-* Зафиксировать место, до которого дочитал
+|* Write something to a named log (topic)
+* Read entries from the topic in FIFO order (within a partition)
+* Commit the offset of the processed entries
 
 |===
 
-== В Кафке нельзя
+== You can't do it in Kafka
 
 [cols="1a,2a"]
 |===
 | image::noway.png[]
-|* Стереть запись
-* Изменить запись
-* Найти в логе запись иначе, как по её порядковому номеру
+|* Erase a record
+* Edit a record
+* Extract a random record from the log except by offset
 |===
 
 
-== Топики, партиции и сообщения
+== Topics, partitions and messages
 
 [graphviz,topics-partitions,png]
 ----
@@ -165,7 +165,7 @@ digraph D {
 ----
 
 
-== Топики, партиции и сообщения
+== Topics, partitions and messages
 
 [graphviz,topics-partitions1,png]
 ----
@@ -216,7 +216,7 @@ digraph D {
 } 
 ----
 
-== Топики, партиции и сообщения
+== Topics, partitions and messages
 
 [graphviz,topics-partitions2,png]
 ----
@@ -267,7 +267,7 @@ digraph D {
 } 
 ----
 
-== Анатомия сообщения
+== Anatomy of a message
 
 [graphviz,message-anatomy,png]
 ----
@@ -278,20 +278,20 @@ digraph G {
     label=<<table cellspacing="5" cellborder="0" style="rounded" border="1">
                     <tr><td><IMG SCALE="TRUE" SRC="lecture01/src/main/asciidoc/images/message.png"/></td></tr>
                     <hr/>
-                    <tr><td>Номер партиции</td></tr>
+                    <tr><td>Partition number</td></tr>
                     <hr/>
-                    <tr><td>Ключ</td></tr>
+                    <tr><td>Key</td></tr>
                     <hr/>
-                    <tr><td>Значение</td></tr>
+                    <tr><td>Value</td></tr>
                     <hr/>
-                    <tr><td>Заголовки</td></tr>
+                    <tr><td>Headers</td></tr>
             </table>>;
             
   ]
 }
 ----
 
-== Анатомия сообщения
+== Anatomy of a message
 
 [graphviz,message-anatomy2,png]
 ----
@@ -302,13 +302,13 @@ digraph G {
     label=<<table cellspacing="5" cellborder="0" style="rounded" border="1">
                     <tr><td><IMG SCALE="TRUE" SRC="lecture01/src/main/asciidoc/images/message.png"/></td></tr>
                     <hr/>
-                    <tr><td bgcolor="gray">Номер партиции</td></tr>
+                    <tr><td bgcolor="gray">Partition number</td></tr>
                     <hr/>
-                    <tr><td bgcolor="gray">Ключ</td></tr>
+                    <tr><td bgcolor="gray">Key</td></tr>
                     <hr/>
-                    <tr><td>Значение</td></tr>
+                    <tr><td>Value</td></tr>
                     <hr/>
-                    <tr><td>Заголовки</td></tr>
+                    <tr><td>Headers</td></tr>
             </table>>;
             
   ]
@@ -321,7 +321,7 @@ digraph G {
 return Utils.toPositive(Utils.murmur2(keyBytes)) % numPartitions;
 ----
 
-== Чтение из Кафки
+== Reading from Kafka
 
 [graphviz,ConsumerG0,png]
 ----
@@ -344,7 +344,7 @@ digraph G {
 }
 ----
 
-== Чтение из Кафки
+== Reading from Kafka
 
 [graphviz,ConsumerG,png]
 ----
@@ -372,7 +372,7 @@ digraph G {
 }
 ----
 
-== Чтение из Кафки
+== Reading from Kafka
 [graphviz,ConsumerG2,png]
 ----
 digraph G {
@@ -408,7 +408,7 @@ digraph G {
 }
 ----
 
-== Чтение из Кафки
+== Reading from Kafka
 [graphviz,ConsumerG3,png]
 ----
 digraph G {
@@ -468,15 +468,15 @@ digraph G {
         shape = none
         label = <<table border="0" cellspacing="0">
                     <tr>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
                     </tr>
                 </table>>
     ]
@@ -504,15 +504,15 @@ digraph G {
         shape = none
         label = <<table border="0" cellspacing="0">
                     <tr>
-                    <td border="1" bgcolor="#4db34d">&nbsp;</td>
-                    <td border="1" bgcolor="#4db34d">&nbsp;</td>
-                    <td border="1" bgcolor="#4db34d">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="#4db34d"> </td>
+                    <td border="1" bgcolor="#4db34d"> </td>
+                    <td border="1" bgcolor="#4db34d"> </td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
                     </tr>
                 </table>>
     ]
@@ -540,15 +540,15 @@ digraph G {
         shape = none
         label = <<table border="0" cellspacing="0">
                     <tr>
-                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
-                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
-                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
-                    <td border="1" bgcolor="#4db34d">&nbsp;</td>
-                    <td border="1" bgcolor="#4db34d">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="#4d4cb4"> </td>
+                    <td border="1" bgcolor="#4d4cb4"> </td>
+                    <td border="1" bgcolor="#4d4cb4"> </td>
+                    <td border="1" bgcolor="#4db34d"> </td>
+                    <td border="1" bgcolor="#4db34d"> </td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
                     </tr>
                 </table>>
     ]
@@ -576,15 +576,15 @@ digraph G {
         shape = none
         label = <<table border="0" cellspacing="0">
                     <tr>
-                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
-                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
-                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
-                    <td border="1" bgcolor="#4db34d">&nbsp;</td>
-                    <td border="1" bgcolor="#4db34d">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="#4d4cb4"> </td>
+                    <td border="1" bgcolor="#4d4cb4"> </td>
+                    <td border="1" bgcolor="#4d4cb4"> </td>
+                    <td border="1" bgcolor="#4db34d"> </td>
+                    <td border="1" bgcolor="#4db34d"> </td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
                     </tr>
                 </table>>
     ]
@@ -616,15 +616,15 @@ digraph G {
         shape = none
         label = <<table border="0" cellspacing="0">
                     <tr>
-                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
-                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
-                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="#4d4cb4"> </td>
+                    <td border="1" bgcolor="#4d4cb4"> </td>
+                    <td border="1" bgcolor="#4d4cb4"> </td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
                     </tr>
                 </table>>
     ]
@@ -655,15 +655,15 @@ digraph G {
         shape = none
         label = <<table border="0" cellspacing="0">
                     <tr>
-                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
-                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
-                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
-                    <td border="1" bgcolor="#4db34d">&nbsp;</td>
-                    <td border="1" bgcolor="#4db34d">&nbsp;</td>
-                    <td border="1" bgcolor="#4db34d">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="#4d4cb4"> </td>
+                    <td border="1" bgcolor="#4d4cb4"> </td>
+                    <td border="1" bgcolor="#4d4cb4"> </td>
+                    <td border="1" bgcolor="#4db34d"> </td>
+                    <td border="1" bgcolor="#4db34d"> </td>
+                    <td border="1" bgcolor="#4db34d"> </td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
+                    <td border="1" bgcolor="white"> </td>
                     </tr>
                 </table>>
     ]
@@ -694,15 +694,15 @@ digraph G {
         shape = none
         label = <<table border="0" cellspacing="0">
                     <tr>
-                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
-                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
-                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
-                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
-                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
-                    <td border="1" bgcolor="#4d4cb4">&nbsp;</td>
-                    <td border="1" bgcolor="#4db34d">&nbsp;</td>
-                    <td border="1" bgcolor="#4db34d">&nbsp;</td>
-                    <td border="1" bgcolor="white">&nbsp;</td>
+                    <td border="1" bgcolor="#4d4cb4"> </td>
+                    <td border="1" bgcolor="#4d4cb4"> </td>
+                    <td border="1" bgcolor="#4d4cb4"> </td>
+                    <td border="1" bgcolor="#4d4cb4"> </td>
+                    <td border="1" bgcolor="#4d4cb4"> </td>
+                    <td border="1" bgcolor="#4d4cb4"> </td>
+                    <td border="1" bgcolor="#4db34d"> </td>
+                    <td border="1" bgcolor="#4db34d"> </td>
+                    <td border="1" bgcolor="white"> </td>
                     </tr>
                 </table>>
     ]
@@ -712,15 +712,15 @@ digraph G {
 ----
 
 == Compacted topics
-.Источник: Kafka Documentation
+.Source: Kafka Documentation
 image::log_compaction.png[{image-60-width}]
 
-== Как работает Retention
+== How Retention works
 
 image::tapeloop.jpg[{image-60-width}]
 
 
-== Потоковая обработка данных: архитектура
+== Stream data processing: architecture
 
 [graphviz,streaming-arch1,png]
 ----
@@ -743,14 +743,14 @@ digraph G {
 }
 ----
 
-== Где нужны потоковые системы?
+== Where are streaming systems needed?
 
-* Мониторинг! Логи!
-* Отслеживание действий пользователей
-* Выявление аномалий (в т. ч. попыток мошенничества)
+* Monitoring! Logs!
+* Track user activity
+* Anomaly detection (including fraud detection)
 
 [%notitle]
-== Всюду, где ценность/влияние данных уменьшается с их «возрастом»
+== Wherever the value/impact of data decreases with its "age"
 
 [cols="1a,2a"]
 |===
@@ -760,7 +760,7 @@ image::streams-ok.svg[{image-90-width}]
 |===
 
 [%notitle]
-== Где использовать Kafka не очень удобно
+== Where Kafka is not very convenient
 
 [cols="1a,2a"]
 |===
@@ -769,7 +769,7 @@ image::streams-ok.svg[{image-90-width}]
 image::streams-noway.svg[{image-90-width}]
 |===
 
-== Существующие фреймворки потоковой обработки
+== Existing stream processing frameworks
 
 [cols=".^1a,.^1a,.^1a,.^1a,.^1a"]
 |===
@@ -780,41 +780,41 @@ image::streams-noway.svg[{image-90-width}]
 |image::kafka-logo.svg[]
 |===
 
-== Наш план
+== Our plan
 
 [cols="20a,60a,20a"]
 |===
 .^|image::kafka.jpg[]
 .^|
 
-Лекция 1.
+Lecture 1.
 
-. [line-through]#Kafka (краткое напоминание) и Data Streaming#
-. *Конфигурация приложения. Простые (stateless) трансформации*
-. Трансформации с использованием локального состояния
+. [line-through]#Kafka (brief reminder) and Data Streaming#
+. *Application configuration. Stateless transformations*
+. Transformations with local state
 
-Лекция 2.
+Lecture 2.
 
-. Дуализм «поток—таблица» и табличные join-ы
-. Время и оконные операции
+. Stream-table dualism and Table joins
+. Time and window operations
 
 .^|image::kafka.jpg[]
 |===
 
 
-== Kafka Streams API: общая структура KStreams-приложения
+== Kafka Streams API: the general structure of a KStreams application
 
 [source,java]
 ----
 StreamsConfig config = ...;
-//Здесь устанавливаем всякие опции
+// Here we set all sorts of options
 
 Topology topology = new StreamsBuilder()
-//Здесь строим топологию
+//Here we build the topology
 ....build();
 ----
 
-== Kafka Streams API: общая структура KStreams-приложения
+== Kafka Streams API: the general structure of a KStreams application
 Топология -- конвейер обработчиков:
 
 [graphviz,"topology-sample.png"]
@@ -845,7 +845,7 @@ e->g;
 }
 ----
 
-== Преобразуем поток в поток
+== Convert a stream to a stream
 
 [cols="^40a,60a"]
 |===
@@ -866,11 +866,11 @@ Stream<SquashedBlock> squashedStream =
   blocksStream.map(Block::squash);
 ----
 
-(Автор анимаций -- Тагир Валеев, движущиеся картинки см. https://stackoverflow.com/questions/35150231/java-streams-lazy-vs-fusion-vs-short-circuiting[здесь])
+(The author of the animations is Tagir Valeev, see moving pictures https://stackoverflow.com/questions/35150231/java-streams-lazy-vs-fusion-vs-short-circuiting[here])
 |===
 
 
-== Фильтруем
+== Filtering
 
 [cols="^40a,60a"]
 |===
@@ -889,7 +889,7 @@ Stream<SquashedBlock> filteredStream =
 ----
 |===
 
-== Отображаем в консоль (терминальная операция)
+== Display to the console (terminal operation)
 
 [cols="^40a,60a"]
 |===
@@ -907,7 +907,7 @@ filteredStream
 |===
 
 
-== Всё вместе в одну строку
+== All together in one line
 
 [cols="^40a,60a"]
 |===
@@ -922,27 +922,27 @@ blocks.stream()
 ----
 |===
 
-== Ничего не напоминает?
+== It reminds us of something!
 
-«Соединить два файла, привести их строки к lowercase, отсортировать, вывести три последних строки в алфавитном порядке»
+"Concatenate two files, convert their lines to lowercase, sort, display the last three lines in alphabetical order"
 
 [source,sh]
 cat file1 file2 | tr "[A-Z]" "[a-z]" | sort | tail -3
 
 
-== Kafka Streams API: общая структура KStreams-приложения
+== Kafka Streams API: the general structure of a KStreams application
 
 [source,java]
 ----
 StreamsConfig config = ...;
-//Здесь устанавливаем всякие опции
+// Here we set all sorts of options
 
 Topology topology = new StreamsBuilder()
-//Здесь строим топологию
+//Here we build the topology
 ....build(); 
 
 
-//Это за нас делает SPRING-KAFKA
+//Spring-KAFKA does it for us
 KafkaStreams streams = new KafkaStreams(topology, config); 
 streams.start(); 
 ...
@@ -952,30 +952,30 @@ streams.close();
 
 
 
-== В Спринге достаточно определить две вещи
+== In Spring, it is enough to define two things
 
 * `@Bean KafkaStreamsConfiguration`
 * `@Bean Topology`
 
-== Легенда
+== Our story
 
 [cols="30a,70a"]
 |===
 .^|image::betting.jpg[]
 .^|
-* Идут футбольные матчи (меняется счёт)
-* Делаются ставки: H, D, A.
-* Поток ставок, ключ: `Cyprus-Belgium:A`
-* Поток ставок, значение:
+* There are football matches (the score changes)
+* Bets are placed: H, D, A.
+* Bet stream, key: 'Cyprus-Belgium:A'
+* Bet stream, value:
 [source,java]
 ----
 class Bet {
-  String bettor;   //John Doe
-  String match;    //Cyprus-Belgium
-  Outcome outcome; //A (or H or D)
-  long amount;     //100
-  double odds;     //1.7
-  long timestamp;  //1554215083998
+  String bettor;   John Doe
+  String match;    Cyprus-Belgium
+  Outcome outcome; A (or H or D)
+  long amount;     100
+  double odds;     1.7
+  long timestamp;  1554215083998
 }
 ----
 |===
@@ -985,16 +985,16 @@ class Bet {
 
 [source,java]
 ----
-//ВАЖНО!
+IMPORTANTLY!
 @Bean(name = 
     KafkaStreamsDefaultConfiguration
-                .DEFAULT_STREAMS_CONFIG_BEAN_NAME)
+                . DEFAULT_STREAMS_CONFIG_BEAN_NAME)
 public KafkaStreamsConfiguration getStreamsConfig() {
     Map<String, Object> props = new HashMap<>();
-    //ВАЖНО!
+    // IMPORTANT!
     props.put(StreamsConfig.APPLICATION_ID_CONFIG,
         "stateless-demo-app");
-    //ВАЖНО!
+    // IMPORTANT!
     props.put(StreamsConfig.NUM_STREAM_THREADS_CONFIG, 4);
     props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
     ...
@@ -1046,9 +1046,9 @@ public Topology createTopology(StreamsBuilder streamsBuilder) {
 ----
 
 
-== Три строчки кода, и что тут такого?
+== Three lines of code, and what's the big deal?
 
-* Больше сообщений в секунду? -- больше машин с одинаковым  `application.id`!
+* More messages per second? -- more instances with the same 'application.id'!
 
 [graphviz,w1,png]
 ----
@@ -1077,7 +1077,7 @@ digraph G {
 }
 ----
 
-== Добавляем ноды
+== Adding nodes
 
 [graphviz,w2,png]
 ----
@@ -1107,7 +1107,7 @@ digraph G {
 }
 ----
 
-== Ограничены только числом партиций
+== Limited only by the number of partitions
 
 [graphviz,w4,png]
 ----
@@ -1147,7 +1147,7 @@ digraph G {
 }
 ----
 
-== TopologyTestDriver: создание
+== TopologyTestDriver: creating
 
 [source,java]
 ----
@@ -1160,7 +1160,7 @@ TopologyTestDriver topologyTestDriver =
                                config.asProperties());
 ----
 
-== TestInput/OutputTopic: создание
+== TestInput/OutputTopic: creating
 [source,java]
 ----
 TestInputTopic<String, Bet> inputTopic =
@@ -1173,7 +1173,7 @@ TestOutputTopic<String, Long> outputTopic =
             new JsonSerde<>(Long.class).deserializer());
 ----
 
-== TopologyTestDriver: использование
+== TopologyTestDriver: Usage
 
 [source,java]
 ----
@@ -1187,7 +1187,7 @@ Bet bet = Bet.builder()
 inputTopic.pipeInput(bet.key(), bet);
 ----
 
-== TopologyTestDriver: использование
+== TopologyTestDriver: Usage
 
 [source,java]
 ----
@@ -1197,14 +1197,14 @@ assertEquals(bet.key(), record.key());
 assertEquals(170L, record.value().longValue());
 ----
 
-== Если что-то пошло не так...
+== If something goes wrong...
 
-* `default.deserialization.exception.handler` -- не смогли десериализовать
-* `default.production.exception.handler` -- брокер отверг сообщение (например, оно слишком велико)
+* `default.deserialization.exception.handler` -- could not deserialize
+* `default.production.exception.handler` -- the broker rejected the message (for example, it is too large)
 
 image::failure.jpg[{image-50-width}]
 
-== Если всё совсем развалилось
+== If everything fell apart completely
 
 [source,java]
 ----
@@ -1217,9 +1217,9 @@ streams.setUncaughtExceptionHandler(
 image::uncaughtexception.jpg[{image-100-width}]
 
 [.fragment]
-В Спринге всё сложнее (см. код)
+In Spring, things are more complicated (see code)
 
-== Состояния приложения KafkaStreams
+== KafkaStreams application states
 
 [graphviz, "kstreamsstates.png"]
 -----
@@ -1241,15 +1241,15 @@ digraph G {
 }
 -----
 
-== Что ещё нужно знать про stateless-трансформации?
+== What else do I need to know about stateless transformations?
 
-== Простое ветвление стримов
-Java-стримы так не могут:
+== Easy branching of streams
+Java streams can't do that:
 [source,java]
 ----
 KStream<..> foo = ...
-KStream<..> bar = foo.mapValues(…).map... to...
-Kstream<..> baz = foo.filter(…).map... forEach...
+KStream<..> bar = foo.mapValues(...). map... to...
+Kstream<..> baz = foo.filter(...). map... forEach...
 ----
 [graphviz, "simplebranch.png"]
 -----
@@ -1264,9 +1264,9 @@ A -> C -> CF
 }
 -----
 
-== Ветвление стримов по условию
+== Branching streams by condition
 
-С версии 2.8:
+From Version 2.8:
 [source,java]
 ----
 gain.split()
@@ -1289,7 +1289,7 @@ Branch -> C -> CF
 }
 -----
 
-== Простое слияние
+== Simple merge
 [source,java]
 ----
 KStream<String, Integer> foo = ... 
@@ -1310,31 +1310,31 @@ B -> C
 }
 -----
 
-== Наш план
+== Our plan
 
 [cols="20a,60a,20a"]
 |===
 .^|image::kafka.jpg[]
 .^|
 
-Лекция 1.
+Lecture 1.
 
-. [line-through]#Kafka (краткое напоминание) и Data Streaming#
-. [line-through]#Конфигурация приложения. Простые (stateless) трансформации#
-. *Трансформации с использованием локального состояния*
+. [line-through]#Kafka (brief reminder) and Data Streaming#
+. [line-through]#Application configuration. Stateless transformations#
+. *Transformations with local state*
 
-Лекция 2.
+Lecture 2.
 
-. Дуализм «поток—таблица» и табличные join-ы
-. Время и оконные операции
+. Stream-table dualism and Table joins
+. Time and window operations
 
 .^|image::kafka.jpg[]
 |===
 
 
-== Локальное состояние
+== Local state
 
-Facebook's RocksDB -- что это и зачем?
+Facebook's RocksDB -- what is it and what is it for?
 
 [.custom-style]
 [cols="25a,75a"]
@@ -1347,16 +1347,16 @@ Facebook's RocksDB -- что это и зачем?
 * Persistent, optimized for SSD
 |===
 
-== RocksDB похож на `TreeMap<K,V>`
+== RocksDB is similar to 'TreeMap<K,V>'
 
-* Сохранение K,V в бинарном формате
-* Лексикографическая сортировка
+* Save K,V in binary format
+* Lexicographic sorting
 * Iterator (snapshot view)
-* Удаление диапазона (deleteRange)
+* Delete Range (deleteRange)
 
-== Пишем “Bet Totalling App”
+== Writing "Bet Totalling App"
 
-Какова сумма выплат по сделанным ставкам, если сыграет исход?
+What is the payout amount for bets made if the outcome is happened?
 
 [graphviz, "counting-topology.png"]
 -----
@@ -1384,7 +1384,7 @@ KStream<String, Long> counted =
         .transformStream(streamsBuilder, input);
 ----
 
-== Суммирование ставок
+== Bets totalling
 [source,java]
 ----
 @Override
@@ -1399,7 +1399,7 @@ public KeyValue<String, Long> transform(String key, Bet value,
 }
 ----
 
-== StateStore доступен в тестах
+== StateStore is available in tests
 [source,java]
 ----
 @Test
@@ -1417,11 +1417,11 @@ void testTopology() {
 ----
 
 
-== Демо: Ребалансировка / репликация
+== Demo: Rebalancing / Replication
 
-* Ребалансировка / репликация партиций state при запуске / выключении обработчиков.
+* Rebalance/replication of partitions when starting/stopping workers.
 
-== Сохранение локального состояния в{nbsp}топик
+== Replication of local state into a{nbsp}topic
 
 [source,code]
 ----
@@ -1449,7 +1449,7 @@ Changelog[shape="box"; style="dashed"; width="1.5"]
 }
 -----
 
-== Партиционирование и local state
+== Partitioning and local state
 [graphviz, "local-partitioning-oneworker.png"]
 -----
 digraph D {
@@ -1509,7 +1509,7 @@ digraph D {
 } 
 -----
 
-== Партиционирование и local state
+== Partitioning and local state
 [graphviz, "local-partitioning-1.png"]
 -----
 digraph D {
@@ -1585,7 +1585,7 @@ digraph D {
 } 
 -----
 
-== Партиционирование и local state
+== Partitioning and local state
 [graphviz, "local-partitioning-2.png"]
 -----
 digraph D {
@@ -1670,7 +1670,7 @@ digraph D {
 } 
 -----
 
-== Партиционирование и local state
+== Partitioning and local state
 [graphviz, "local-partitioning-25.png"]
 -----
 digraph D {
@@ -1760,7 +1760,7 @@ digraph D {
 } 
 -----
 
-== Партиционирование и local state
+== Partitioning and local state
 [graphviz, "local-partitioning-3.png"]
 -----
 digraph D {
@@ -1850,7 +1850,7 @@ digraph D {
 } 
 -----
 
-== Партиционирование и local state
+== Partitioning and local state
 [graphviz, "local-partitioning-4.png"]
 -----
 digraph D {
@@ -1946,7 +1946,7 @@ digraph D {
 } 
 -----
 
-== Партиционирование и local state
+== Partitioning and local state
 [graphviz, "local-partitioning-5.png"]
 -----
 digraph D {
@@ -2030,7 +2030,7 @@ digraph D {
 } 
 -----
 
-== Партиционирование и local state
+== Partitioning and local state
 [graphviz, "local-partitioning-6.png"]
 -----
 digraph D {
@@ -2106,7 +2106,7 @@ digraph D {
 } 
 -----
 
-== Репартиционирование
+== Repartition
 
 [graphviz, "through.png"]
 -----
@@ -2123,11 +2123,11 @@ digraph G
 }
 -----
 
-* Явное при помощи +
+* Explicit using +
 `repartition(Repartitioned<K, V> repartitioned)`
-* Неявное при операциях, меняющих ключ + stateful-операциях
+* Implicit in key change operations + stateful operations
 
-== Дублирующееся неявное репартиционирование
+== Duplicate implicit repartitioning
 [source,java]
 ----
 KStream source = builder.stream("topic1");
@@ -2160,12 +2160,12 @@ throughJoin [shape="record"; label="{ | | | | }"; height = "0.2"]
 }
 -----
 
-== Избавляемся от дублирующегося репартиционирования
+== Getting rid of duplicate repartitioning
 
 [source,java]
 ----
 KStream source = builder.stream("topic1");
-KStream shuffled = source.map(...).repartition(...);
+KStream shuffled = source.map(...). repartition(...);
 KTable counts = shuffled.groupByKey().aggregate(...);
 KStream sink = shuffled.leftJoin(counts, ...);
 ----
@@ -2193,7 +2193,7 @@ throughAgg [shape="record"; label="{ | | | | }"; height = "0.2"]
 }
 -----
 
-== Ключ лучше лишний раз не трогать
+== It is better not to touch the key when not needed
 
 *Key only:* `selectKey`
 
