@@ -25,6 +25,8 @@ lecture02/src/main/asciidoc/*.png
 /*.mp4
 /*.bat
 
+*.bak
+
 #i18n gettext
 *.mo
 *.po~

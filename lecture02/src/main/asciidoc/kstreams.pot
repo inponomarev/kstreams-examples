@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-17 02:36+0300\n"
+"POT-Creation-Date: 2022-07-17 03:32+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -416,11 +416,16 @@ msgctxt "kstreams.adoc:242"
 msgid "          }"
 msgstr ""
 
-#: kstreams.adoc:251
+#: kstreams.adoc:246
 msgid ""
 "          a->a1[style=\"dashed\" dir=\"none\"];\n"
 "          b->b1[style=\"dashed\" dir=\"none\"];\n"
-"          c->c1[style=\"dashed\" dir=\"none\"];\n"
+"          c->c1[style=\"dashed\" dir=\"none\"];"
+msgstr ""
+
+#: kstreams.adoc:252
+msgctxt "kstreams.adoc:252"
+msgid ""
 "    }\n"
 "    subgraph cluster_p2 {\n"
 "      label = \"Worker 2\";\n"
@@ -428,12 +433,12 @@ msgid ""
 "              label = \"Partition 3\""
 msgstr ""
 
-#: kstreams.adoc:253
-msgctxt "kstreams.adoc:253"
+#: kstreams.adoc:254
+msgctxt "kstreams.adoc:254"
 msgid "              d[label = \"D\"];"
 msgstr ""
 
-#: kstreams.adoc:260
+#: kstreams.adoc:261
 msgid ""
 "          }\n"
 "          subgraph cluster_p2{\n"
@@ -442,12 +447,12 @@ msgid ""
 "              d1[label = \"D\"];"
 msgstr ""
 
-#: kstreams.adoc:263
-msgctxt "kstreams.adoc:263"
+#: kstreams.adoc:264
+msgctxt "kstreams.adoc:264"
 msgid "          }"
 msgstr ""
 
-#: kstreams.adoc:269
+#: kstreams.adoc:270
 msgid ""
 "          d->d1[style=\"dashed\" dir=\"none\"];\n"
 "    }\n"
@@ -456,15 +461,15 @@ msgid ""
 "-----"
 msgstr ""
 
-#: kstreams.adoc:271
+#: kstreams.adoc:272
 msgid "== Несовпадение количества партиций"
 msgstr ""
 
-#: kstreams.adoc:273
+#: kstreams.adoc:274
 msgid "Join не работает (Runtime Exception)"
 msgstr ""
 
-#: kstreams.adoc:293
+#: kstreams.adoc:294
 msgid ""
 "[graphviz, \"copart-diff.png\"]\n"
 "-----\n"
@@ -487,24 +492,24 @@ msgid ""
 "          }"
 msgstr ""
 
-#: kstreams.adoc:296
-msgctxt "kstreams.adoc:296"
+#: kstreams.adoc:297
+msgctxt "kstreams.adoc:297"
 msgid ""
 "        subgraph cluster_pp1{\n"
 "              label = \"Partition 1\""
 msgstr ""
 
-#: kstreams.adoc:299
-msgctxt "kstreams.adoc:299"
+#: kstreams.adoc:300
+msgctxt "kstreams.adoc:300"
 msgid "              a [label = \"A\"];"
 msgstr ""
 
-#: kstreams.adoc:301
-msgctxt "kstreams.adoc:301"
+#: kstreams.adoc:302
+msgctxt "kstreams.adoc:302"
 msgid "          }"
 msgstr ""
 
-#: kstreams.adoc:306
+#: kstreams.adoc:307
 msgid ""
 "          subgraph cluster_pa2{\n"
 "              label = \"Partition 2\"\n"
@@ -512,14 +517,15 @@ msgid ""
 "              c [label = \"C\" color=\"red\"];"
 msgstr ""
 
-#: kstreams.adoc:310
+#: kstreams.adoc:311
 msgid ""
 "          }\n"
 "          a->a1[style=\"dashed\" dir=\"none\"];\n"
 "          b->b1[style=\"dashed\" dir=\"none\"];"
 msgstr ""
 
-#: kstreams.adoc:317
+#: kstreams.adoc:318
+msgctxt "kstreams.adoc:318"
 msgid ""
 "    }\n"
 "    subgraph cluster_p2 {\n"
@@ -528,12 +534,12 @@ msgid ""
 "              label = \"Partition 3\""
 msgstr ""
 
-#: kstreams.adoc:319
-msgctxt "kstreams.adoc:319"
+#: kstreams.adoc:320
+msgctxt "kstreams.adoc:320"
 msgid "              d[label = \"D\"];"
 msgstr ""
 
-#: kstreams.adoc:325
+#: kstreams.adoc:326
 msgid ""
 "          }\n"
 "          subgraph cluster_pa3{\n"
@@ -541,13 +547,13 @@ msgid ""
 "              labelloc = \"b\""
 msgstr ""
 
-#: kstreams.adoc:328
+#: kstreams.adoc:329
 msgid ""
 "              d1[label = \"D\"];\n"
 "              c1[label = \"C\" color =\"red\"];"
 msgstr ""
 
-#: kstreams.adoc:336
+#: kstreams.adoc:337
 msgid ""
 "          }\n"
 "          c->c1[ dir=\"none\" color=\"red\"];\n"
@@ -558,15 +564,15 @@ msgid ""
 "-----"
 msgstr ""
 
-#: kstreams.adoc:338
+#: kstreams.adoc:339
 msgid "== Несовпадение алгоритма партицирования"
 msgstr ""
 
-#: kstreams.adoc:340
+#: kstreams.adoc:341
 msgid "Join не работает молча!"
 msgstr ""
 
-#: kstreams.adoc:357
+#: kstreams.adoc:358
 msgid ""
 "[graphviz, \"copart-diff-algorithm.png\"]\n"
 "-----\n"
@@ -586,36 +592,36 @@ msgid ""
 "              labelloc = \"b\""
 msgstr ""
 
-#: kstreams.adoc:360
+#: kstreams.adoc:361
 msgid ""
 "              b1 [label = \"B\" color=\"red\"]\n"
 "              a1 [label = \"A\"]"
 msgstr ""
 
-#: kstreams.adoc:362
-msgctxt "kstreams.adoc:362"
+#: kstreams.adoc:363
+msgctxt "kstreams.adoc:363"
 msgid "          }"
 msgstr ""
 
-#: kstreams.adoc:365
-msgctxt "kstreams.adoc:365"
+#: kstreams.adoc:366
+msgctxt "kstreams.adoc:366"
 msgid ""
 "        subgraph cluster_pp1{\n"
 "              label = \"Partition 1\""
 msgstr ""
 
-#: kstreams.adoc:368
+#: kstreams.adoc:369
 msgid ""
 "               c[label = \"C\" color= \"red\"];\n"
 "              a [label = \"A\"];"
 msgstr ""
 
-#: kstreams.adoc:370
-msgctxt "kstreams.adoc:370"
+#: kstreams.adoc:371
+msgctxt "kstreams.adoc:371"
 msgid "          }"
 msgstr ""
 
-#: kstreams.adoc:378
+#: kstreams.adoc:379
 msgid ""
 "    }\n"
 "    subgraph cluster_p2 {\n"
@@ -626,7 +632,7 @@ msgid ""
 "              d[label = \"D\"];"
 msgstr ""
 
-#: kstreams.adoc:386
+#: kstreams.adoc:387
 msgid ""
 "          }\n"
 "          subgraph cluster_p2{\n"
@@ -636,7 +642,7 @@ msgid ""
 "              c1[label = \"C\" color = \"red\"];"
 msgstr ""
 
-#: kstreams.adoc:396
+#: kstreams.adoc:397
 msgid ""
 "          }\n"
 "          a->a1[style=\"dashed\" dir=\"none\"];\n"
@@ -649,15 +655,15 @@ msgid ""
 "-----"
 msgstr ""
 
-#: kstreams.adoc:398
+#: kstreams.adoc:399
 msgid "== GlobalKTable"
 msgstr ""
 
-#: kstreams.adoc:400
+#: kstreams.adoc:401
 msgid "Реплицируется всюду целиком"
 msgstr ""
 
-#: kstreams.adoc:405
+#: kstreams.adoc:406
 msgid ""
 "[source,java]\n"
 "----\n"
@@ -665,7 +671,7 @@ msgid ""
 "----"
 msgstr ""
 
-#: kstreams.adoc:421
+#: kstreams.adoc:422
 msgid ""
 "[graphviz, \"globalktable.png\"]\n"
 "-----\n"
@@ -684,7 +690,7 @@ msgid ""
 "              label = \"\""
 msgstr ""
 
-#: kstreams.adoc:429
+#: kstreams.adoc:430
 msgid ""
 "              b1 [label = \"B\"]\n"
 "              a1 [label = \"A\"]\n"
@@ -695,21 +701,21 @@ msgid ""
 "          }"
 msgstr ""
 
-#: kstreams.adoc:432
-msgctxt "kstreams.adoc:432"
+#: kstreams.adoc:433
+msgctxt "kstreams.adoc:433"
 msgid ""
 "        subgraph cluster_pp1{\n"
 "              label = \"Partition 1\""
 msgstr ""
 
-#: kstreams.adoc:437
+#: kstreams.adoc:438
 msgid ""
 "              a [label = \"A\"];\n"
 "              b [label = \"B\"];\n"
 "          }"
 msgstr ""
 
-#: kstreams.adoc:444
+#: kstreams.adoc:445
 msgid ""
 "    }\n"
 "    subgraph cluster_p2 {\n"
@@ -719,12 +725,12 @@ msgid ""
 "                c[label = \"C\"];"
 msgstr ""
 
-#: kstreams.adoc:446
-msgctxt "kstreams.adoc:446"
+#: kstreams.adoc:447
+msgctxt "kstreams.adoc:447"
 msgid "              d[label = \"D\"];"
 msgstr ""
 
-#: kstreams.adoc:459
+#: kstreams.adoc:460
 msgid ""
 "          }\n"
 "          subgraph cluster_p2{\n"
@@ -738,7 +744,7 @@ msgid ""
 "              d1->bbb [style= \"invis\"];"
 msgstr ""
 
-#: kstreams.adoc:469
+#: kstreams.adoc:470
 msgid ""
 "          }\n"
 "          a->a1[style=\"dashed\" dir=\"none\"];\n"
@@ -751,11 +757,11 @@ msgid ""
 "-----"
 msgstr ""
 
-#: kstreams.adoc:471
+#: kstreams.adoc:472
 msgid "== Foreign Key Joins: join + `ForeignKeyExtractor`"
 msgstr ""
 
-#: kstreams.adoc:480
+#: kstreams.adoc:481
 msgid ""
 "[graphviz, \"fkjoin.png\"]\n"
 "-----\n"
@@ -767,7 +773,7 @@ msgid ""
 "{rank=same; Join1; Join2; Store1;Store2};"
 msgstr ""
 
-#: kstreams.adoc:492
+#: kstreams.adoc:493
 msgid ""
 "Store1 [shape=\"cylinder\"; label=\"Local Store\"; fixedsize=\"true\"; width="
 "\"1.7\"]\n"
@@ -786,17 +792,17 @@ msgid ""
 " \"]"
 msgstr ""
 
-#: kstreams.adoc:494
+#: kstreams.adoc:495
 msgid "subscribe->update[style=invis];"
 msgstr ""
 
-#: kstreams.adoc:497
+#: kstreams.adoc:498
 msgid ""
 "}\n"
 "-----"
 msgstr ""
 
-#: kstreams.adoc:502
+#: kstreams.adoc:503
 msgid ""
 "== Операции между стримами и таблицами: сводка\n"
 ".Источник: https://kafka.apache.org/20/documentation/streams/developer-guide"
@@ -804,52 +810,52 @@ msgid ""
 "image::streams-stateful_operations.png[{image-50-width}]"
 msgstr ""
 
-#: kstreams.adoc:504
-msgctxt "kstreams.adoc:504"
+#: kstreams.adoc:505
+msgctxt "kstreams.adoc:505"
 msgid "== Виды Join-ов: Table-Table"
 msgstr ""
 
-#: kstreams.adoc:506
+#: kstreams.adoc:507
 msgid "image::table-table.svg[{image-40-width}]"
 msgstr ""
 
-#: kstreams.adoc:508
-msgctxt "kstreams.adoc:508"
+#: kstreams.adoc:509
+msgctxt "kstreams.adoc:509"
 msgid "== Виды Join-ов: Table-Table"
 msgstr ""
 
-#: kstreams.adoc:510
-msgctxt "kstreams.adoc:510"
+#: kstreams.adoc:511
+msgctxt "kstreams.adoc:511"
 msgid "image::table-table1.svg[{image-40-width}]"
 msgstr ""
 
-#: kstreams.adoc:512
-msgctxt "kstreams.adoc:512"
+#: kstreams.adoc:513
+msgctxt "kstreams.adoc:513"
 msgid "== Виды Join-ов: Table-Table"
 msgstr ""
 
-#: kstreams.adoc:514
-msgctxt "kstreams.adoc:514"
+#: kstreams.adoc:515
+msgctxt "kstreams.adoc:515"
 msgid "image::table-table2.svg[{image-40-width}]"
 msgstr ""
 
-#: kstreams.adoc:516
+#: kstreams.adoc:517
 msgid "== Виды Join-ов: Stream-Table"
 msgstr ""
 
-#: kstreams.adoc:518
+#: kstreams.adoc:519
 msgid "image::stream-table.svg[{image-40-width}]"
 msgstr ""
 
-#: kstreams.adoc:520
+#: kstreams.adoc:521
 msgid "== Виды Join-ов: Stream-Stream"
 msgstr ""
 
-#: kstreams.adoc:522
+#: kstreams.adoc:523
 msgid "image::stream-stream.svg[{image-40-width}]"
 msgstr ""
 
-#: kstreams.adoc:529
+#: kstreams.adoc:530
 msgid ""
 "== Наш план\n"
 "[cols=\"20a,60a,20a\"]\n"
@@ -858,13 +864,13 @@ msgid ""
 ".^|"
 msgstr ""
 
-#: kstreams.adoc:531
-msgctxt "kstreams.adoc:531"
+#: kstreams.adoc:532
+msgctxt "kstreams.adoc:532"
 msgid "Лекция 1."
 msgstr ""
 
-#: kstreams.adoc:535
-msgctxt "kstreams.adoc:535"
+#: kstreams.adoc:536
+msgctxt "kstreams.adoc:536"
 msgid ""
 ". [line-through]#Kafka (краткое напоминание) и Data Streaming#\n"
 ". [line-through]#Конфигурация приложения. Простые (stateless) трансформации#"
@@ -872,33 +878,33 @@ msgid ""
 ". [line-through]#Трансформации с использованием локального состояния#"
 msgstr ""
 
-#: kstreams.adoc:537
-msgctxt "kstreams.adoc:537"
+#: kstreams.adoc:538
+msgctxt "kstreams.adoc:538"
 msgid "Лекция 2."
 msgstr ""
 
-#: kstreams.adoc:540
+#: kstreams.adoc:541
 msgid ""
 ". [line-through]#Дуализм «поток—таблица» и табличные join-ы#\n"
 ". *Время и оконные операции*"
 msgstr ""
 
-#: kstreams.adoc:543
-msgctxt "kstreams.adoc:543"
+#: kstreams.adoc:544
+msgctxt "kstreams.adoc:544"
 msgid ""
 ".^|image::kafka.jpg[]\n"
 "|==="
 msgstr ""
 
-#: kstreams.adoc:547
+#: kstreams.adoc:548
 msgid "== Сохранение Timestamped-значений в{nbsp}RocksDB"
 msgstr ""
 
-#: kstreams.adoc:549
+#: kstreams.adoc:550
 msgid "WindowKeySchema.java"
 msgstr ""
 
-#: kstreams.adoc:565
+#: kstreams.adoc:566
 msgid ""
 "[source,java]\n"
 "----\n"
@@ -917,11 +923,11 @@ msgid ""
 "----"
 msgstr ""
 
-#: kstreams.adoc:567
+#: kstreams.adoc:568
 msgid "== Быстрое извлечение значений по ключу из диапазона времени"
 msgstr ""
 
-#: kstreams.adoc:581
+#: kstreams.adoc:582
 msgid ""
 "[graphviz, \"timestamped-record.png\"]\n"
 "-----\n"
@@ -938,26 +944,26 @@ msgid ""
 "-----"
 msgstr ""
 
-#: kstreams.adoc:583
+#: kstreams.adoc:584
 msgid "== Демо: Windowed Joins"
 msgstr ""
 
-#: kstreams.adoc:586
+#: kstreams.adoc:587
 msgid ""
 "* «Послегольщик» — игрок, пытающийся протолкнуть правильную ставку в момент "
 "смены счёта в матче\n"
 "* Штамп времени ставки и события смены счёта должны «почти совпадать»."
 msgstr ""
 
-#: kstreams.adoc:588
+#: kstreams.adoc:589
 msgid "image::livebet.jpg[{image-50-width}]"
 msgstr ""
 
-#: kstreams.adoc:590
+#: kstreams.adoc:591
 msgid "== Время, вперёд!"
 msgstr ""
 
-#: kstreams.adoc:597
+#: kstreams.adoc:598
 msgid ""
 "[source,java]\n"
 "----\n"
@@ -967,20 +973,20 @@ msgid ""
 "            .withTimestampExtractor("
 msgstr ""
 
-#: kstreams.adoc:600
+#: kstreams.adoc:601
 msgid ""
 "                (record, previousTimestamp) ->\n"
 "                    ((Bet) record.value()).getTimestamp()"
 msgstr ""
 
-#: kstreams.adoc:604
+#: kstreams.adoc:605
 msgid ""
 "            ));\n"
 "----\n"
 "(Ещё время можно извлечь из WallClock и RecordMetadata.)"
 msgstr ""
 
-#: kstreams.adoc:610
+#: kstreams.adoc:611
 msgid ""
 "== Демо: Windowed Joins\n"
 "По событию смены счёта понимаем, какая ставка будет «правильной»:\n"
@@ -988,14 +994,14 @@ msgid ""
 "----"
 msgstr ""
 
-#: kstreams.adoc:614
+#: kstreams.adoc:615
 msgid ""
 "Score current = Optional.ofNullable(stateStore.get(key))\n"
 "                .orElse(new Score());\n"
 "stateStore.put(key, value.getScore());"
 msgstr ""
 
-#: kstreams.adoc:620
+#: kstreams.adoc:621
 msgid ""
 "Outcome currenOutcome = \n"
 "    value.getScore().getHome() > current.getHome() \n"
@@ -1004,7 +1010,7 @@ msgid ""
 "----"
 msgstr ""
 
-#: kstreams.adoc:626
+#: kstreams.adoc:627
 msgid ""
 "== Демо: Windowed Joins\n"
 "[source, java]\n"
@@ -1013,7 +1019,7 @@ msgid ""
 "    (bet, sureBet) -> "
 msgstr ""
 
-#: kstreams.adoc:634
+#: kstreams.adoc:635
 msgid ""
 "    String.format(\"%s %dms before goal\", \n"
 "                bet.getBettor(),\n"
@@ -1025,11 +1031,11 @@ msgid ""
 "----"
 msgstr ""
 
-#: kstreams.adoc:637
+#: kstreams.adoc:638
 msgid "== Tumbling window"
 msgstr ""
 
-#: kstreams.adoc:646
+#: kstreams.adoc:647
 msgid ""
 "[source,java]\n"
 "----\n"
@@ -1041,7 +1047,7 @@ msgid ""
 "image::tumbling-window.png[{image-70-width}]"
 msgstr ""
 
-#: kstreams.adoc:653
+#: kstreams.adoc:654
 msgid ""
 "== Tumbling window\n"
 "[source,java]\n"
@@ -1051,11 +1057,11 @@ msgid ""
 "        .windowedBy(TimeWindows.of(Duration.ofSeconds(20)));"
 msgstr ""
 
-#: kstreams.adoc:655
+#: kstreams.adoc:656
 msgid "KTable<Windowed<...>, Long> count = windowed.count();"
 msgstr ""
 
-#: kstreams.adoc:664
+#: kstreams.adoc:665
 msgid ""
 "/*\n"
 "* Windowed<K> interface:\n"
@@ -1067,7 +1073,7 @@ msgid ""
 "----"
 msgstr ""
 
-#: kstreams.adoc:675
+#: kstreams.adoc:676
 msgid ""
 "== Hopping Window\n"
 "[source,java]\n"
@@ -1081,7 +1087,7 @@ msgid ""
 "image::hopping-window.png[{image-50-width}]"
 msgstr ""
 
-#: kstreams.adoc:684
+#: kstreams.adoc:685
 msgid ""
 "== Session Window\n"
 "[source,java]\n"
@@ -1093,19 +1099,19 @@ msgid ""
 "image::streams-session-windows-02.png[{image-50-width}]"
 msgstr ""
 
-#: kstreams.adoc:686
+#: kstreams.adoc:687
 msgid "== Window Retention time vs. Grace Time"
 msgstr ""
 
-#: kstreams.adoc:688
+#: kstreams.adoc:689
 msgid "image::window-retention.png[]"
 msgstr ""
 
-#: kstreams.adoc:691
+#: kstreams.adoc:692
 msgid "== Иногда нужны не окна, а Punctuator"
 msgstr ""
 
-#: kstreams.adoc:702
+#: kstreams.adoc:703
 msgid ""
 "[.custom-style]\n"
 "[cols=\"30a,70a\"]\n"
@@ -1119,7 +1125,7 @@ msgid ""
 "    public void init(ProcessorContext context) {"
 msgstr ""
 
-#: kstreams.adoc:707
+#: kstreams.adoc:708
 msgid ""
 "        context.schedule(\n"
 "            Duration.ofSeconds(10),\n"
@@ -1127,20 +1133,20 @@ msgid ""
 "            timestamp->{. . .});"
 msgstr ""
 
-#: kstreams.adoc:711
+#: kstreams.adoc:712
 msgid ""
 "    }\n"
 "----\n"
 "|==="
 msgstr ""
 
-#: kstreams.adoc:713
-msgctxt "kstreams.adoc:713"
+#: kstreams.adoc:714
+msgctxt "kstreams.adoc:714"
 msgid "== Наш план"
 msgstr ""
 
-#: kstreams.adoc:718
-msgctxt "kstreams.adoc:718"
+#: kstreams.adoc:719
+msgctxt "kstreams.adoc:719"
 msgid ""
 "[cols=\"20a,60a,20a\"]\n"
 "|===\n"
@@ -1148,13 +1154,13 @@ msgid ""
 ".^|"
 msgstr ""
 
-#: kstreams.adoc:720
-msgctxt "kstreams.adoc:720"
+#: kstreams.adoc:721
+msgctxt "kstreams.adoc:721"
 msgid "Лекция 1."
 msgstr ""
 
-#: kstreams.adoc:724
-msgctxt "kstreams.adoc:724"
+#: kstreams.adoc:725
+msgctxt "kstreams.adoc:725"
 msgid ""
 ". [line-through]#Kafka (краткое напоминание) и Data Streaming#\n"
 ". [line-through]#Конфигурация приложения. Простые (stateless) трансформации#"
@@ -1162,33 +1168,33 @@ msgid ""
 ". [line-through]#Трансформации с использованием локального состояния#"
 msgstr ""
 
-#: kstreams.adoc:726
-msgctxt "kstreams.adoc:726"
+#: kstreams.adoc:727
+msgctxt "kstreams.adoc:727"
 msgid "Лекция 2."
 msgstr ""
 
-#: kstreams.adoc:729
+#: kstreams.adoc:730
 msgid ""
 ". [line-through]#Дуализм «поток—таблица» и табличные join-ы#\n"
 ". [line-through]#Время и оконные операции#"
 msgstr ""
 
-#: kstreams.adoc:732
-msgctxt "kstreams.adoc:732"
+#: kstreams.adoc:733
+msgctxt "kstreams.adoc:733"
 msgid ""
 ".^|image::kafka.jpg[]\n"
 "|==="
 msgstr ""
 
-#: kstreams.adoc:734
+#: kstreams.adoc:735
 msgid "*Пора закругляться!*"
 msgstr ""
 
-#: kstreams.adoc:736
+#: kstreams.adoc:737
 msgid "== Kafka Streams in Action"
 msgstr ""
 
-#: kstreams.adoc:746
+#: kstreams.adoc:747
 msgid ""
 "[.custom-style]\n"
 "[cols=\"30a,70a\"]\n"
@@ -1201,11 +1207,11 @@ msgid ""
 "|==="
 msgstr ""
 
-#: kstreams.adoc:748
+#: kstreams.adoc:749
 msgid "== Kafka: The Definitive Guide"
 msgstr ""
 
-#: kstreams.adoc:757
+#: kstreams.adoc:758
 msgid ""
 "[.custom-style]\n"
 "[cols=\"30a,70a\"]\n"
@@ -1217,11 +1223,11 @@ msgid ""
 "|==="
 msgstr ""
 
-#: kstreams.adoc:761
+#: kstreams.adoc:762
 msgid "== Другие источники"
 msgstr ""
 
-#: kstreams.adoc:767
+#: kstreams.adoc:768
 msgid ""
 "- https://docs.confluent.io/current/streams/developer-"
 "guide/index.html[docs.confluent.io: Streams Developer Guide]\n"
@@ -1233,7 +1239,7 @@ msgid ""
 "** https://github.com/spring-projects/spring-kafka"
 msgstr ""
 
-#: kstreams.adoc:773
+#: kstreams.adoc:774
 msgid ""
 "== Сообщества, конференции\n"
 "- Телеграм: Грефневая Кафка\n"
@@ -1242,11 +1248,11 @@ msgid ""
 "- Kafka Summit Conference"
 msgstr ""
 
-#: kstreams.adoc:775
+#: kstreams.adoc:776
 msgid "== Некоторые итоги"
 msgstr ""
 
-#: kstreams.adoc:782
+#: kstreams.adoc:783
 msgid ""
 "[%step]\n"
 "* Kafka StreamsAPI -- это удобная абстракция над «сырой» Кафкой\n"
@@ -1257,25 +1263,25 @@ msgid ""
 "** - публичные интерфейсы изменяются очень быстро"
 msgstr ""
 
-#: kstreams.adoc:784
+#: kstreams.adoc:785
 msgid "== На этом всё!"
 msgstr ""
 
-#: kstreams.adoc:786
+#: kstreams.adoc:787
 msgid ""
 "icon:github[size=lg] https://github.com/inponomarev/kstreams-"
 "examples[inponomarev/kstreams-examples]"
 msgstr ""
 
-#: kstreams.adoc:788
+#: kstreams.adoc:789
 msgid "icon:twitter[size=lg] https://twitter.com/inponomarev[@inponomarev]"
 msgstr ""
 
-#: kstreams.adoc:790
-msgctxt "kstreams.adoc:790"
+#: kstreams.adoc:791
+msgctxt "kstreams.adoc:791"
 msgid "ponomarev@corchestra.ru"
 msgstr ""
 
-#: kstreams.adoc:791
+#: kstreams.adoc:792
 msgid "*Спасибо!*"
 msgstr ""
