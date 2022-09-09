@@ -24,7 +24,7 @@
     </developers>
 
     <properties>
-        <kafka.version>2.8.1</kafka.version>
+        <kafka.version>3.2.2</kafka.version>
         <jackson.version>2.13.3</jackson.version>
     </properties>
 
