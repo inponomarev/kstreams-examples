@@ -1,0 +1,1287 @@
+#. extracted from kstreams.adoc
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-07-17 03:32+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Translate Toolkit 2.2.5\n"
+
+#: kstreams.adoc:25
+msgid ""
+"= Kafka Streams API: Шаг за рамки Hello World\n"
+"Иван Пономарёв, КУРС/МФТИ\n"
+":revealjs_theme: black\n"
+":revealjs_customtheme: white_course.css\n"
+":revealjs_slideNumber:\n"
+":revealjs_history:\n"
+":revealjs_progress:\n"
+":encoding: UTF-8\n"
+":lang: ru\n"
+"include::_doc_general_attributes.adoc[]\n"
+":doctype: article\n"
+":toclevels: 3\n"
+":imagesdir: images\n"
+":source-highlighter: highlightjs\n"
+":highlightjsdir: highlight\n"
+":icons: font\n"
+":iconfont-remote!:\n"
+":iconfont-name: font-awesome-4.7.0/css/font-awesome\n"
+":revealjs_mouseWheel: true\n"
+":revealjs_center: false\n"
+":revealjs_transition: none\n"
+":revealjs_width: 1600\n"
+":revealjs_height: 900\n"
+":stem: latexmath"
+msgstr ""
+
+#: kstreams.adoc:28
+msgid ""
+"//== Часть 1. Введение\n"
+":!figure-caption:"
+msgstr ""
+
+#: kstreams.adoc:30
+msgctxt "kstreams.adoc:30"
+msgid "ponomarev@corchestra.ru"
+msgstr ""
+
+#: kstreams.adoc:32
+msgid "icon:twitter[size=lg] @inponomarev"
+msgstr ""
+
+#: kstreams.adoc:34
+msgctxt "kstreams.adoc:34"
+msgid "== Наш план"
+msgstr ""
+
+#: kstreams.adoc:39
+msgctxt "kstreams.adoc:39"
+msgid ""
+"[cols=\"20a,60a,20a\"]\n"
+"|===\n"
+".^|image::kafka.jpg[]\n"
+".^|"
+msgstr ""
+
+#: kstreams.adoc:41
+msgctxt "kstreams.adoc:41"
+msgid "Лекция 1."
+msgstr ""
+
+#: kstreams.adoc:45
+msgctxt "kstreams.adoc:45"
+msgid ""
+". [line-through]#Kafka (краткое напоминание) и Data Streaming#\n"
+". [line-through]#Конфигурация приложения. Простые (stateless) трансформации#"
+"\n"
+". [line-through]#Трансформации с использованием локального состояния#"
+msgstr ""
+
+#: kstreams.adoc:47
+msgctxt "kstreams.adoc:47"
+msgid "Лекция 2."
+msgstr ""
+
+#: kstreams.adoc:50
+msgid ""
+". *Дуализм «поток—таблица» и табличные join-ы*\n"
+". Время и оконные операции"
+msgstr ""
+
+#: kstreams.adoc:53
+msgctxt "kstreams.adoc:53"
+msgid ""
+".^|image::kafka.jpg[]\n"
+"|==="
+msgstr ""
+
+#: kstreams.adoc:56
+msgctxt "kstreams.adoc:56"
+msgid "== Таблицы vs стримы"
+msgstr ""
+
+#: kstreams.adoc:58
+msgid "Местонахождение пользователя"
+msgstr ""
+
+#: kstreams.adoc:61
+msgid ""
+".Michael G. Noll. Of Streams and Tables in Kafka and Stream Processing\n"
+"image::stream-table-animation-latestLocation.gif[{image-100-width}]"
+msgstr ""
+
+#: kstreams.adoc:63
+msgctxt "kstreams.adoc:63"
+msgid "== Таблицы vs стримы"
+msgstr ""
+
+#: kstreams.adoc:65
+msgid "Количество посещенных мест"
+msgstr ""
+
+#: kstreams.adoc:68
+msgid ""
+".Michael G. Noll. Of Streams and Tables in Kafka and Stream Processing\n"
+"image::stream-table-animation-numVisitedLocations.gif[{image-100-width}]"
+msgstr ""
+
+#: kstreams.adoc:70
+msgctxt "kstreams.adoc:70"
+msgid "== Таблицы vs стримы"
+msgstr ""
+
+#: kstreams.adoc:72
+msgid "Производная и интеграл"
+msgstr ""
+
+#: kstreams.adoc:80
+msgid ""
+"[stem] \n"
+"++++\n"
+"\\huge\n"
+"state(now) = \\int\\limits_{t=0}^{now} stream(t)\\, \\mathrm{d}t\n"
+"\\quad\\quad\n"
+"stream(t) = \\frac{\\mathrm{d}state(t)}{\\mathrm{d}t}\n"
+"++++"
+msgstr ""
+
+#: kstreams.adoc:82
+msgid "Martin Kleppmann, “Designing Data Intensive Applications”"
+msgstr ""
+
+#: kstreams.adoc:84
+msgid "== Table-table join"
+msgstr ""
+
+#: kstreams.adoc:90
+msgctxt "kstreams.adoc:90"
+msgid ""
+"[stem] \n"
+"++++\n"
+"\\huge\n"
+"(uv)'= u'v + uv'\n"
+"++++"
+msgstr ""
+
+#: kstreams.adoc:93
+msgid ""
+"[.fragment]\n"
+"image::table-table.svg[{image-40-width}]"
+msgstr ""
+
+#: kstreams.adoc:95
+msgctxt "kstreams.adoc:95"
+msgid "== Table-Table join"
+msgstr ""
+
+#: kstreams.adoc:101
+msgctxt "kstreams.adoc:101"
+msgid ""
+"[stem] \n"
+"++++\n"
+"\\huge\n"
+"(uv)'= u'v + uv'\n"
+"++++"
+msgstr ""
+
+#: kstreams.adoc:104
+msgctxt "kstreams.adoc:104"
+msgid "image::table-table1.svg[{image-40-width}]"
+msgstr ""
+
+#: kstreams.adoc:106
+msgctxt "kstreams.adoc:106"
+msgid "== Table-Table join"
+msgstr ""
+
+#: kstreams.adoc:112
+msgctxt "kstreams.adoc:112"
+msgid ""
+"[stem] \n"
+"++++\n"
+"\\huge\n"
+"(uv)'= u'v + uv'\n"
+"++++"
+msgstr ""
+
+#: kstreams.adoc:115
+msgctxt "kstreams.adoc:115"
+msgid "image::table-table2.svg[{image-40-width}]"
+msgstr ""
+
+#: kstreams.adoc:117
+msgid "== Топология Table-Table join"
+msgstr ""
+
+#: kstreams.adoc:128
+msgid ""
+"[graphviz, \"join-storages.png\"]\n"
+"-----\n"
+"digraph G {\n"
+"graph [ dpi = 150 ]; \n"
+"rankdir=\"LR\";\n"
+"node [fontsize=18; shape=\"circle\"; fixedsize=\"true\"; width=\"1.1\"];\n"
+"Store1 [shape=\"cylinder\"; label=\"Local Store 1\"; fixedsize=\"true\"; "
+"width=\"1.7\"]\n"
+"Store2 [shape=\"cylinder\"; label=\"Local Store 2\"; fixedsize=\"true\"; "
+"width=\"1.7\"]\n"
+"Source1 -> Join\n"
+"Source2 -> Join"
+msgstr ""
+
+#: kstreams.adoc:136
+msgid ""
+"Join -> Sink\n"
+"Join -> Store1 [dir=both; label=\" \\n"
+" \"]\n"
+"Join -> Store2 [dir=both; label=\" \\n"
+" \"]\n"
+"Store1 -> Store2 [style=invis]\n"
+"{rank = same; Store1; Join }\n"
+"}\n"
+"-----"
+msgstr ""
+
+#: kstreams.adoc:138
+msgid "== Переписываем totalling app при помощи KTable"
+msgstr ""
+
+#: kstreams.adoc:147
+msgid ""
+"[source,java]\n"
+"----\n"
+"KTable<String, Long> totals = input.groupByKey().aggregate(\n"
+"    () -> 0L, \n"
+"    (k, v, a) -> a + Math.round(v.getAmount() * v.getOdds()),\n"
+"    Materialized.with(Serdes.String(), Serdes.Long())\n"
+");\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:151
+msgid ""
+"[source,code]\n"
+"----\n"
+"$kafka-topics --zookeeper localhost --describe"
+msgstr ""
+
+#: kstreams.adoc:158
+msgid ""
+"Topic: \n"
+"table2-demo-KSTREAM-AGGREGATE-STATE-STORE-0000000001-changelog \n"
+"PartitionCount:10\n"
+"ReplicationFactor:1\n"
+"Configs:cleanup.policy=compact\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:169
+msgid ""
+"== Получаем таблицу счетов матчей\n"
+"[source,java]\n"
+"----\n"
+"KStream<String, Score> scores = \n"
+"    eventScores.flatMap((k, v) ->\n"
+"        Stream.of(Outcome.H, Outcome.A).map(o ->\n"
+"            KeyValue.pair(String.format(\"%s:%s\", k, o), v))\n"
+"            .collect(Collectors.toList()))\n"
+"    .mapValues(EventScore::getScore);"
+msgstr ""
+
+#: kstreams.adoc:172
+msgid ""
+"KTable<String, Score> tableScores =\n"
+"    scores.groupByKey(Grouped.with(...).reduce((a, b) -> b);"
+msgstr ""
+
+#: kstreams.adoc:177
+msgid ""
+"----\n"
+"[source,code]\n"
+"----\n"
+"$kafka-topics --zookeeper localhost --list"
+msgstr ""
+
+#: kstreams.adoc:181
+msgid ""
+"table2-demo-KSTREAM-REDUCE-STATE-STORE-0000000006-repartition\n"
+"table2-demo-KSTREAM-REDUCE-STATE-STORE-0000000006-changelog\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:190
+msgid ""
+"== Демо: Объединяем сумму ставок с текущим счётом\n"
+"[source,java]\n"
+"----\n"
+"KTable<String, String> joined = \n"
+"    totals.join(tableScores,\n"
+"            (total, eventScore) -> \n"
+"                String.format(\"(%s)\\t%d\", eventScore, total));\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:193
+msgid "== Копартиционирование"
+msgstr ""
+
+#: kstreams.adoc:195
+msgid "Join работает"
+msgstr ""
+
+#: kstreams.adoc:209
+msgid ""
+"[graphviz, \"copart-norm.png\"]\n"
+"-----\n"
+"digraph D {\n"
+"  graph [ dpi = 150 ]; \n"
+"  subgraph system {\n"
+"     subgraph cluster_s2{\n"
+"          style = \"invis\"\n"
+"          S1 [shape=plaintext label = \"Source 1\"];\n"
+"          S2 [shape=plaintext label = \"Source 2\"];\n"
+"          S1->S2 [style=\"invis\"]\n"
+"      }\n"
+"    subgraph cluster_p1 {\n"
+"      label = \"Worker 1\";"
+msgstr ""
+
+#: kstreams.adoc:213
+msgid ""
+"          subgraph cluster_pp11{\n"
+"              label = \"Partition 2\""
+msgstr ""
+
+#: kstreams.adoc:216
+msgid ""
+"              b [label = \"B\"];\n"
+"              c[label = \"C\"];"
+msgstr ""
+
+#: kstreams.adoc:221
+msgid ""
+"          }\n"
+"          subgraph cluster_pp12{\n"
+"              label = \"Partition 2\"\n"
+"              labelloc =\"b\""
+msgstr ""
+
+#: kstreams.adoc:223
+msgid "              b1 [label = \"B\"];"
+msgstr ""
+
+#: kstreams.adoc:226
+msgid ""
+"              c1[label = \"C\"];\n"
+"          }"
+msgstr ""
+
+#: kstreams.adoc:230
+msgid ""
+"          subgraph cluster_p1{\n"
+"              label = \"Partition 1\"\n"
+"          labelloc = \"b\""
+msgstr ""
+
+#: kstreams.adoc:232
+msgid "              a1 [label = \"A\"]"
+msgstr ""
+
+#: kstreams.adoc:234
+msgctxt "kstreams.adoc:234"
+msgid "          }"
+msgstr ""
+
+#: kstreams.adoc:237
+msgctxt "kstreams.adoc:237"
+msgid ""
+"        subgraph cluster_pp1{\n"
+"              label = \"Partition 1\""
+msgstr ""
+
+#: kstreams.adoc:240
+msgctxt "kstreams.adoc:240"
+msgid "              a [label = \"A\"];"
+msgstr ""
+
+#: kstreams.adoc:242
+msgctxt "kstreams.adoc:242"
+msgid "          }"
+msgstr ""
+
+#: kstreams.adoc:246
+msgid ""
+"          a->a1[style=\"dashed\" dir=\"none\"];\n"
+"          b->b1[style=\"dashed\" dir=\"none\"];\n"
+"          c->c1[style=\"dashed\" dir=\"none\"];"
+msgstr ""
+
+#: kstreams.adoc:252
+msgctxt "kstreams.adoc:252"
+msgid ""
+"    }\n"
+"    subgraph cluster_p2 {\n"
+"      label = \"Worker 2\";\n"
+"      subgraph cluster_pp2{\n"
+"              label = \"Partition 3\""
+msgstr ""
+
+#: kstreams.adoc:254
+msgctxt "kstreams.adoc:254"
+msgid "              d[label = \"D\"];"
+msgstr ""
+
+#: kstreams.adoc:261
+msgid ""
+"          }\n"
+"          subgraph cluster_p2{\n"
+"              label = \"Partition 3\"\n"
+"              labelloc = \"b\"\n"
+"              d1[label = \"D\"];"
+msgstr ""
+
+#: kstreams.adoc:264
+msgctxt "kstreams.adoc:264"
+msgid "          }"
+msgstr ""
+
+#: kstreams.adoc:270
+msgid ""
+"          d->d1[style=\"dashed\" dir=\"none\"];\n"
+"    }\n"
+"  }\n"
+"} \n"
+"-----"
+msgstr ""
+
+#: kstreams.adoc:272
+msgid "== Несовпадение количества партиций"
+msgstr ""
+
+#: kstreams.adoc:274
+msgid "Join не работает (Runtime Exception)"
+msgstr ""
+
+#: kstreams.adoc:294
+msgid ""
+"[graphviz, \"copart-diff.png\"]\n"
+"-----\n"
+"digraph D {\n"
+"  graph [ dpi = 150 ]; \n"
+"  subgraph system {\n"
+"     subgraph cluster_s2{\n"
+"          style = \"invis\"\n"
+"          S1 [shape=plaintext label = \"Source 1\"];\n"
+"          S2 [shape=plaintext label = \"Source 2\"];\n"
+"          S1->S2 [style=\"invis\"]\n"
+"      }\n"
+"    subgraph cluster_p1 {\n"
+"      label = \"Worker 1\";\n"
+"        subgraph cluster_p1{\n"
+"              label = \"Partition 1\"\n"
+"              labelloc = \"b\"\n"
+"              b1 [label = \"B\"]\n"
+"              a1 [label = \"A\"]\n"
+"          }"
+msgstr ""
+
+#: kstreams.adoc:297
+msgctxt "kstreams.adoc:297"
+msgid ""
+"        subgraph cluster_pp1{\n"
+"              label = \"Partition 1\""
+msgstr ""
+
+#: kstreams.adoc:300
+msgctxt "kstreams.adoc:300"
+msgid "              a [label = \"A\"];"
+msgstr ""
+
+#: kstreams.adoc:302
+msgctxt "kstreams.adoc:302"
+msgid "          }"
+msgstr ""
+
+#: kstreams.adoc:307
+msgid ""
+"          subgraph cluster_pa2{\n"
+"              label = \"Partition 2\"\n"
+"          b [label = \"B\"];\n"
+"              c [label = \"C\" color=\"red\"];"
+msgstr ""
+
+#: kstreams.adoc:311
+msgid ""
+"          }\n"
+"          a->a1[style=\"dashed\" dir=\"none\"];\n"
+"          b->b1[style=\"dashed\" dir=\"none\"];"
+msgstr ""
+
+#: kstreams.adoc:318
+msgctxt "kstreams.adoc:318"
+msgid ""
+"    }\n"
+"    subgraph cluster_p2 {\n"
+"      label = \"Worker 2\";\n"
+"      subgraph cluster_pp2{\n"
+"              label = \"Partition 3\""
+msgstr ""
+
+#: kstreams.adoc:320
+msgctxt "kstreams.adoc:320"
+msgid "              d[label = \"D\"];"
+msgstr ""
+
+#: kstreams.adoc:326
+msgid ""
+"          }\n"
+"          subgraph cluster_pa3{\n"
+"              label = \"Partition 2\"\n"
+"              labelloc = \"b\""
+msgstr ""
+
+#: kstreams.adoc:329
+msgid ""
+"              d1[label = \"D\"];\n"
+"              c1[label = \"C\" color =\"red\"];"
+msgstr ""
+
+#: kstreams.adoc:337
+msgid ""
+"          }\n"
+"          c->c1[ dir=\"none\" color=\"red\"];\n"
+"          d->d1[style=\"dashed\" dir=\"none\"];\n"
+"    }\n"
+"  }\n"
+"} \n"
+"-----"
+msgstr ""
+
+#: kstreams.adoc:339
+msgid "== Несовпадение алгоритма партицирования"
+msgstr ""
+
+#: kstreams.adoc:341
+msgid "Join не работает молча!"
+msgstr ""
+
+#: kstreams.adoc:358
+msgid ""
+"[graphviz, \"copart-diff-algorithm.png\"]\n"
+"-----\n"
+"digraph D {\n"
+"  graph [ dpi = 150 ]; \n"
+"  subgraph system {\n"
+"     subgraph cluster_s2{\n"
+"          style = \"invis\"\n"
+"          S1 [shape=plaintext label = \"Source 1\"];\n"
+"          S2 [shape=plaintext label = \"Source 2\"];\n"
+"          S1->S2 [style=\"invis\"]\n"
+"      }\n"
+"    subgraph cluster_p1 {\n"
+"      label = \"Worker 1\";\n"
+"        subgraph cluster_p1{\n"
+"              label = \"Partition 1\"\n"
+"              labelloc = \"b\""
+msgstr ""
+
+#: kstreams.adoc:361
+msgid ""
+"              b1 [label = \"B\" color=\"red\"]\n"
+"              a1 [label = \"A\"]"
+msgstr ""
+
+#: kstreams.adoc:363
+msgctxt "kstreams.adoc:363"
+msgid "          }"
+msgstr ""
+
+#: kstreams.adoc:366
+msgctxt "kstreams.adoc:366"
+msgid ""
+"        subgraph cluster_pp1{\n"
+"              label = \"Partition 1\""
+msgstr ""
+
+#: kstreams.adoc:369
+msgid ""
+"               c[label = \"C\" color= \"red\"];\n"
+"              a [label = \"A\"];"
+msgstr ""
+
+#: kstreams.adoc:371
+msgctxt "kstreams.adoc:371"
+msgid "          }"
+msgstr ""
+
+#: kstreams.adoc:379
+msgid ""
+"    }\n"
+"    subgraph cluster_p2 {\n"
+"      label = \"Worker 2\";\n"
+"      subgraph cluster_pp2{\n"
+"              label = \"Partition 2\"\n"
+"          b [label = \"B\" color=\"red\"];\n"
+"              d[label = \"D\"];"
+msgstr ""
+
+#: kstreams.adoc:387
+msgid ""
+"          }\n"
+"          subgraph cluster_p2{\n"
+"              label = \"Partition 2\"\n"
+"              labelloc = \"b\"\n"
+"              d1[label = \"D\"];\n"
+"              c1[label = \"C\" color = \"red\"];"
+msgstr ""
+
+#: kstreams.adoc:397
+msgid ""
+"          }\n"
+"          a->a1[style=\"dashed\" dir=\"none\"];\n"
+"          b->b1[color=\"red\" dir=\"none\"];\n"
+"          c->c1[color=\"red\" dir=\"none\"];\n"
+"          d->d1[style=\"dashed\" dir=\"none\"];\n"
+"    }\n"
+"  }\n"
+"} \n"
+"-----"
+msgstr ""
+
+#: kstreams.adoc:399
+msgid "== GlobalKTable"
+msgstr ""
+
+#: kstreams.adoc:401
+msgid "Реплицируется всюду целиком"
+msgstr ""
+
+#: kstreams.adoc:406
+msgid ""
+"[source,java]\n"
+"----\n"
+"GlobalKTable<...> global = streamsBuilder.globalTable(\"global\", ...);\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:422
+msgid ""
+"[graphviz, \"globalktable.png\"]\n"
+"-----\n"
+"digraph D {\n"
+"  graph [ dpi = 150 ]; \n"
+"  subgraph system {\n"
+"     subgraph cluster_s2{\n"
+"          style = \"invis\"\n"
+"          S1 [shape=plaintext label = \"Source 1\"];\n"
+"          S2 [shape=plaintext label = \"GlobalKTable\"];\n"
+"          S1->S2 [style=\"invis\"]\n"
+"      }\n"
+"    subgraph cluster_p1 {\n"
+"      label = \"Worker 1\";\n"
+"        subgraph cluster_p1{\n"
+"              label = \"\""
+msgstr ""
+
+#: kstreams.adoc:430
+msgid ""
+"              b1 [label = \"B\"]\n"
+"              a1 [label = \"A\"]\n"
+"              cc [label = \"C\"] \n"
+"              dd [label = \"D\"]\n"
+"              a1->cc[style=\"invis\"];\n"
+"              b1->dd[style=\"invis\"];\n"
+"          }"
+msgstr ""
+
+#: kstreams.adoc:433
+msgctxt "kstreams.adoc:433"
+msgid ""
+"        subgraph cluster_pp1{\n"
+"              label = \"Partition 1\""
+msgstr ""
+
+#: kstreams.adoc:438
+msgid ""
+"              a [label = \"A\"];\n"
+"              b [label = \"B\"];\n"
+"          }"
+msgstr ""
+
+#: kstreams.adoc:445
+msgid ""
+"    }\n"
+"    subgraph cluster_p2 {\n"
+"      label = \"Worker 2\";\n"
+"      subgraph cluster_pp2{\n"
+"              label = \"Partition 2\"\n"
+"                c[label = \"C\"];"
+msgstr ""
+
+#: kstreams.adoc:447
+msgctxt "kstreams.adoc:447"
+msgid "              d[label = \"D\"];"
+msgstr ""
+
+#: kstreams.adoc:460
+msgid ""
+"          }\n"
+"          subgraph cluster_p2{\n"
+"              label = \"\"\n"
+"              labelloc = \"b\"\n"
+"              d1[label = \"D\"];\n"
+"              c1[label = \"C\" ];\n"
+"              aa[label = \"A\"];\n"
+"              bbb[label = \"B\"];\n"
+"              c1->aa [style= \"invis\"];\n"
+"              d1->bbb [style= \"invis\"];"
+msgstr ""
+
+#: kstreams.adoc:470
+msgid ""
+"          }\n"
+"          a->a1[style=\"dashed\" dir=\"none\"];\n"
+"          b->b1[style=\"dashed\" dir=\"none\"];\n"
+"          c->c1[style=\"dashed\" dir=\"none\"];\n"
+"          d->d1[style=\"dashed\" dir=\"none\"];\n"
+"    }\n"
+"  }\n"
+"} \n"
+"-----"
+msgstr ""
+
+#: kstreams.adoc:472
+msgid "== Foreign Key Joins: join + `ForeignKeyExtractor`"
+msgstr ""
+
+#: kstreams.adoc:481
+msgid ""
+"[graphviz, \"fkjoin.png\"]\n"
+"-----\n"
+"digraph G {\n"
+"graph [ dpi = 140 ]; \n"
+"#rankdir=\"LR\";\n"
+"node [fontsize=18; shape=\"circle\"; fixedsize=\"true\"; width=\"1.1\"];\n"
+"{rank=min; Source1; Source2};\n"
+"{rank=same; Join1; Join2; Store1;Store2};"
+msgstr ""
+
+#: kstreams.adoc:493
+msgid ""
+"Store1 [shape=\"cylinder\"; label=\"Local Store\"; fixedsize=\"true\"; width="
+"\"1.7\"]\n"
+"Store2 [shape=\"cylinder\"; label=\"Local Store\"; fixedsize=\"true\"; width="
+"\"1.7\"]\n"
+"Source1 -> Join1\n"
+"Source2 -> Join2\n"
+"Join1 -> subscribe -> Join2;\n"
+"Join1 -> update -> Join2[dir=back];\n"
+"subscribe[shape=record;label=\" | | | | \";xlabel=\"subscribe\"];\n"
+"update[shape=record;label=\" | | | | \";xlabel=\"update\"];\n"
+"Join1 -> Sink\n"
+"Join2 -> Store1 [dir=both; label=\" \\n"
+" \"]\n"
+"Join2 -> Store2 [dir=both; label=\" \\n"
+" \"]"
+msgstr ""
+
+#: kstreams.adoc:495
+msgid "subscribe->update[style=invis];"
+msgstr ""
+
+#: kstreams.adoc:498
+msgid ""
+"}\n"
+"-----"
+msgstr ""
+
+#: kstreams.adoc:503
+msgid ""
+"== Операции между стримами и таблицами: сводка\n"
+".Источник: https://kafka.apache.org/20/documentation/streams/developer-guide"
+"/dsl-api.html#stateful-transformations[Kafka Streams DSL Documentation]\n"
+"image::streams-stateful_operations.png[{image-50-width}]"
+msgstr ""
+
+#: kstreams.adoc:505
+msgctxt "kstreams.adoc:505"
+msgid "== Виды Join-ов: Table-Table"
+msgstr ""
+
+#: kstreams.adoc:507
+msgid "image::table-table.svg[{image-40-width}]"
+msgstr ""
+
+#: kstreams.adoc:509
+msgctxt "kstreams.adoc:509"
+msgid "== Виды Join-ов: Table-Table"
+msgstr ""
+
+#: kstreams.adoc:511
+msgctxt "kstreams.adoc:511"
+msgid "image::table-table1.svg[{image-40-width}]"
+msgstr ""
+
+#: kstreams.adoc:513
+msgctxt "kstreams.adoc:513"
+msgid "== Виды Join-ов: Table-Table"
+msgstr ""
+
+#: kstreams.adoc:515
+msgctxt "kstreams.adoc:515"
+msgid "image::table-table2.svg[{image-40-width}]"
+msgstr ""
+
+#: kstreams.adoc:517
+msgid "== Виды Join-ов: Stream-Table"
+msgstr ""
+
+#: kstreams.adoc:519
+msgid "image::stream-table.svg[{image-40-width}]"
+msgstr ""
+
+#: kstreams.adoc:521
+msgid "== Виды Join-ов: Stream-Stream"
+msgstr ""
+
+#: kstreams.adoc:523
+msgid "image::stream-stream.svg[{image-40-width}]"
+msgstr ""
+
+#: kstreams.adoc:530
+msgid ""
+"== Наш план\n"
+"[cols=\"20a,60a,20a\"]\n"
+"|===\n"
+".^|image::kafka.jpg[]\n"
+".^|"
+msgstr ""
+
+#: kstreams.adoc:532
+msgctxt "kstreams.adoc:532"
+msgid "Лекция 1."
+msgstr ""
+
+#: kstreams.adoc:536
+msgctxt "kstreams.adoc:536"
+msgid ""
+". [line-through]#Kafka (краткое напоминание) и Data Streaming#\n"
+". [line-through]#Конфигурация приложения. Простые (stateless) трансформации#"
+"\n"
+". [line-through]#Трансформации с использованием локального состояния#"
+msgstr ""
+
+#: kstreams.adoc:538
+msgctxt "kstreams.adoc:538"
+msgid "Лекция 2."
+msgstr ""
+
+#: kstreams.adoc:541
+msgid ""
+". [line-through]#Дуализм «поток—таблица» и табличные join-ы#\n"
+". *Время и оконные операции*"
+msgstr ""
+
+#: kstreams.adoc:544
+msgctxt "kstreams.adoc:544"
+msgid ""
+".^|image::kafka.jpg[]\n"
+"|==="
+msgstr ""
+
+#: kstreams.adoc:548
+msgid "== Сохранение Timestamped-значений в{nbsp}RocksDB"
+msgstr ""
+
+#: kstreams.adoc:550
+msgid "WindowKeySchema.java"
+msgstr ""
+
+#: kstreams.adoc:566
+msgid ""
+"[source,java]\n"
+"----\n"
+"static Bytes toStoreKeyBinary(byte[] serializedKey,\n"
+"                              long timestamp,\n"
+"                              int seqnum) {\n"
+"    ByteBuffer buf = ByteBuffer.allocate(\n"
+"                                serializedKey.length\n"
+"                                + TIMESTAMP_SIZE \n"
+"                                + SEQNUM_SIZE);\n"
+"    buf.put(serializedKey);\n"
+"    buf.putLong(timestamp);\n"
+"    buf.putInt(seqnum);\n"
+"    return Bytes.wrap(buf.array());\n"
+"}\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:568
+msgid "== Быстрое извлечение значений по ключу из диапазона времени"
+msgstr ""
+
+#: kstreams.adoc:582
+msgid ""
+"[graphviz, \"timestamped-record.png\"]\n"
+"-----\n"
+"digraph G\n"
+"{\n"
+"    graph [ dpi = 150 ]; \n"
+"    node [shape=record, fontsize=18];\n"
+"    node0 [label=\"...\"];\n"
+"    node1 [label=\"<f0> key|<f1> timestamp|<f2> seqnum\"];\n"
+"    node2 [label=\"...\"];\n"
+"    node0 -> node1;\n"
+"    node0 -> node2;\n"
+"}\n"
+"-----"
+msgstr ""
+
+#: kstreams.adoc:584
+msgid "== Демо: Windowed Joins"
+msgstr ""
+
+#: kstreams.adoc:587
+msgid ""
+"* «Послегольщик» — игрок, пытающийся протолкнуть правильную ставку в момент "
+"смены счёта в матче\n"
+"* Штамп времени ставки и события смены счёта должны «почти совпадать»."
+msgstr ""
+
+#: kstreams.adoc:589
+msgid "image::livebet.jpg[{image-50-width}]"
+msgstr ""
+
+#: kstreams.adoc:591
+msgid "== Время, вперёд!"
+msgstr ""
+
+#: kstreams.adoc:598
+msgid ""
+"[source,java]\n"
+"----\n"
+"KStream<String, Bet> bets = streamsBuilder.stream(BET_TOPIC,\n"
+"    Consumed.with(\n"
+"            Serdes...)\n"
+"            .withTimestampExtractor("
+msgstr ""
+
+#: kstreams.adoc:601
+msgid ""
+"                (record, previousTimestamp) ->\n"
+"                    ((Bet) record.value()).getTimestamp()"
+msgstr ""
+
+#: kstreams.adoc:605
+msgid ""
+"            ));\n"
+"----\n"
+"(Ещё время можно извлечь из WallClock и RecordMetadata.)"
+msgstr ""
+
+#: kstreams.adoc:611
+msgid ""
+"== Демо: Windowed Joins\n"
+"По событию смены счёта понимаем, какая ставка будет «правильной»:\n"
+"[source,java]\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:615
+msgid ""
+"Score current = Optional.ofNullable(stateStore.get(key))\n"
+"                .orElse(new Score());\n"
+"stateStore.put(key, value.getScore());"
+msgstr ""
+
+#: kstreams.adoc:621
+msgid ""
+"Outcome currenOutcome = \n"
+"    value.getScore().getHome() > current.getHome() \n"
+"    ?\n"
+"    Outcome.H : Outcome.A;\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:627
+msgid ""
+"== Демо: Windowed Joins\n"
+"[source, java]\n"
+"----\n"
+"KStream<String, String> join = bets.join(outcomes,\n"
+"    (bet, sureBet) -> "
+msgstr ""
+
+#: kstreams.adoc:635
+msgid ""
+"    String.format(\"%s %dms before goal\", \n"
+"                bet.getBettor(),\n"
+"                sureBet.getTimestamp() - bet.getTimestamp()),\n"
+"                JoinWindows.of(Duration.ofSeconds(1)).before(Duration.ZERO),"
+"\n"
+"                StreamJoined.with(Serdes....\n"
+"    ));\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:638
+msgid "== Tumbling window"
+msgstr ""
+
+#: kstreams.adoc:647
+msgid ""
+"[source,java]\n"
+"----\n"
+"TimeWindowedKStream<..., ...> windowed = \n"
+"    stream.groupByKey()\n"
+"        .windowedBy(TimeWindows.of(Duration.ofSeconds(20)));\n"
+"----\n"
+".Источник: Kafka Streams in Action\n"
+"image::tumbling-window.png[{image-70-width}]"
+msgstr ""
+
+#: kstreams.adoc:654
+msgid ""
+"== Tumbling window\n"
+"[source,java]\n"
+"----\n"
+"TimeWindowedKStream<..., ...> windowed = \n"
+"    stream.groupByKey()\n"
+"        .windowedBy(TimeWindows.of(Duration.ofSeconds(20)));"
+msgstr ""
+
+#: kstreams.adoc:656
+msgid "KTable<Windowed<...>, Long> count = windowed.count();"
+msgstr ""
+
+#: kstreams.adoc:665
+msgid ""
+"/*\n"
+"* Windowed<K> interface:\n"
+"* - K key()\n"
+"* - Window window()\n"
+"* -- Instant startTime()\n"
+"* -- Instant endTime()\n"
+"*/\n"
+"----"
+msgstr ""
+
+#: kstreams.adoc:676
+msgid ""
+"== Hopping Window\n"
+"[source,java]\n"
+"----\n"
+"TimeWindowedKStream<..., ...> windowed = \n"
+"    stream.groupByKey()\n"
+"        .windowedBy(TimeWindows.of(Duration.ofSeconds(20))\n"
+"                        .advanceBy(Duration.ofSeconds(10)));\n"
+"----\n"
+".Источник: Kafka Streams in Action\n"
+"image::hopping-window.png[{image-50-width}]"
+msgstr ""
+
+#: kstreams.adoc:685
+msgid ""
+"== Session Window\n"
+"[source,java]\n"
+"----\n"
+"SessionWindowedKStream<..., ...> windowed = \n"
+"    stream.groupByKey()\n"
+"        .windowedBy(SessionWindows.with(Duration.ofMinutes(5)));\n"
+"----\n"
+"image::streams-session-windows-02.png[{image-50-width}]"
+msgstr ""
+
+#: kstreams.adoc:687
+msgid "== Window Retention time vs. Grace Time"
+msgstr ""
+
+#: kstreams.adoc:689
+msgid "image::window-retention.png[]"
+msgstr ""
+
+#: kstreams.adoc:692
+msgid "== Иногда нужны не окна, а Punctuator"
+msgstr ""
+
+#: kstreams.adoc:703
+msgid ""
+"[.custom-style]\n"
+"[cols=\"30a,70a\"]\n"
+"|===\n"
+"|image::metronome.jpg[]\n"
+"|\n"
+"[source,java]\n"
+"----\n"
+"class MyTransformer implements Transformer<...> {\n"
+"    @Override\n"
+"    public void init(ProcessorContext context) {"
+msgstr ""
+
+#: kstreams.adoc:708
+msgid ""
+"        context.schedule(\n"
+"            Duration.ofSeconds(10),\n"
+"            PunctuationType.WALL_CLOCK_TIME,\n"
+"            timestamp->{. . .});"
+msgstr ""
+
+#: kstreams.adoc:712
+msgid ""
+"    }\n"
+"----\n"
+"|==="
+msgstr ""
+
+#: kstreams.adoc:714
+msgctxt "kstreams.adoc:714"
+msgid "== Наш план"
+msgstr ""
+
+#: kstreams.adoc:719
+msgctxt "kstreams.adoc:719"
+msgid ""
+"[cols=\"20a,60a,20a\"]\n"
+"|===\n"
+".^|image::kafka.jpg[]\n"
+".^|"
+msgstr ""
+
+#: kstreams.adoc:721
+msgctxt "kstreams.adoc:721"
+msgid "Лекция 1."
+msgstr ""
+
+#: kstreams.adoc:725
+msgctxt "kstreams.adoc:725"
+msgid ""
+". [line-through]#Kafka (краткое напоминание) и Data Streaming#\n"
+". [line-through]#Конфигурация приложения. Простые (stateless) трансформации#"
+"\n"
+". [line-through]#Трансформации с использованием локального состояния#"
+msgstr ""
+
+#: kstreams.adoc:727
+msgctxt "kstreams.adoc:727"
+msgid "Лекция 2."
+msgstr ""
+
+#: kstreams.adoc:730
+msgid ""
+". [line-through]#Дуализм «поток—таблица» и табличные join-ы#\n"
+". [line-through]#Время и оконные операции#"
+msgstr ""
+
+#: kstreams.adoc:733
+msgctxt "kstreams.adoc:733"
+msgid ""
+".^|image::kafka.jpg[]\n"
+"|==="
+msgstr ""
+
+#: kstreams.adoc:735
+msgid "*Пора закругляться!*"
+msgstr ""
+
+#: kstreams.adoc:737
+msgid "== Kafka Streams in Action"
+msgstr ""
+
+#: kstreams.adoc:747
+msgid ""
+"[.custom-style]\n"
+"[cols=\"30a,70a\"]\n"
+"|===\n"
+"|image::KSIA.png[]\n"
+"|\n"
+"* **William Bejeck**, + \n"
+"“Kafka Streams in Action, Second Edition”, Spring 2023?\n"
+"* Первое издание устарело!\n"
+"|==="
+msgstr ""
+
+#: kstreams.adoc:749
+msgid "== Kafka: The Definitive Guide"
+msgstr ""
+
+#: kstreams.adoc:758
+msgid ""
+"[.custom-style]\n"
+"[cols=\"30a,70a\"]\n"
+"|===\n"
+"|image::kafka-the-definitive-guide.jpg[]\n"
+"|\n"
+"* Gwen Shapira, Todd Palino, Rajini Sivaram, Krit Petty\n"
+"* November 2021\n"
+"|==="
+msgstr ""
+
+#: kstreams.adoc:762
+msgid "== Другие источники"
+msgstr ""
+
+#: kstreams.adoc:768
+msgid ""
+"- https://docs.confluent.io/current/streams/developer-"
+"guide/index.html[docs.confluent.io: Streams Developer Guide]\n"
+"- https://www.confluent.io/blog/stream-processing-part-1-tutorial-developing-"
+"streaming-applications[Getting Your Feet Wet with Stream Processing ("
+"Confluent tutorials)]\n"
+"- Исходники!\n"
+"** https://github.com/apache/kafka/\n"
+"** https://github.com/spring-projects/spring-kafka"
+msgstr ""
+
+#: kstreams.adoc:774
+msgid ""
+"== Сообщества, конференции\n"
+"- Телеграм: Грефневая Кафка\n"
+"** https://t.me/AwesomeKafka_ru\n"
+"** https://t.me/proKafka\n"
+"- Kafka Summit Conference"
+msgstr ""
+
+#: kstreams.adoc:776
+msgid "== Некоторые итоги"
+msgstr ""
+
+#: kstreams.adoc:783
+msgid ""
+"[%step]\n"
+"* Kafka StreamsAPI -- это удобная абстракция над «сырой» Кафкой\n"
+"* Чтобы начать пользоваться, надо настроить мышление под потоковую "
+"обработку\n"
+"* Технология переживает бурное развитие\n"
+"** + живой community, есть шанс повлиять на процесс самому \n"
+"** - публичные интерфейсы изменяются очень быстро"
+msgstr ""
+
+#: kstreams.adoc:785
+msgid "== На этом всё!"
+msgstr ""
+
+#: kstreams.adoc:787
+msgid ""
+"icon:github[size=lg] https://github.com/inponomarev/kstreams-"
+"examples[inponomarev/kstreams-examples]"
+msgstr ""
+
+#: kstreams.adoc:789
+msgid "icon:twitter[size=lg] https://twitter.com/inponomarev[@inponomarev]"
+msgstr ""
+
+#: kstreams.adoc:791
+msgctxt "kstreams.adoc:791"
+msgid "ponomarev@corchestra.ru"
+msgstr ""
+
+#: kstreams.adoc:792
+msgid "*Спасибо!*"
+msgstr ""
